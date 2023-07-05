@@ -7,6 +7,8 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final prefs = await SharedPreferences.getInstance();
+  prefs.setBool('showOnboarding', true);
+
   var showOnboarding = prefs.getBool('showOnboarding') ?? true;
 
   runApp(App(showOnboarding: showOnboarding));

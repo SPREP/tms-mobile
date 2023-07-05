@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:macres/screens/onboarding/onboarding_first.dart';
+import 'package:macres/screens/onboarding/onboarding_second.dart';
 import 'package:macres/screens/weather_forcast/weather_forcast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -34,19 +36,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
               isLastPage = index == 1;
             });
           },
-          children: [
-            Container(
-              color: Colors.red,
-              child: const Center(
-                child: Text('Page 1'),
-              ),
-            ),
-            Container(
-              color: Colors.indigo,
-              child: const Center(
-                child: Text('Page 2'),
-              ),
-            ),
+          children: const [
+            OnboardingFirst(),
+            OnboardingSecond(),
           ],
         ),
       ),
