@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:macres/screens/weather_forcast/weather_forcast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -27,6 +29,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
         padding: const EdgeInsets.only(bottom: 80),
         child: PageView(
           controller: controller,
+          onPageChanged: (index) {
+            setState(() {
+              isLastPage = index == 1;
+            });
+          },
           children: [
             Container(
               color: Colors.red,
@@ -45,10 +52,28 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ),
       bottomSheet: isLastPage
           ? TextButton(
+              style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(1),
+                ),
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.teal.shade700,
+                minimumSize: const Size.fromHeight(80),
+              ),
               child: const Text(
                 'Get Started',
                 style: TextStyle(fontSize: 24),
               ),
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                prefs.setBool('showOnboarding', false);
+
+                //Navigate to home page
+                Navigator.of(context)
+                    .pushReplacement(MaterialPageRoute(builder: (context) {
+                  return const WeatherForcast();
+                }));
+              },
             )
           : Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -77,7 +102,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      controller.nextPage(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut);
+                    },
                     child: const Text('NEXT'),
                   ),
                 ],
