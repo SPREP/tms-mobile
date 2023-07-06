@@ -23,6 +23,48 @@ class OnboardingSecond extends StatelessWidget {
               children: const [
                 Text(
                     'This app, allows you to report to us events. You can send us your post disaster impact report, request assistance and more.'),
+                SizedBox(height: 20),
+                ListTile(
+                  horizontalTitleGap: 1,
+                  leading: Icon(
+                    Icons.check_circle_rounded,
+                    color: Colors.green,
+                  ),
+                  title: Text('Let us know when you felt an earthquake'),
+                ),
+                ListTile(
+                  horizontalTitleGap: 1,
+                  leading: Icon(
+                    Icons.check_circle_rounded,
+                    color: Colors.green,
+                  ),
+                  title: Text('Receive Weather Forecast'),
+                ),
+                ListTile(
+                  horizontalTitleGap: 1,
+                  leading: Icon(
+                    Icons.check_circle_rounded,
+                    color: Colors.green,
+                  ),
+                  title: Text(
+                      'Receive Critical Notifications and Alerts (Tsunami, Weather, Volcanic and more)'),
+                ),
+                ListTile(
+                  horizontalTitleGap: 1,
+                  leading: Icon(
+                    Icons.check_circle_rounded,
+                    color: Colors.green,
+                  ),
+                  title: Text('Send Disaster Impact Report'),
+                ),
+                ListTile(
+                  horizontalTitleGap: 1,
+                  leading: Icon(
+                    Icons.check_circle_rounded,
+                    color: Colors.green,
+                  ),
+                  title: Text('Send Assitance Request'),
+                ),
               ],
             ),
           ),

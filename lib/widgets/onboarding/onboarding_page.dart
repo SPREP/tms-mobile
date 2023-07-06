@@ -49,7 +49,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   borderRadius: BorderRadius.circular(1),
                 ),
                 foregroundColor: Colors.white,
-                backgroundColor: Colors.teal.shade700,
+                backgroundColor: Color.fromARGB(255, 110, 107, 99),
                 minimumSize: const Size.fromHeight(80),
               ),
               child: const Text(
@@ -68,6 +68,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               },
             )
           : Container(
+              color: Color.fromARGB(255, 110, 107, 99),
               padding: const EdgeInsets.symmetric(horizontal: 20),
               height: 80,
               child: Row(
@@ -81,10 +82,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     child: SmoothPageIndicator(
                       controller: controller,
                       count: 2,
-                      effect: WormEffect(
+                      effect: const WormEffect(
                         spacing: 16,
-                        dotColor: Colors.black26,
-                        activeDotColor: Colors.teal.shade700,
+                        dotColor: Color.fromARGB(255, 181, 179, 179),
+                        activeDotColor: Colors.white,
                       ),
                       onDotClicked: (index) {
                         controller.animateToPage(index,
@@ -99,7 +100,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeInOut);
                     },
-                    child: const Text('NEXT'),
+                    child: const Text(
+                      'NEXT',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               )),
