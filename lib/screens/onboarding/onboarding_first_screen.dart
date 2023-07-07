@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
 
-class OnboardingFirst extends StatefulWidget {
-  const OnboardingFirst({super.key});
+class OnboardingFirstScreen extends StatefulWidget {
+  const OnboardingFirstScreen(
+      {super.key,
+      required this.validateLocation,
+      required this.userLanguage,
+      required this.userLocationKey});
+
+  final void Function(String) validateLocation;
+  final void Function(String) userLanguage;
+  final GlobalKey<FormState> userLocationKey;
 
   @override
-  State<OnboardingFirst> createState() {
-    return _OnboardingFirst();
+  State<OnboardingFirstScreen> createState() {
+    return _OnboardingFirstScreen();
   }
 }
 
-class _OnboardingFirst extends State<OnboardingFirst> {
-  String? lang;
+//language
+enum Language { tongan, english }
+
+class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
   final List<String> _locations = [
     'Select your location',
     'Tongatapu',
@@ -22,6 +32,7 @@ class _OnboardingFirst extends State<OnboardingFirst> {
   ];
 
   String _selectedLocation = 'Select your location';
+  Language? _selectedLanguage = Language.english;
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +73,19 @@ class _OnboardingFirst extends State<OnboardingFirst> {
                 ),
                 const SizedBox(height: 20),
                 const Divider(),
-                Container(
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Row(
                     children: [
                       const Text('Language: '),
                       Radio(
-                        value: 1,
-                        groupValue: 'lang',
+                        value: Language.english,
+                        groupValue: _selectedLanguage,
                         onChanged: (val) {
-                          setState(() {});
+                          widget.userLanguage(val.toString());
+                          setState(() {
+                            _selectedLanguage = val;
+                          });
                         },
                       ),
                       const Text(
@@ -80,10 +95,13 @@ class _OnboardingFirst extends State<OnboardingFirst> {
                         ),
                       ),
                       Radio(
-                        value: 2,
-                        groupValue: 'lang',
+                        value: Language.tongan,
+                        groupValue: _selectedLanguage,
                         onChanged: (val) {
-                          setState(() {});
+                          widget.userLanguage(val.toString());
+                          setState(() {
+                            _selectedLanguage = val;
+                          });
                         },
                       ),
                       const Text(
@@ -96,19 +114,29 @@ class _OnboardingFirst extends State<OnboardingFirst> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                DropdownButton(
-                  value: _selectedLocation,
-                  items: _locations.map((String value) {
-                    return DropdownMenuItem(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (val) {
-                    setState(() {
-                      _selectedLocation = val.toString();
-                    });
-                  },
+                Form(
+                  key: widget.userLocationKey,
+                  child: DropdownButtonFormField(
+                    value: _selectedLocation,
+                    items: _locations.map((String value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (val) {
+                      widget.validateLocation(val!);
+                      setState(() {
+                        _selectedLocation = val.toString();
+                      });
+                    },
+                    validator: (val) {
+                      if (val == 'Select your location') {
+                        return 'Please select your location';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
               ],
             ),

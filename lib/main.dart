@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:macres/screens/weather_forcast/weather_forcast.dart';
+import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:macres/widgets/onboarding/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,8 +21,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("showOnboarding: $showOnboarding");
-
     return MaterialApp(
       title: 'Tonga Weather App',
       theme: ThemeData().copyWith(
@@ -31,7 +29,9 @@ class App extends StatelessWidget {
           seedColor: const Color.fromARGB(255, 148, 139, 92),
         ),
       ),
-      home: showOnboarding ? const OnboardingPage() : const WeatherForcast(),
+      home: showOnboarding
+          ? const OnboardingPage()
+          : const WeatherForcastScreen(),
     );
   }
 }

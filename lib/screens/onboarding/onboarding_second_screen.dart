@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
 
-class OnboardingSecond extends StatelessWidget {
-  const OnboardingSecond({super.key});
+class OnboardingSecondScreen extends StatefulWidget {
+  const OnboardingSecondScreen({super.key, required this.userSelectedLanguage});
 
+  final String userSelectedLanguage;
+
+  @override
+  State<OnboardingSecondScreen> createState() {
+    return _OnboardingSecondScreen();
+  }
+}
+
+class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    String lang = widget.userSelectedLanguage;
+    String strLang = lang == 'Language.tongan'
+        ? 'Koe App ko eni teke lava lipooti mai ai ngaahi fakatamaki.'
+        : 'This app, allows you to report to us events. You can send us your post disaster impact report, request assistance and more.';
+    print(lang);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -20,11 +34,10 @@ class OnboardingSecond extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
             child: Column(
-              children: const [
-                Text(
-                    'This app, allows you to report to us events. You can send us your post disaster impact report, request assistance and more.'),
-                SizedBox(height: 20),
-                ListTile(
+              children: [
+                Text(strLang),
+                const SizedBox(height: 20),
+                const ListTile(
                   horizontalTitleGap: 1,
                   leading: Icon(
                     Icons.check_circle_rounded,
@@ -32,7 +45,7 @@ class OnboardingSecond extends StatelessWidget {
                   ),
                   title: Text('Let us know when you felt an earthquake'),
                 ),
-                ListTile(
+                const ListTile(
                   horizontalTitleGap: 1,
                   leading: Icon(
                     Icons.check_circle_rounded,
@@ -40,7 +53,7 @@ class OnboardingSecond extends StatelessWidget {
                   ),
                   title: Text('Receive Weather Forecast'),
                 ),
-                ListTile(
+                const ListTile(
                   horizontalTitleGap: 1,
                   leading: Icon(
                     Icons.check_circle_rounded,
@@ -49,7 +62,7 @@ class OnboardingSecond extends StatelessWidget {
                   title: Text(
                       'Receive Critical Notifications and Alerts (Tsunami, Weather, Volcanic and more)'),
                 ),
-                ListTile(
+                const ListTile(
                   horizontalTitleGap: 1,
                   leading: Icon(
                     Icons.check_circle_rounded,
@@ -57,7 +70,7 @@ class OnboardingSecond extends StatelessWidget {
                   ),
                   title: Text('Send Disaster Impact Report'),
                 ),
-                ListTile(
+                const ListTile(
                   horizontalTitleGap: 1,
                   leading: Icon(
                     Icons.check_circle_rounded,

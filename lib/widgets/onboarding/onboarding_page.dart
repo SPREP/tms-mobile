@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:macres/screens/onboarding/onboarding_first.dart';
-import 'package:macres/screens/onboarding/onboarding_second.dart';
-import 'package:macres/screens/weather_forcast/weather_forcast.dart';
+import 'package:macres/screens/onboarding/onboarding_first_screen.dart';
+import 'package:macres/screens/onboarding/onboarding_second_screen.dart';
+import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -17,6 +17,38 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingPageState extends State<OnboardingPage> {
   final controller = PageController();
   bool isLastPage = false;
+  String _selectedLocation = 'Select your location';
+  String _selectedLanguage = 'English';
+  final _userLocationKey = GlobalKey<FormState>();
+
+  bool isError = false;
+
+  void _selectedUserLocation(String value) {
+    _selectedLocation = value;
+  }
+
+  void _selectedUserLanguage(String value) {
+    _selectedLanguage = value;
+  }
+
+  void _submissionCallback() async {
+    if (!isLastPage) {
+      final validationStatus =
+          _userLocationKey.currentState?.validate() ?? false;
+
+      if (!validationStatus) {
+        isError = true;
+      } else {
+        isError = false;
+
+        //save values
+        final prefs = await SharedPreferences.getInstance();
+
+        prefs.setString('user_location', _selectedLocation);
+        prefs.setString('user_language', _selectedLanguage);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -30,15 +62,22 @@ class _OnboardingPageState extends State<OnboardingPage> {
       body: Container(
         padding: const EdgeInsets.only(bottom: 80),
         child: PageView(
-          controller: controller,
+          physics: const NeverScrollableScrollPhysics(),
           onPageChanged: (index) {
             setState(() {
               isLastPage = index == 1;
+              index = 0;
             });
           },
-          children: const [
-            OnboardingFirst(),
-            OnboardingSecond(),
+          //physics: const NeverScrollableScrollPhysics(),
+          controller: controller,
+          children: [
+            OnboardingFirstScreen(
+              validateLocation: _selectedUserLocation,
+              userLanguage: _selectedUserLanguage,
+              userLocationKey: _userLocationKey,
+            ),
+            OnboardingSecondScreen(userSelectedLanguage: _selectedLanguage),
           ],
         ),
       ),
@@ -63,7 +102,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 //Navigate to home page
                 Navigator.of(context)
                     .pushReplacement(MaterialPageRoute(builder: (context) {
-                  return const WeatherForcast();
+                  return const WeatherForcastScreen();
                 }));
               },
             )
@@ -88,6 +127,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         activeDotColor: Colors.white,
                       ),
                       onDotClicked: (index) {
+                        _submissionCallback();
+                        if (isError) return;
                         controller.animateToPage(index,
                             duration: const Duration(milliseconds: 500),
                             curve: Curves.easeIn);
@@ -96,9 +137,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ),
                   TextButton(
                     onPressed: () {
+                      _submissionCallback();
+                      if (isError) return;
                       controller.nextPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut);
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
                     },
                     child: const Text(
                       'NEXT',
