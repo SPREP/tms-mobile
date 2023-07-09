@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:macres/providers/locale_provider.dart';
+import 'package:provider/provider.dart';
 
 class OnboardingFirstScreen extends StatefulWidget {
   const OnboardingFirstScreen(
       {super.key,
       required this.validateLocation,
-      required this.userLanguage,
       required this.userLocationKey});
 
   final void Function(String) validateLocation;
-  final void Function(String) userLanguage;
   final GlobalKey<FormState> userLocationKey;
 
   @override
@@ -18,7 +18,7 @@ class OnboardingFirstScreen extends StatefulWidget {
 }
 
 //language
-enum Language { tongan, english }
+enum Language { to, en }
 
 class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
   final List<String> _locations = [
@@ -32,7 +32,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
   ];
 
   String _selectedLocation = 'Select your location';
-  Language? _selectedLanguage = Language.english;
+  Language? _selectedLanguage = Language.en;
 
   @override
   Widget build(BuildContext context) {
@@ -75,42 +75,52 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                 const Divider(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Row(
-                    children: [
-                      const Text('Language: '),
-                      Radio(
-                        value: Language.english,
-                        groupValue: _selectedLanguage,
-                        onChanged: (val) {
-                          widget.userLanguage(val.toString());
-                          setState(() {
-                            _selectedLanguage = val;
-                          });
-                        },
-                      ),
-                      const Text(
-                        'English',
-                        style: TextStyle(
-                          fontSize: 17.0,
+                  child: Consumer<LocaleProvider>(
+                    builder: (context, localeProvider, child) => Row(
+                      children: [
+                        const Text('Language: '),
+                        Radio(
+                          value: Language.en,
+                          groupValue: _selectedLanguage,
+                          onChanged: (val) {
+                            setState(() {
+                              _selectedLanguage = val;
+
+                              if (val == null) return;
+                              int idx = val.toString().indexOf(".") + 1;
+                              localeProvider.setLocale(
+                                  val.toString().substring(idx).trim());
+                            });
+                          },
                         ),
-                      ),
-                      Radio(
-                        value: Language.tongan,
-                        groupValue: _selectedLanguage,
-                        onChanged: (val) {
-                          widget.userLanguage(val.toString());
-                          setState(() {
-                            _selectedLanguage = val;
-                          });
-                        },
-                      ),
-                      const Text(
-                        'Tongan',
-                        style: TextStyle(
-                          fontSize: 17.0,
+                        const Text(
+                          'English',
+                          style: TextStyle(
+                            fontSize: 17.0,
+                          ),
                         ),
-                      ),
-                    ],
+                        Radio(
+                          value: Language.to,
+                          groupValue: _selectedLanguage,
+                          onChanged: (val) {
+                            setState(() {
+                              _selectedLanguage = val;
+
+                              if (val == null) return;
+                              int idx = val.toString().indexOf(".") + 1;
+                              localeProvider.setLocale(
+                                  val.toString().substring(idx).trim());
+                            });
+                          },
+                        ),
+                        const Text(
+                          'Tongan',
+                          style: TextStyle(
+                            fontSize: 17.0,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),

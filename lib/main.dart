@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:macres/providers/locale_provider.dart';
 import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:macres/widgets/onboarding/onboarding_page.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -25,26 +27,33 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        ToMaterialLocalizations.delegate,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => LocaleProvider())
       ],
-      supportedLocales: const [Locale('to'), Locale('en', 'US')],
-      locale: const Locale('to'),
-      title: 'Tonga Weather App',
-      theme: ThemeData().copyWith(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 148, 139, 92),
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, child) => MaterialApp(
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            ToMaterialLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('to'), Locale('en', 'US')],
+          locale: localeProvider.selectedLocale,
+          title: 'Tonga Weather App',
+          theme: ThemeData().copyWith(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color.fromARGB(255, 148, 139, 92),
+            ),
+          ),
+          home: showOnboarding
+              ? const OnboardingPage()
+              : const WeatherForcastScreen(),
         ),
       ),
-      home: showOnboarding
-          ? const OnboardingPage()
-          : const WeatherForcastScreen(),
     );
   }
 }

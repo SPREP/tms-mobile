@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingSecondScreen extends StatefulWidget {
-  const OnboardingSecondScreen({super.key, required this.userSelectedLanguage});
-
-  final String userSelectedLanguage;
+  const OnboardingSecondScreen({super.key});
 
   @override
   State<OnboardingSecondScreen> createState() {
@@ -16,7 +14,6 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    String lang = widget.userSelectedLanguage;
 
     return Scaffold(
       extendBodyBehindAppBar: true,

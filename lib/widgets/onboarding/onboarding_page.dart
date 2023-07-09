@@ -74,10 +74,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
           children: [
             OnboardingFirstScreen(
               validateLocation: _selectedUserLocation,
-              userLanguage: _selectedUserLanguage,
               userLocationKey: _userLocationKey,
             ),
-            OnboardingSecondScreen(userSelectedLanguage: _selectedLanguage),
+            const OnboardingSecondScreen(),
           ],
         ),
       ),
