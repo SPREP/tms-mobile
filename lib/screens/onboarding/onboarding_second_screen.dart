@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingSecondScreen extends StatefulWidget {
   const OnboardingSecondScreen({super.key, required this.userSelectedLanguage});
@@ -16,10 +17,6 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     String lang = widget.userSelectedLanguage;
-    String strLang = lang == 'Language.tongan'
-        ? 'Koe App ko eni teke lava lipooti mai ai ngaahi fakatamaki.'
-        : 'This app, allows you to report to us events. You can send us your post disaster impact report, request assistance and more.';
-    print(lang);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -35,48 +32,47 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
             padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
             child: Column(
               children: [
-                Text(strLang),
+                Text(AppLocalizations.of(context).onBoardingHeadingText),
                 const SizedBox(height: 20),
-                const ListTile(
+                ListTile(
                   horizontalTitleGap: 1,
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.check_circle_rounded,
                     color: Colors.green,
                   ),
-                  title: Text('Let us know when you felt an earthquake'),
+                  title: Text(AppLocalizations.of(context).onBoardListItem1),
                 ),
-                const ListTile(
+                ListTile(
                   horizontalTitleGap: 1,
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.check_circle_rounded,
                     color: Colors.green,
                   ),
-                  title: Text('Receive Weather Forecast'),
+                  title: Text(AppLocalizations.of(context).onBoardListItem2),
                 ),
-                const ListTile(
+                ListTile(
                   horizontalTitleGap: 1,
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.check_circle_rounded,
                     color: Colors.green,
                   ),
-                  title: Text(
-                      'Receive Critical Notifications and Alerts (Tsunami, Weather, Volcanic and more)'),
+                  title: Text(AppLocalizations.of(context).onBoardListItem3),
                 ),
-                const ListTile(
+                ListTile(
                   horizontalTitleGap: 1,
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.check_circle_rounded,
                     color: Colors.green,
                   ),
-                  title: Text('Send Disaster Impact Report'),
+                  title: Text(AppLocalizations.of(context).onBoardListItem4),
                 ),
-                const ListTile(
+                ListTile(
                   horizontalTitleGap: 1,
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.check_circle_rounded,
                     color: Colors.green,
                   ),
-                  title: Text('Send Assitance Request'),
+                  title: Text(AppLocalizations.of(context).onBoardListItem5),
                 ),
               ],
             ),

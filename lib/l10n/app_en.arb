@@ -1,0 +1,18 @@
+{
+    "helloWorld": "Hello World",
+    "@helloWorld": {
+        "description": "The conventional newborn programmer greeting"
+    },
+    "onBoardListItem1": "Let us know when you felt an earthquake",
+    "onBoardListItem2": "Receive Weather Forecast",
+    "onBoardListItem3": "Receive Critical Notifications and Alerts (Tsunami, Weather, Volcanic and more)",
+    "onBoardListItem4": "Send Disaster Impact Report",
+    "onBoardListItem5": "Send Assitance Request",
+    "@onBoardListItem1": {
+        "description": "The list of what the app do in the onboarding second page."
+    },
+    "onBoardingHeadingText": "This app, allows you to report to us events.  You can send us your post disaster impact report, request assistance and more.",
+    "@onBoardingHeadingText": {
+        "description": "The onboarding second screen heading text"
+    }
+}
