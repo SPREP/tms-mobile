@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:macres/providers/locale_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingFirstScreen extends StatefulWidget {
   const OnboardingFirstScreen(
@@ -22,7 +23,7 @@ enum Language { to, en }
 
 class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
   final List<String> _locations = [
-    'Select your location',
+    'Select...',
     'Tongatapu',
     'Vavau',
     'Haapai',
@@ -31,7 +32,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
     'Niuatoputapu'
   ];
 
-  String _selectedLocation = 'Select your location';
+  String _selectedLocation = 'Select...';
   Language? _selectedLanguage = Language.en;
 
   @override
@@ -53,23 +54,23 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
             child: Column(
               children: [
                 const Text(
-                  'Malo e lelei',
+                  "Malo e lelei",
                   style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(255, 145, 142, 142)),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Welcome to Tonga weather App.',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).onBoardingSubtitle,
+                  style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(255, 152, 150, 150)),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'Choose your language and location',
+                Text(
+                  AppLocalizations.of(context).onBoardingUnderSubtitle,
                 ),
                 const SizedBox(height: 20),
                 const Divider(),
@@ -78,7 +79,8 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                   child: Consumer<LocaleProvider>(
                     builder: (context, localeProvider, child) => Row(
                       children: [
-                        const Text('Language: '),
+                        Text(
+                            "${AppLocalizations.of(context).onBoardingLanguage}:"),
                         Radio(
                           value: Language.en,
                           groupValue: _selectedLanguage,
@@ -141,8 +143,13 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                       });
                     },
                     validator: (val) {
-                      if (val == 'Select your location') {
-                        return 'Please select your location';
+                      if (val == 'Select...') {
+                        String errMsg = "";
+                        setState(() {
+                          errMsg = AppLocalizations.of(context)
+                              .onBoardingLocationError;
+                        });
+                        return errMsg;
                       }
                       return null;
                     },

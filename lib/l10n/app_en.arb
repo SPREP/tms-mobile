@@ -14,5 +14,37 @@
     "onBoardingHeadingText": "This app, allows you to report to us events.  You can send us your post disaster impact report, request assistance and more.",
     "@onBoardingHeadingText": {
         "description": "The onboarding second screen heading text"
-    }
+    },
+    "onBoardingGetStartedButton": "Get Started",
+    "@onBoardingGetStartedButton": {
+        "description": "Get Started button on the second onboarding page."
+    },
+    "onBoardingNextButton": "NEXT",
+    "@onBoardingNextButton": {
+        "description": "Next button on the second onboarding page."
+    },
+    "onBoardingYourLocation": "Select your location",
+    "@onBoardingYourLocation": {
+        "description": "Label of the dropdown select your location inside the onboarding first page."
+    },
+    "onBoardingSubtitle": "Welcome to Tonga weather App.",
+    "@onBoardingSubtitle": {
+        "description": "Subtitle inside the onboarding first page."
+    },
+    "onBoardingUnderSubtitle": "Choose your language and location",
+    "@onBoardingUnderSubtitle": {
+        "description": "A third lines instructions for user to choose language and location inside onboarding first page."
+    },
+     "onBoardingLanguage": "Language",
+     "@onBoardingLanguage": {
+        "description": "Language label inside onboarding first page."
+     },
+
+     "onBoardingLocationError": "Please select your location",
+     "@onBoardingLocationError": {
+        "description": "Error message for the location dropdown box"
+     }
+
+
+
 }

@@ -4,6 +4,7 @@ import 'package:macres/screens/onboarding/onboarding_second_screen.dart';
 import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -56,6 +57,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
     super.dispose();
   }
 
+  void turnOnboardingOff() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('showOnboarding', false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,17 +93,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   borderRadius: BorderRadius.circular(1),
                 ),
                 foregroundColor: Colors.white,
-                backgroundColor: Color.fromARGB(255, 110, 107, 99),
+                backgroundColor: const Color.fromARGB(255, 110, 107, 99),
                 minimumSize: const Size.fromHeight(80),
               ),
-              child: const Text(
-                'Get Started',
-                style: TextStyle(fontSize: 24),
-              ),
-              onPressed: () async {
-                final prefs = await SharedPreferences.getInstance();
-                prefs.setBool('showOnboarding', false);
-
+              child: Row(children: [
+                Text(
+                  AppLocalizations.of(context).onBoardingGetStartedButton,
+                  style: const TextStyle(fontSize: 24),
+                ),
+                const Icon(
+                  Icons.arrow_forward,
+                  color: Colors.white,
+                ),
+              ]),
+              onPressed: () {
+                turnOnboardingOff();
                 //Navigate to home page
                 Navigator.of(context)
                     .pushReplacement(MaterialPageRoute(builder: (context) {
@@ -143,9 +153,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         curve: Curves.easeInOut,
                       );
                     },
-                    child: const Text(
-                      'NEXT',
-                      style: TextStyle(color: Colors.white),
+                    child: Row(
+                      children: [
+                        Text(
+                          AppLocalizations.of(context).onBoardingNextButton,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
+                      ],
                     ),
                   ),
                 ],

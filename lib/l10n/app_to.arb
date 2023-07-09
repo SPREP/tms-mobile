@@ -5,5 +5,12 @@
     "onBoardListItem3": "Ma'u heni ngaahi fakatokanga mahu'inga 'aupito hange koe Sunami, Afa moe Mo'ungaafi",
     "onBoardListItem4": "Lipooti mai ngaahi maumau hili ha fakatamaki fakaenatula",
     "onBoardListItem5": "Kole tokoni mai heni ki ha'o fiema'u vivili hili ha fakatamaki fakaenatula",
-    "onBoardingHeadingText": "Lipooti mai ngaahi me'a 'oku hoko hange ko e maumau hili e fakatamaki faka e natula moe ngaahi me'a lahi."
+    "onBoardingHeadingText": "Lipooti mai ngaahi me'a 'oku hoko hange ko e maumau hili e fakatamaki faka e natula moe ngaahi me'a lahi.",
+    "onBoardingGetStartedButton": "Kamata",
+    "onBoardingNextButton": "Hokomai",
+    "onBoardingYourLocation": "Ko fe feitu'u 'oku ke nofo ai",
+    "onBoardingSubtitle": "App fakamatala'ea 'a Tonga",
+    "onBoardingUnderSubtitle": "Fili 'a e lea moe feitu'u 'oku ke nofo ai",
+    "onBoardingLanguage": "Lea",
+    "onBoardingLocationError": "Kataki fili e feitu'u 'oku ke nofo ai."
 }
