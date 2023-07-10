@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:macres/screens/onboarding/onboarding_first_screen.dart';
 import 'package:macres/screens/onboarding/onboarding_second_screen.dart';
+import 'package:macres/screens/tabs_screen.dart';
 import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -111,7 +112,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 //Navigate to home page
                 Navigator.of(context)
                     .pushReplacement(MaterialPageRoute(builder: (context) {
-                  return const WeatherForcastScreen();
+                  return const TabsScreen();
                 }));
               },
             )

@@ -5,13 +5,6 @@ class WeatherForcastScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Weather Forcast'),
-      ),
-      body: const Center(
-        child: Text('Weather Forcast Content Here'),
-      ),
-    );
+    return const Text('Weather Forcast 123');
   }
 }

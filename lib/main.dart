@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:macres/providers/locale_provider.dart';
-import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
+import 'package:macres/screens/tabs_screen.dart';
 import 'package:macres/widgets/onboarding/onboarding_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,9 +49,7 @@ class App extends StatelessWidget {
               seedColor: const Color.fromARGB(255, 148, 139, 92),
             ),
           ),
-          home: showOnboarding
-              ? const OnboardingPage()
-              : const WeatherForcastScreen(),
+          home: showOnboarding ? const OnboardingPage() : const TabsScreen(),
         ),
       ),
     );
