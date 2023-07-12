@@ -42,6 +42,8 @@ dependencies:
     sdk: flutter
   intl: any
   syncfusion_flutter_sliders: ^21.2.4
+  humanitarian_icons: ^1.0.2
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:macres/models/settings_model.dart';
 
 void main() => runApp(const SettingsScreen());
 
@@ -11,6 +14,9 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  final GlobalKey<FormState> userLocationKey = GlobalKey<FormState>();
+  Location _selectedLocation = Location.select;
+  Language? _selectedLanguage = Language.en;
   double _value = 50.0;
   bool light = true;
 
@@ -34,18 +40,81 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
         child: Column(
           children: [
-            const Text('Language:'),
-            const Divider(
-              indent: 20,
-              endIndent: 20,
-              thickness: 0.5,
+            Consumer(
+              builder: (context, localeProvider, child) => Row(
+                children: [
+                  Text("${AppLocalizations.of(context).onBoardingLanguage}:"),
+                  Radio(
+                    value: Language.en,
+                    groupValue: _selectedLanguage,
+                    onChanged: (val) {
+                      setState(() {
+                        _selectedLanguage = val;
+
+                        if (val == null) return;
+                        int idx = val.toString().indexOf(".") + 1;
+                        //localeProvider
+                        //    .setLocale(val.toString().substring(idx).trim());
+                      });
+                    },
+                  ),
+                  Text(
+                    languageLabel[Language.en].toString(),
+                    style: const TextStyle(
+                      fontSize: 17.0,
+                    ),
+                  ),
+                  Radio(
+                    value: Language.to,
+                    groupValue: _selectedLanguage,
+                    onChanged: (val) {
+                      setState(() {
+                        _selectedLanguage = val;
+
+                        if (val == null) return;
+                        int idx = val.toString().indexOf(".") + 1;
+                        //localeProvider
+                        //   .setLocale(val.toString().substring(idx).trim());
+                      });
+                    },
+                  ),
+                  Text(
+                    languageLabel[Language.to].toString(),
+                    style: const TextStyle(
+                      fontSize: 17.0,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 10),
-            const Text('Location:'),
-            const Divider(
-              indent: 20,
-              endIndent: 20,
-              thickness: 0.5,
+            const SizedBox(height: 20),
+            Form(
+              key: userLocationKey,
+              child: DropdownButtonFormField(
+                value: _selectedLocation,
+                items: Location.values.map((value) {
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(locationLabel[value].toString()),
+                  );
+                }).toList(),
+                onChanged: (val) {
+                  setState(() {
+                    _selectedLocation = val!;
+                  });
+                },
+                validator: (val) {
+                  if (val == Location.select) {
+                    String errMsg = "";
+                    setState(() {
+                      errMsg =
+                          AppLocalizations.of(context).onBoardingLocationError;
+                    });
+                    return errMsg;
+                  }
+                  return null;
+                },
+              ),
             ),
             const Text('Dark Theme:'),
             Switch(
