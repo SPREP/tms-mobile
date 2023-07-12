@@ -5,6 +5,8 @@ class WeatherForcastScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('Weather Forcast 123');
+    return const Text(
+      'Weather Forcast 123',
+    );
   }
 }

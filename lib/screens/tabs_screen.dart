@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macres/screens/event_report_screen.dart';
 import 'package:macres/screens/event_screen.dart';
 import 'package:macres/screens/notification_screen.dart';
 import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
@@ -37,15 +38,20 @@ class _TabsScreenState extends State<TabsScreen> {
       activePageTitle = 'Notifications';
     }
 
+    void openEventReportOverlay() {
+      showModalBottomSheet(
+          context: context, builder: (ctx) => const EventReportScreen());
+    }
+
     return Scaffold(
+      body: Center(child: activePage),
       extendBodyBehindAppBar: true,
       drawer: const MainDrawerWidget(),
       appBar: AppBar(
         title: Text(activePageTitle),
       ),
-      body: activePage,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: openEventReportOverlay,
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(

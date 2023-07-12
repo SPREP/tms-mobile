@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:macres/providers/locale_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:macres/models/settings_model.dart';
 
 class OnboardingFirstScreen extends StatefulWidget {
   const OnboardingFirstScreen(
@@ -18,21 +19,8 @@ class OnboardingFirstScreen extends StatefulWidget {
   }
 }
 
-//language
-enum Language { to, en }
-
 class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
-  final List<String> _locations = [
-    'Select...',
-    'Tongatapu',
-    'Vavau',
-    'Haapai',
-    'Eua',
-    'Niuafoou',
-    'Niuatoputapu'
-  ];
-
-  String _selectedLocation = 'Select...';
+  Location _selectedLocation = Location.select;
   Language? _selectedLanguage = Language.en;
 
   @override
@@ -95,9 +83,9 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                             });
                           },
                         ),
-                        const Text(
-                          'English',
-                          style: TextStyle(
+                        Text(
+                          languageLabel[Language.en].toString(),
+                          style: const TextStyle(
                             fontSize: 17.0,
                           ),
                         ),
@@ -115,9 +103,9 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                             });
                           },
                         ),
-                        const Text(
-                          'Tongan',
-                          style: TextStyle(
+                        Text(
+                          languageLabel[Language.to].toString(),
+                          style: const TextStyle(
                             fontSize: 17.0,
                           ),
                         ),
@@ -130,20 +118,20 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                   key: widget.userLocationKey,
                   child: DropdownButtonFormField(
                     value: _selectedLocation,
-                    items: _locations.map((String value) {
+                    items: Location.values.map((value) {
                       return DropdownMenuItem(
                         value: value,
-                        child: Text(value),
+                        child: Text(locationLabel[value].toString()),
                       );
                     }).toList(),
                     onChanged: (val) {
-                      widget.validateLocation(val!);
+                      widget.validateLocation(val.toString());
                       setState(() {
-                        _selectedLocation = val.toString();
+                        _selectedLocation = val!;
                       });
                     },
                     validator: (val) {
-                      if (val == 'Select...') {
+                      if (val == Location.select) {
                         String errMsg = "";
                         setState(() {
                           errMsg = AppLocalizations.of(context)

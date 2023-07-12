@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:macres/screens/onboarding/onboarding_first_screen.dart';
 import 'package:macres/screens/onboarding/onboarding_second_screen.dart';
 import 'package:macres/screens/tabs_screen.dart';
-import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -117,7 +116,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               },
             )
           : Container(
-              color: Color.fromARGB(255, 110, 107, 99),
+              color: const Color.fromARGB(255, 110, 107, 99),
               padding: const EdgeInsets.symmetric(horizontal: 20),
               height: 80,
               child: Row(
