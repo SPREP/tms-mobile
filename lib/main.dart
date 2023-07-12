@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:macres/providers/locale_provider.dart';
 import 'package:macres/screens/tabs_screen.dart';
 import 'package:macres/widgets/onboarding/onboarding_page.dart';
@@ -43,7 +44,10 @@ class App extends StatelessWidget {
           supportedLocales: const [Locale('to'), Locale('en', 'US')],
           locale: localeProvider.selectedLocale,
           title: 'Tonga Weather App',
-          theme: ThemeData().copyWith(
+          theme: ThemeData(
+                  //fontFamily: GoogleFonts.openSans().fontFamily,
+                  )
+              .copyWith(
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
               seedColor: const Color.fromARGB(255, 133, 131, 131),

@@ -1,73 +1,87 @@
 import 'package:flutter/material.dart';
-import 'package:humanitarian_icons/humanitarian_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:macres/widgets/national_number_widget.dart';
+import 'package:macres/models/national_number_model.dart';
+import 'package:macres/models/settings_model.dart';
 
 class NationalNumberScreen extends StatelessWidget {
   const NationalNumberScreen({super.key});
 
-  Future _callThisNumber(String number) async {
-    Uri url = Uri(scheme: "tel", path: number);
-    print(url);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    const tongatapuNumbers = {
+      Location: Location.tongatapu,
+      Category.ambulance: "+676 387221",
+      Category.police: "+676 387856",
+      Category.fire: "+676 387332",
+      Category.hospital: "+676 387976",
+    };
+
+    const haapaiNumbers = {
+      Location: Location.haapai,
+      Category.ambulance: "+676 38564",
+      Category.police: "+676 387444",
+      Category.fire: "+676 38756443",
+      Category.hospital: "+676 38734333",
+    };
+
+    const vavauNumbers = {
+      Location: Location.vavau,
+      Category.ambulance: "+676 387754",
+      Category.police: "+676 387244",
+      Category.fire: "+676 387299",
+      Category.hospital: "+676 387543",
+    };
+
+    const niuafoouNumbers = {
+      Location: Location.niuafoou,
+      Category.ambulance: "+676 38332",
+      Category.police: "+676 387854",
+      Category.fire: "+676 38444",
+      Category.hospital: "+676 3873329",
+    };
+
+    const niuatoputapuNumbers = {
+      Location: Location.niuatoputapu,
+      Category.ambulance: "+676 387333",
+      Category.police: "+676 38222",
+      Category.fire: "+676 387555",
+      Category.hospital: "+676 38666",
+    };
+
+    const euaNumbers = {
+      Location: Location.eua,
+      Category.ambulance: "+676 387444",
+      Category.police: "+676 3874",
+      Category.fire: "+676 38723129",
+      Category.hospital: "+676 387543",
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('National number'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white,
       ),
-      body: Column(
-        children: [
-          Card(
-            child: Column(
-              children: [
-                ListTile(
-                  visualDensity: const VisualDensity(vertical: -3),
-                  dense: true,
-                  leading: const Icon(HumanitarianIcons.ambulance),
-                  title: const Text('Ambulance'),
-                  trailing: TextButton(
-                    onPressed: () {
-                      _callThisNumber('89332');
-                    },
-                    child: const Text('+676 89332'),
-                  ),
-                ),
-                ListTile(
-                  visualDensity: const VisualDensity(vertical: -3),
-                  dense: true,
-                  leading: const Icon(Icons.local_police),
-                  title: const Text('Police'),
-                  trailing: TextButton(
-                      onPressed: () {
-                        _callThisNumber('89332');
-                      },
-                      child: const Text('+676 89332')),
-                ),
-                ListTile(
-                  visualDensity: const VisualDensity(vertical: -3),
-                  dense: true,
-                  leading: const Icon(
-                    HumanitarianIcons.fire,
-                    color: Colors.red,
-                  ),
-                  title: const Text('Fire'),
-                  trailing: TextButton(
-                    onPressed: () {
-                      _callThisNumber('89332');
-                    },
-                    child: const Text('+676 89332'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+      body: const SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(padding: EdgeInsets.only(top: 30)),
+            Text("You will find here the national telephone numbers."),
+            SizedBox(height: 10),
+            NationalNumberWidget(contactNumber: tongatapuNumbers),
+            SizedBox(height: 10),
+            NationalNumberWidget(contactNumber: haapaiNumbers),
+            SizedBox(height: 10),
+            NationalNumberWidget(contactNumber: vavauNumbers),
+            SizedBox(height: 10),
+            NationalNumberWidget(contactNumber: niuafoouNumbers),
+            SizedBox(height: 10),
+            NationalNumberWidget(contactNumber: niuatoputapuNumbers),
+            SizedBox(height: 10),
+            NationalNumberWidget(contactNumber: euaNumbers),
+            Padding(padding: EdgeInsets.only(bottom: 30)),
+          ],
+        ),
       ),
     );
   }

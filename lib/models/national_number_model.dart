@@ -11,8 +11,20 @@ const categoryLabel = {
 };
 
 const categoryIcon = {
-  Category.hospital: Icon(Icons.local_hospital),
-  Category.fire: Icon(Icons.fire_truck),
-  Category.police: Icon(Icons.local_police),
-  Category.ambulance: Icon(HumanitarianIcons.ambulance),
+  Category.hospital: Icon(
+    Icons.local_hospital,
+    color: Color.fromARGB(255, 105, 130, 62),
+  ),
+  Category.fire: Icon(
+    HumanitarianIcons.fire,
+    color: Color.fromARGB(255, 206, 124, 64),
+  ),
+  Category.police: Icon(
+    Icons.local_police,
+    color: Colors.blue,
+  ),
+  Category.ambulance: Icon(
+    HumanitarianIcons.ambulance,
+    color: Color.fromARGB(255, 64, 160, 77),
+  ),
 };
