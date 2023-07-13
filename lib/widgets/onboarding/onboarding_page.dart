@@ -96,7 +96,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 backgroundColor: const Color.fromARGB(255, 110, 107, 99),
                 minimumSize: const Size.fromHeight(80),
               ),
-              child: Row(children: [
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const Spacer(),
                 Text(
                   AppLocalizations.of(context).onBoardingGetStartedButton,
                   style: const TextStyle(fontSize: 24),
@@ -105,6 +107,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   Icons.arrow_forward,
                   color: Colors.white,
                 ),
+                const Spacer(),
               ]),
               onPressed: () {
                 turnOnboardingOff();

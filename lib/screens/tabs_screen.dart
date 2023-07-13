@@ -49,6 +49,8 @@ class _TabsScreenState extends State<TabsScreen> {
       drawer: const MainDrawerWidget(),
       appBar: AppBar(
         title: Text(activePageTitle),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: openEventReportOverlay,

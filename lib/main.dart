@@ -45,9 +45,12 @@ class App extends StatelessWidget {
           locale: localeProvider.selectedLocale,
           title: 'Tonga Weather App',
           theme: ThemeData(
-                  //fontFamily: GoogleFonts.openSans().fontFamily,
-                  )
-              .copyWith(
+            //fontFamily: GoogleFonts.openSans().fontFamily,
+            inputDecorationTheme: const InputDecorationTheme(
+              filled: true,
+              fillColor: Color.fromARGB(255, 238, 235, 246),
+            ),
+          ).copyWith(
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
               seedColor: const Color.fromARGB(255, 133, 131, 131),

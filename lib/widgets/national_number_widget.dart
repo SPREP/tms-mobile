@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:macres/models/settings_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:macres/models/national_number_model.dart';

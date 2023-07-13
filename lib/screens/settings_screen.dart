@@ -29,7 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
-        title: Row(children: const [
+        title: const Row(children: [
           Icon(Icons.settings),
           SizedBox(width: 10),
           Text('Settings'),
