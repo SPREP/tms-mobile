@@ -14,7 +14,7 @@ class _EventScreen extends State<EventScreen> {
   Widget build(BuildContext context) {
     return const SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.only(top: 140),
+        padding: EdgeInsets.only(top: 10, bottom: 10),
         child: Column(
           children: [
             EventWidget(

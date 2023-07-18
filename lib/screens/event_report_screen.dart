@@ -11,13 +11,9 @@ class _EventReportScreenState extends State<EventReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(top: 10, bottom: 20, left: 10, right: 10),
       child: Column(
         children: [
-          const Text(
-            'Event Report',
-            style: TextStyle(fontSize: 18),
-          ),
           const SizedBox(
             height: 15,
           ),
@@ -42,14 +38,10 @@ class _EventReportScreenState extends State<EventReportScreen> {
           Row(
             children: [
               const Spacer(),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
               const SizedBox(width: 16),
               ElevatedButton(
                 onPressed: () {},
-                child: const Text('Save'),
+                child: const Text('Submit'),
               ),
             ],
           ),

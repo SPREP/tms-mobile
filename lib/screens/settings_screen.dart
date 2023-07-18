@@ -146,7 +146,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _value = value;
                   });
                 }),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             Row(
               children: [
                 const Spacer(),
