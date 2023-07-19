@@ -54,7 +54,11 @@ class _TabsScreenState extends State<TabsScreen> {
       extendBodyBehindAppBar: _selectedPageIndex == 0 ? true : false,
       body: Container(
         padding: _selectedPageIndex == 0
-            ? EdgeInsets.only(top: height, right: 10, left: 10, bottom: 20)
+            ? EdgeInsets.only(
+                top: height,
+                right: 10,
+                left: 10,
+              )
             : null,
         width: double.infinity,
         height: double.infinity,
@@ -66,7 +70,9 @@ class _TabsScreenState extends State<TabsScreen> {
                 ),
               )
             : null,
-        child: activePage,
+        child: SingleChildScrollView(
+          child: activePage,
+        ),
       ),
       drawer: const MainDrawerWidget(),
       appBar: AppBar(
@@ -75,7 +81,7 @@ class _TabsScreenState extends State<TabsScreen> {
             statusBarIconBrightness: Brightness.dark),
         backgroundColor: Colors.transparent,
         title: Text(activePageTitle),
-        elevation: 10,
+        elevation: 0,
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
