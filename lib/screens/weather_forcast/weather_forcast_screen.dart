@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/single_child_widget.dart';
+import 'package:macres/screens/weather_forcast/ocean_outlook_slide.dart';
+import 'package:macres/screens/weather_forcast/rainfall_outlook_slide.dart';
+import 'package:macres/screens/weather_forcast/sun_moon_slide.dart';
+import 'package:macres/screens/weather_forcast/tide_slide.dart';
+import 'package:macres/screens/weather_forcast/weather_slide.dart';
 import 'package:weather_icons/weather_icons.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:macres/models/settings_model.dart';
 
 class WeatherForcastScreen extends StatefulWidget {
   const WeatherForcastScreen({super.key});
@@ -17,7 +22,10 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     viewportFraction: 0.8,
     keepPage: true,
   );
-  final _itemCount = 5;
+  final _itemCount = 6;
+  dynamic activeSlide;
+
+  Location selectedLocation = Location.tongatapu;
 
   @override
   Widget build(BuildContext context) {
@@ -27,24 +35,46 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         children: [
           Container(
             decoration: const BoxDecoration(
-              color: Color.fromARGB(180, 0, 37, 42),
+              color: Color.fromARGB(210, 0, 37, 42),
               borderRadius: BorderRadius.all(
                 Radius.circular(20),
               ),
             ),
             padding: const EdgeInsets.all(20),
-            child: const Column(
+            child: Column(
               children: [
                 Row(
                   children: [
-                    Text('Tongatapu'),
-                    Spacer(),
-                    Icon(
+                    DropdownButton<Location>(
+                      borderRadius: BorderRadius.circular(10),
+                      value: selectedLocation,
+                      dropdownColor: const Color.fromARGB(255, 17, 48, 51),
+                      icon: const Icon(
+                        Icons.expand_more,
+                        color: Colors.white,
+                      ),
+                      items: Location.values.map((Location value) {
+                        return DropdownMenuItem<Location>(
+                          value: value,
+                          child: Text(
+                            locationLabel[value].toString(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedLocation = value!;
+                        });
+                      },
+                    ),
+                    const Spacer(),
+                    const Icon(
                       Icons.favorite_sharp,
                       color: Colors.white,
                     ),
-                    Spacer(),
-                    Row(
+                    const Spacer(),
+                    const Row(
                       children: [
                         Text('\u2103'),
                         SizedBox(
@@ -55,10 +85,10 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Row(
+                const Row(
                   children: [
                     Spacer(),
                     Text(
@@ -84,8 +114,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     Spacer(),
                   ],
                 ),
-                SizedBox(height: 20),
-                Row(
+                const SizedBox(height: 20),
+                const Row(
                   children: [
                     Column(
                       children: [
@@ -132,8 +162,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
-                Text('Cloudy periods with few showers'),
+                const SizedBox(height: 20),
+                const Text('Cloudy periods with few showers'),
               ],
             ),
           ),
@@ -141,124 +171,30 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           Container(
             height: 350,
             decoration: const BoxDecoration(
-              color: Color.fromARGB(180, 0, 37, 42),
+              color: Color.fromARGB(210, 0, 37, 42),
               borderRadius: BorderRadius.all(
                 Radius.circular(20),
               ),
             ),
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+            padding: const EdgeInsets.only(left: 0, right: 0, top: 20),
             child: Column(
               children: [
                 Expanded(
-                  flex: 1,
                   child: PageView.builder(
                     controller: myController,
                     itemCount: _itemCount,
                     itemBuilder: (_, index) {
-                      return const Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Spacer(),
-                                Text('Weather'),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Icon(
-                                  Icons.favorite,
-                                  color: Colors.white,
-                                ),
-                                Spacer(),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            ListTile(
-                              dense: true,
-                              leading: BoxedIcon(
-                                WeatherIcons.day_sunny,
-                                color: Colors.white,
-                              ),
-                              title: Text('Today',
-                                  style: TextStyle(color: Colors.white)),
-                              trailing: Text(
-                                '21/20',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            ListTile(
-                              dense: true,
-                              leading: BoxedIcon(
-                                WeatherIcons.day_snow_thunderstorm,
-                                color: Colors.white,
-                              ),
-                              title: Text('Tommorow',
-                                  style: TextStyle(color: Colors.white)),
-                              trailing: Text(
-                                '21/20',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            ListTile(
-                              dense: true,
-                              leading: BoxedIcon(
-                                WeatherIcons.day_cloudy_windy,
-                                color: Colors.white,
-                              ),
-                              title: Text('Monday',
-                                  style: TextStyle(color: Colors.white)),
-                              trailing: Text(
-                                '21/20',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            ListTile(
-                              dense: true,
-                              leading: BoxedIcon(
-                                WeatherIcons.rain_wind,
-                                color: Colors.white,
-                              ),
-                              title: Text('Tuesday',
-                                  style: TextStyle(color: Colors.white)),
-                              trailing: Text(
-                                '21/20',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            ListTile(
-                              dense: true,
-                              leading: BoxedIcon(
-                                WeatherIcons.day_cloudy,
-                                color: Colors.white,
-                              ),
-                              title: Text('Wednesday',
-                                  style: TextStyle(color: Colors.white)),
-                              trailing: Text(
-                                '21/20',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                      if (index == 0) activeSlide = const WeatherSlide();
+
+                      if (index == 1) activeSlide = const TideSlide();
+
+                      if (index == 2) activeSlide = const SunMoonSlide();
+
+                      if (index == 3) activeSlide = const RainfallSlide();
+
+                      if (index == 4) activeSlide = const OceanSlide();
+
+                      return activeSlide;
                     },
                   ),
                 ),

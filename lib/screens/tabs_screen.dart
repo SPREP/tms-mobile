@@ -28,7 +28,7 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     Widget activePage = const WeatherForcastScreen();
     String activePageTitle = '';
-    double height = AppBar().preferredSize.height + 60;
+    double height = AppBar().preferredSize.height + 40;
 
     if (_selectedPageIndex == 1) {
       activePage = const EventScreen();
@@ -65,7 +65,7 @@ class _TabsScreenState extends State<TabsScreen> {
         decoration: _selectedPageIndex == 0
             ? const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/rain.jpg'),
+                  image: AssetImage('assets/images/windy_day.jpg'),
                   fit: BoxFit.cover,
                 ),
               )

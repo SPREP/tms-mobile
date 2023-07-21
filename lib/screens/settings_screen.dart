@@ -15,7 +15,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final GlobalKey<FormState> userLocationKey = GlobalKey<FormState>();
-  Location _selectedLocation = Location.select;
+  Location _selectedLocation = Location.tongatapu;
   Language? _selectedLanguage = Language.en;
   double _value = 50.0;
   bool light = true;
@@ -104,14 +104,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   });
                 },
                 validator: (val) {
-                  if (val == Location.select) {
+                  /*  if (val == Location.select) {
                     String errMsg = "";
                     setState(() {
                       errMsg =
                           AppLocalizations.of(context).onBoardingLocationError;
                     });
                     return errMsg;
-                  }
+                  } */
                   return null;
                 },
               ),

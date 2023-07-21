@@ -5,10 +5,9 @@ final formatter = DateFormat.yMd();
 
 enum Language { en, to }
 
-enum Location { select, tongatapu, haapai, vavau, niuafoou, niuatoputapu, eua }
+enum Location { tongatapu, haapai, vavau, niuafoou, niuatoputapu, eua }
 
 const locationLabel = {
-  Location.select: "Select...",
   Location.tongatapu: "Tongatapu",
   Location.haapai: "Ha'apai",
   Location.vavau: "Vava'u",

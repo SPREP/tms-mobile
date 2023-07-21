@@ -20,7 +20,7 @@ class OnboardingFirstScreen extends StatefulWidget {
 }
 
 class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
-  Location _selectedLocation = Location.select;
+  Location? _selectedLocation;
   Language? _selectedLanguage = Language.en;
 
   @override
@@ -117,6 +117,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                 Form(
                   key: widget.userLocationKey,
                   child: DropdownButtonFormField(
+                    hint: const Text('Select your location'),
                     value: _selectedLocation,
                     items: Location.values.map((value) {
                       return DropdownMenuItem(
@@ -131,7 +132,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                       });
                     },
                     validator: (val) {
-                      if (val == Location.select) {
+                      if (val == null) {
                         String errMsg = "";
                         setState(() {
                           errMsg = AppLocalizations.of(context)
