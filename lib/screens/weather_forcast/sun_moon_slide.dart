@@ -15,16 +15,19 @@ class _SunMoonSlideState extends State<SunMoonSlide> {
       children: [
         Row(
           children: [
+            SizedBox(
+              width: 30,
+            ),
             Spacer(),
             Text('Sun & Moon'),
-            SizedBox(
-              width: 20,
-            ),
+            Spacer(),
             Icon(
               Icons.favorite,
               color: Colors.white,
             ),
-            Spacer(),
+            SizedBox(
+              width: 30,
+            ),
           ],
         ),
         SizedBox(

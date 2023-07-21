@@ -15,16 +15,19 @@ class _TideSlideState extends State<TideSlide> {
       children: [
         Row(
           children: [
+            SizedBox(
+              width: 30,
+            ),
             Spacer(),
             Text('Tides'),
-            SizedBox(
-              width: 20,
-            ),
+            Spacer(),
             Icon(
               Icons.favorite,
               color: Colors.white,
             ),
-            Spacer(),
+            SizedBox(
+              width: 30,
+            ),
           ],
         ),
         SizedBox(

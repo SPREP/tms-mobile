@@ -65,7 +65,7 @@ class _TabsScreenState extends State<TabsScreen> {
         decoration: _selectedPageIndex == 0
             ? const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/windy_day.jpg'),
+                  image: AssetImage('assets/images/sunny_day.jpg'),
                   fit: BoxFit.cover,
                 ),
               )

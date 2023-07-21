@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:macres/screens/weather_forcast/ocean_outlook_slide.dart';
-import 'package:macres/screens/weather_forcast/rainfall_outlook_slide.dart';
 import 'package:macres/screens/weather_forcast/sun_moon_slide.dart';
 import 'package:macres/screens/weather_forcast/tide_slide.dart';
 import 'package:macres/screens/weather_forcast/weather_slide.dart';
@@ -19,10 +17,9 @@ class WeatherForcastScreen extends StatefulWidget {
 
 class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   final PageController myController = PageController(
-    viewportFraction: 0.8,
     keepPage: true,
   );
-  final _itemCount = 6;
+  final _itemCount = 3;
   dynamic activeSlide;
 
   Location selectedLocation = Location.tongatapu;
@@ -73,6 +70,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                       Icons.favorite_sharp,
                       color: Colors.white,
                     ),
+                    /*
                     const Spacer(),
                     const Row(
                       children: [
@@ -83,6 +81,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                         Text('\u2109'),
                       ],
                     ),
+                    */
                   ],
                 ),
                 const SizedBox(
@@ -99,13 +98,13 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     Column(
                       children: [
                         Text(
-                          'RAINING 21/21',
+                          'SUNNY 21/20',
                           style: TextStyle(
                             fontSize: 16,
                           ),
                         ),
                         BoxedIcon(
-                          WeatherIcons.rain,
+                          WeatherIcons.day_sunny,
                           color: Colors.white,
                           size: 40,
                         ),
@@ -176,7 +175,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                 Radius.circular(20),
               ),
             ),
-            padding: const EdgeInsets.only(left: 0, right: 0, top: 20),
+            padding: const EdgeInsets.only(top: 20),
             child: Column(
               children: [
                 Expanded(
@@ -190,9 +189,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
                       if (index == 2) activeSlide = const SunMoonSlide();
 
-                      if (index == 3) activeSlide = const RainfallSlide();
+                      //if (index == 3) activeSlide = const RainfallSlide();
 
-                      if (index == 4) activeSlide = const OceanSlide();
+                      //if (index == 4) activeSlide = const OceanSlide();
 
                       return activeSlide;
                     },

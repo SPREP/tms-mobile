@@ -15,16 +15,19 @@ class _WeatherSlideState extends State<WeatherSlide> {
       children: [
         Row(
           children: [
+            SizedBox(
+              width: 30,
+            ),
             Spacer(),
             Text('Weather'),
-            SizedBox(
-              width: 20,
-            ),
+            Spacer(),
             Icon(
               Icons.favorite,
               color: Colors.white,
             ),
-            Spacer(),
+            SizedBox(
+              width: 30,
+            ),
           ],
         ),
         SizedBox(
