@@ -30,9 +30,9 @@ class MainDrawerWidget extends StatelessWidget {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 CircleAvatar(
                   radius: 60,
                   backgroundImage: NetworkImage(

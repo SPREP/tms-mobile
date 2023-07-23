@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:macres/models/settings_model.dart';
 
 class EventModel {
   final int level;
-  final String body;
+  final Widget body;
+  final EventType type;
 
-  const EventModel(this.level, this.body);
+  const EventModel(this.level, this.body, this.type);
 
   Icon getIcon() {
     switch (level) {

@@ -7,6 +7,28 @@ enum Language { en, to }
 
 enum Location { tongatapu, haapai, vavau, niuafoou, niuatoputapu, eua }
 
+enum EventType {
+  earthquake,
+  cyclone,
+  tornado,
+  volcano,
+  tsunami,
+  flood,
+  fire,
+  bushfile
+}
+
+const eventTypeLabel = {
+  EventType.earthquake: 'Earthquake',
+  EventType.cyclone: 'Cyclone',
+  EventType.tornado: 'Tornado',
+  EventType.volcano: 'Volcano Eruption',
+  EventType.tsunami: 'TSunami',
+  EventType.fire: 'Fire',
+  EventType.flood: 'Flood',
+  EventType.bushfile: 'Bush Fire',
+};
+
 const locationLabel = {
   Location.tongatapu: "Tongatapu",
   Location.haapai: "Ha'apai",

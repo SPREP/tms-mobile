@@ -46,6 +46,8 @@ dependencies:
   url_launcher: ^6.1.11
   google_fonts: ^5.1.0
   weather_icons: ^3.0.0
+  flutter_map: ^5.0.0
+  simple_ripple_animation: ^0.0.7
 
 dev_dependencies:
   flutter_test:
