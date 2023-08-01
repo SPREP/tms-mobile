@@ -117,49 +117,51 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   children: [
                     roundContent(
                         const Icon(
-                          Icons.abc,
+                          Icons.calendar_month,
                           color: Colors.white,
                         ),
-                        const Text('hello'),
+                        Text(widget.eventModel.date.toString()),
                         Colors.blue),
                     const Spacer(),
                     roundContent(
                         const Icon(
-                          Icons.abc,
+                          Icons.lock_clock,
                           color: Colors.white,
                         ),
-                        const Text('hello'),
-                        Colors.red),
+                        Text(widget.eventModel.time.toString()),
+                        Color.fromARGB(255, 124, 169, 40)),
                     const Spacer(),
                     roundContent(
                       const Icon(
-                        Icons.abc,
+                        Icons.wind_power,
                         color: Colors.white,
                       ),
-                      const Text('hello'),
+                      Text("${widget.eventModel.category.toString()} Cat..."),
                       Colors.green,
                     ),
                     const Spacer(),
                     roundContent(
                         const Icon(
-                          Icons.abc,
+                          Icons.deck,
                           color: Colors.white,
                         ),
-                        const Text('hello'),
+                        Text("${widget.eventModel.km.toString()} KM"),
                         Colors.orange),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
-                Text('Tsunami Warning'),
-                Text('Felt'),
-                Text('Affecting'),
-                SizedBox(
+                styleLabel(Text('Tsunami Warning'), Text('value')),
+                SizedBox(height: 15),
+                styleLabel(Text('Felt'), Text('value')),
+                SizedBox(height: 15),
+                styleLabel(Text('Affecting'), Text('value')),
+                const SizedBox(
                   height: 50,
                 ),
                 Text('Create Impact Report'),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Text('Request Assistance'),
@@ -171,12 +173,35 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
+  Widget styleLabel(Text label, Text value) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          color: Colors.blue,
+          child: const Text(
+            'label',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          color: Colors.amber,
+          child: const Text(
+            'label',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget roundContent(Icon theIcon, Text theLabel, Color theColor) {
     return ClipOval(
       child: DefaultTextStyle.merge(
         child: Container(
-          width: 80,
-          height: 80,
+          width: 82,
+          height: 82,
           color: theColor,
           padding: const EdgeInsets.all(10),
           child: Column(
@@ -184,11 +209,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               theIcon,
+              const SizedBox(
+                height: 5,
+              ),
               theLabel,
             ],
           ),
         ),
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
       ),
     );
   }

@@ -51,71 +51,64 @@ class _TabsScreenState extends State<TabsScreen> {
     }
 
     return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/sunny_day.jpg'),
-          fit: BoxFit.cover,
+      decoration: _selectedPageIndex == 0
+          ? const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/sunny_day.jpg'),
+                fit: BoxFit.cover,
+              ),
+            )
+          : null,
+      child: Scaffold(
+        backgroundColor: _selectedPageIndex == 0
+            ? const Color.fromARGB(0, 82, 38, 38)
+            : null,
+        body: Container(
+          padding: _selectedPageIndex == 0
+              ? const EdgeInsets.only(
+                  right: 5,
+                  left: 5,
+                )
+              : null,
+          width: double.infinity,
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: activePage,
+          ),
         ),
-      ),
-      child: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          body: Container(
-            padding: _selectedPageIndex == 0
-                ? const EdgeInsets.only(
-                    right: 5,
-                    left: 5,
-                  )
-                : null,
-            width: double.infinity,
-            height: double.infinity,
-            child: SingleChildScrollView(
-              child: activePage,
-            ),
+        drawer: const MainDrawerWidget(),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(activePageTitle),
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
           ),
-          drawer: const MainDrawerWidget(),
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            title: Text(activePageTitle),
-            systemOverlayStyle: const SystemUiOverlayStyle(
-              statusBarBrightness: Brightness.light,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: _selectPage,
+          backgroundColor: const Color.fromARGB(255, 95, 94, 94),
+          unselectedItemColor: Colors.white54,
+          selectedItemColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
             ),
-            /*
-            bottom: const TabBar(
-              tabs: [
-                Tab(text: '24 HOURS'),
-                Tab(text: '5 DAYS'),
-                Tab(text: '16 DAYS')
-              ],
+            BottomNavigationBarItem(
+              icon: Icon(Icons.event_available_rounded),
+              label: 'Events',
             ),
-            */
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            onTap: _selectPage,
-            backgroundColor: Color.fromARGB(255, 95, 94, 94),
-            unselectedItemColor: Colors.white54,
-            selectedItemColor: Colors.white,
-            type: BottomNavigationBarType.fixed,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.event_available_rounded),
-                label: 'Events',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
-                label: 'Notification',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_month),
-                label: 'Event Report',
-              ),
-            ],
-            currentIndex: _selectedPageIndex,
-          ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: 'Notification',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month),
+              label: 'Event Report',
+            ),
+          ],
+          currentIndex: _selectedPageIndex,
         ),
       ),
     );

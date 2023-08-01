@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:macres/models/event_model.dart';
-import 'package:macres/models/settings_model.dart';
 import 'package:macres/widgets/event_widget.dart';
 
 class EventScreen extends StatefulWidget {
@@ -59,6 +58,7 @@ class _EventScreen extends State<EventScreen> {
       'category': 5,
       'lat': -21.178989,
       'lon': -177.198242,
+      'km': 135,
     },
   ];
 
@@ -83,6 +83,7 @@ class _EventScreen extends State<EventScreen> {
                   depth: item['depth'],
                   lat: item['lat'],
                   lon: item['lon'],
+                  km: item['km'],
                 ),
               ),
           ],

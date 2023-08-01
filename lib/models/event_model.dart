@@ -1,7 +1,28 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:macres/models/settings_model.dart';
+
+enum EventType {
+  earthquake,
+  cyclone,
+  tornado,
+  volcano,
+  tsunami,
+  flood,
+  fire,
+  bushfile
+}
+
+const eventTypeLabel = {
+  EventType.earthquake: 'Earthquake',
+  EventType.cyclone: 'Cyclone',
+  EventType.tornado: 'Tornado',
+  EventType.volcano: 'Volcano Eruption',
+  EventType.tsunami: 'TSunami',
+  EventType.fire: 'Fire',
+  EventType.flood: 'Flood',
+  EventType.bushfile: 'Bush Fire',
+};
 
 class EventModel {
   final int level;
