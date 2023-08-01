@@ -178,6 +178,22 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
             padding: const EdgeInsets.only(top: 20),
             child: Column(
               children: [
+                SmoothPageIndicator(
+                  controller: myController,
+                  count: _itemCount,
+                  effect: const WormEffect(
+                    paintStyle: PaintingStyle.stroke,
+                    dotColor: Colors.white,
+                    activeDotColor: Colors.white,
+                    dotHeight: 10,
+                    dotWidth: 10,
+                    type: WormType.thin,
+                    // strokeWidth: 5,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Expanded(
                   child: PageView.builder(
                     controller: myController,
@@ -195,19 +211,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
                       return activeSlide;
                     },
-                  ),
-                ),
-                SmoothPageIndicator(
-                  controller: myController,
-                  count: _itemCount,
-                  effect: const WormEffect(
-                    paintStyle: PaintingStyle.stroke,
-                    dotColor: Colors.white,
-                    activeDotColor: Colors.white,
-                    dotHeight: 10,
-                    dotWidth: 10,
-                    type: WormType.thin,
-                    // strokeWidth: 5,
                   ),
                 ),
                 const SizedBox(

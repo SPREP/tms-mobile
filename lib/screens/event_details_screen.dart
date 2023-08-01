@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:macres/models/event_model.dart';
 import 'package:macres/models/settings_model.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
 class EventDetailsScreen extends StatefulWidget {
-  const EventDetailsScreen({super.key, required this.eventType});
+  const EventDetailsScreen({super.key, required this.eventModel});
 
-  final EventType eventType;
+  final EventModel eventModel;
 
   @override
   State<EventDetailsScreen> createState() => _EventDetailsScreenState();
@@ -55,42 +56,50 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(40)),
-                border: Border.all(
-                    color: const Color.fromARGB(255, 148, 155, 167))),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(40),
+              ),
+              border: Border.all(
+                color: const Color.fromARGB(255, 148, 155, 167),
+              ),
+            ),
             height: 300,
             child: ClipRRect(
               borderRadius: const BorderRadius.only(),
-              child: FlutterMap(
-                mapController: MapController(),
-                options: MapOptions(
-                  center: const LatLng(-21.178986, -175.198242),
-                  zoom: 6,
-                ),
-                children: [
-                  FloatingActionButton(
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.red,
+              child: widget.eventModel.lat == 0
+                  ? const Center(child: Text('Map is not available'))
+                  : FlutterMap(
+                      mapController: MapController(),
+                      options: MapOptions(
+                        center: LatLng(
+                            widget.eventModel.lat, widget.eventModel.lon),
+                        zoom: 6,
                       ),
-                      onPressed: () {}),
-                  TileLayer(
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.example.app',
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        point: const LatLng(-21.178989, -177.198242),
-                        width: 50,
-                        height: 50,
-                        builder: (context) => getCentre(),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      children: [
+                        FloatingActionButton(
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {}),
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          userAgentPackageName: 'com.example.app',
+                        ),
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              point: LatLng(
+                                  widget.eventModel.lat, widget.eventModel.lon),
+                              width: 50,
+                              height: 50,
+                              builder: (context) => getCentre(),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
             ),
           ),
           Container(
@@ -102,9 +111,84 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             margin: const EdgeInsets.only(top: 250),
-            child: const Text('Content details here'),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    roundContent(
+                        const Icon(
+                          Icons.abc,
+                          color: Colors.white,
+                        ),
+                        const Text('hello'),
+                        Colors.blue),
+                    const Spacer(),
+                    roundContent(
+                        const Icon(
+                          Icons.abc,
+                          color: Colors.white,
+                        ),
+                        const Text('hello'),
+                        Colors.red),
+                    const Spacer(),
+                    roundContent(
+                      const Icon(
+                        Icons.abc,
+                        color: Colors.white,
+                      ),
+                      const Text('hello'),
+                      Colors.green,
+                    ),
+                    const Spacer(),
+                    roundContent(
+                        const Icon(
+                          Icons.abc,
+                          color: Colors.white,
+                        ),
+                        const Text('hello'),
+                        Colors.orange),
+                  ],
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Text('Tsunami Warning'),
+                Text('Felt'),
+                Text('Affecting'),
+                SizedBox(
+                  height: 50,
+                ),
+                Text('Create Impact Report'),
+                SizedBox(
+                  height: 20,
+                ),
+                Text('Request Assistance'),
+              ],
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget roundContent(Icon theIcon, Text theLabel, Color theColor) {
+    return ClipOval(
+      child: DefaultTextStyle.merge(
+        child: Container(
+          width: 80,
+          height: 80,
+          color: theColor,
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              theIcon,
+              theLabel,
+            ],
+          ),
+        ),
+        style: const TextStyle(color: Colors.white),
       ),
     );
   }

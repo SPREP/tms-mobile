@@ -28,7 +28,7 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     Widget activePage = const WeatherForcastScreen();
     String activePageTitle = '';
-    double height = AppBar().preferredSize.height + 40;
+    double height = AppBar().preferredSize.height + 60;
 
     if (_selectedPageIndex == 1) {
       activePage = const EventScreen();
@@ -50,64 +50,73 @@ class _TabsScreenState extends State<TabsScreen> {
           context: context, builder: (ctx) => const EventReportScreen());
     }
 
-    return Scaffold(
-      extendBodyBehindAppBar: _selectedPageIndex == 0 ? true : false,
-      body: Container(
-        padding: _selectedPageIndex == 0
-            ? EdgeInsets.only(
-                top: height,
-                right: 10,
-                left: 10,
-              )
-            : null,
-        width: double.infinity,
-        height: double.infinity,
-        decoration: _selectedPageIndex == 0
-            ? const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/sunny_day.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              )
-            : null,
-        child: SingleChildScrollView(
-          child: activePage,
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/sunny_day.jpg'),
+          fit: BoxFit.cover,
         ),
       ),
-      drawer: const MainDrawerWidget(),
-      appBar: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.dark),
-        backgroundColor: Colors.transparent,
-        title: Text(activePageTitle),
-        elevation: 0,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: _selectPage,
-        backgroundColor: Color.fromARGB(255, 240, 238, 230),
-        //unselectedItemColor: Colors.white54,
-        //selectedItemColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+      child: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          body: Container(
+            padding: _selectedPageIndex == 0
+                ? const EdgeInsets.only(
+                    right: 5,
+                    left: 5,
+                  )
+                : null,
+            width: double.infinity,
+            height: double.infinity,
+            child: SingleChildScrollView(
+              child: activePage,
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event_available_rounded),
-            label: 'Events',
+          drawer: const MainDrawerWidget(),
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            title: Text(activePageTitle),
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarBrightness: Brightness.light,
+            ),
+            /*
+            bottom: const TabBar(
+              tabs: [
+                Tab(text: '24 HOURS'),
+                Tab(text: '5 DAYS'),
+                Tab(text: '16 DAYS')
+              ],
+            ),
+            */
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notification',
+          bottomNavigationBar: BottomNavigationBar(
+            onTap: _selectPage,
+            backgroundColor: Color.fromARGB(255, 95, 94, 94),
+            unselectedItemColor: Colors.white54,
+            selectedItemColor: Colors.white,
+            type: BottomNavigationBarType.fixed,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.event_available_rounded),
+                label: 'Events',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                label: 'Notification',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_month),
+                label: 'Event Report',
+              ),
+            ],
+            currentIndex: _selectedPageIndex,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: 'Event Report',
-          ),
-        ],
-        currentIndex: _selectedPageIndex,
+        ),
       ),
     );
   }

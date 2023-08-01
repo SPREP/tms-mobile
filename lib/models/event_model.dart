@@ -1,12 +1,40 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:macres/models/settings_model.dart';
 
 class EventModel {
   final int level;
-  final Widget body;
+  Widget? body;
   final EventType type;
+  String? time;
+  String? date;
+  num? category;
+  num? km;
+  num? depth;
+  Bool? tsunami;
+  num? magnitude;
+  String? location;
+  Bool? evacuate;
+  double lat;
+  double lon;
 
-  const EventModel(this.level, this.body, this.type);
+  EventModel({
+    required this.level,
+    this.body,
+    required this.type,
+    this.time,
+    this.date,
+    this.category,
+    this.km,
+    this.depth,
+    this.tsunami,
+    this.magnitude,
+    this.location,
+    this.evacuate,
+    this.lat = 0,
+    this.lon = 0,
+  });
 
   Icon getIcon() {
     switch (level) {

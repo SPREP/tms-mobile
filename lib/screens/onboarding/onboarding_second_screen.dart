@@ -16,7 +16,6 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
       body: Column(
         children: [
           Image.asset(

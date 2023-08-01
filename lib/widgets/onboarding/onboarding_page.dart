@@ -65,6 +65,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.black.withOpacity(0.25),
+      ),
       body: Container(
         padding: const EdgeInsets.only(bottom: 80),
         child: PageView(

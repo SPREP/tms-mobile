@@ -18,6 +18,8 @@ class _EventScreen extends State<EventScreen> {
       'date': 'Today',
       'magnitude': 3.6,
       'level': 1,
+      'lat': 0.0,
+      'lon': 0.0,
     },
     {
       'type': EventType.earthquake,
@@ -25,6 +27,9 @@ class _EventScreen extends State<EventScreen> {
       'date': 'Today',
       'magnitude': 3.6,
       'level': 2,
+      'category': 6,
+      'lat': -21.178989,
+      'lon': -177.198242,
     },
     {
       'type': EventType.volcano,
@@ -32,6 +37,8 @@ class _EventScreen extends State<EventScreen> {
       'date': 'Wednesday',
       'location': 'Tofua',
       'level': 3,
+      'lat': -21.178989,
+      'lon': -177.198242,
     },
     {
       'type': EventType.earthquake,
@@ -39,6 +46,9 @@ class _EventScreen extends State<EventScreen> {
       'date': 'Today',
       'magnitude': 3.6,
       'level': 2,
+      'depth': 12,
+      'lat': 0.0,
+      'lon': 0.0,
     },
     {
       'type': EventType.cyclone,
@@ -46,6 +56,9 @@ class _EventScreen extends State<EventScreen> {
       'date': 'Yesterday',
       'location': "Niuafo'ou",
       'level': 1,
+      'category': 5,
+      'lat': -21.178989,
+      'lon': -177.198242,
     },
   ];
 
@@ -59,29 +72,17 @@ class _EventScreen extends State<EventScreen> {
             for (var item in poolEvents)
               EventWidget(
                 event: EventModel(
-                  item['level'],
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        eventTypeLabel[item['type']].toString(),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      if (item.containsKey('time'))
-                        Text("Time: ${item['time']}"),
-                      if (item.containsKey('date'))
-                        Text("Date: ${item['date'].toString()}"),
-                      if (item.containsKey('magnitude'))
-                        Text("Magnitude: ${item['magnitude'].toString()}"),
-                      if (item.containsKey('category'))
-                        Text("Category: ${item['category'].toString()}"),
-                      if (item.containsKey('location'))
-                        Text("Location: ${item['location'].toString()}"),
-                      if (item.containsKey('evacuation'))
-                        Text("Evacuation: ${item['evacuation'].toString()}"),
-                    ],
-                  ),
-                  item['type'],
+                  level: item['level'],
+                  type: item['type'],
+                  date: item['date'],
+                  time: item['time'],
+                  location: item['location'],
+                  category: item['category'],
+                  evacuate: item['evacuation'],
+                  magnitude: item['magnitude'],
+                  depth: item['depth'],
+                  lat: item['lat'],
+                  lon: item['lon'],
                 ),
               ),
           ],
