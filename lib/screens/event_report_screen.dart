@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -13,6 +14,8 @@ class _EventReportScreenState extends State<EventReportScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController bodyController = TextEditingController();
 
+  var _isInProgress = false;
+
   @override
   void dispose() {
     titleController.dispose();
@@ -26,20 +29,38 @@ class _EventReportScreenState extends State<EventReportScreen> {
     const username = 'mobile_app';
     const password = 'intel13!';
     final basicAuth =
-        'Basic ' + base64.encode(utf8.encode('$username:$password'));
+        "Basic ${base64.encode(utf8.encode('$username:$password'))}";
+    dynamic res;
 
-    final response = await http.post(
-      Uri.parse('http://met-api.lndo.site/api/v1/event-report?_format=json'),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': basicAuth
-      },
-      body: json.encode([
-        {"nodetype": "event_report", "title": title, "body": body}
-      ]),
-    );
+    try {
+      setState(() {
+        _isInProgress = true;
+      });
 
-    return response;
+      res = await http.post(
+        Uri.parse('http://met-api.lndo.site/api/v1/event-report?_format=json'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': basicAuth
+        },
+        body: json.encode([
+          {"nodetype": "event_report", "title": title, "body": body}
+        ]),
+      );
+    } catch (e) {
+      log(e.toString());
+    }
+
+    setState(() {
+      _isInProgress = false;
+    });
+
+    return res;
+  }
+
+  clearFields() {
+    titleController.text = '';
+    bodyController.text = '';
   }
 
   @override
@@ -55,6 +76,7 @@ class _EventReportScreenState extends State<EventReportScreen> {
             "Fill in the following fields, to report an event from your location. For exmaple:  If you see a fire, you can report it here.  If you see a smoke coming out from a Vocano.",
             style: TextStyle(fontSize: 13),
           ),
+          const SizedBox(height: 20),
           TextFormField(
             controller: titleController,
             maxLength: 50,
@@ -75,13 +97,16 @@ class _EventReportScreenState extends State<EventReportScreen> {
             children: [
               const Spacer(),
               const SizedBox(width: 16),
-              ElevatedButton(
-                onPressed: () {
-                  sendData();
-                  showAlertDialog(context);
-                },
-                child: const Text('Submit'),
-              ),
+              if (_isInProgress) const CircularProgressIndicator(),
+              if (!_isInProgress)
+                ElevatedButton(
+                  onPressed: () async {
+                    await sendData();
+                    showAlertDialog(context);
+                    clearFields();
+                  },
+                  child: const Text('Submit'),
+                ),
             ],
           ),
         ],
