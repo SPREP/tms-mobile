@@ -116,6 +116,12 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                 Form(
                   key: widget.userLocationKey,
                   child: DropdownButtonFormField(
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(255, 155, 153, 153),
+                      ),
+                    )),
                     hint: const Text('Select your location'),
                     value: _selectedLocation,
                     items: Location.values.map((value) {

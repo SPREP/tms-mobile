@@ -66,6 +66,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               border: Border.all(
                 color: const Color.fromARGB(255, 148, 155, 167),
               ),
+              color: Color.fromARGB(255, 235, 235, 234),
             ),
             height: 300,
             child: ClipRRect(
@@ -221,15 +222,16 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           color: Colors.blue,
           child: Text(
             label,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
         Container(
           padding: const EdgeInsets.all(8),
-          color: Color.fromARGB(255, 170, 236, 178),
+          color: const Color.fromARGB(255, 170, 236, 178),
           child: Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Color.fromARGB(255, 104, 103, 103),
                 fontWeight: FontWeight.bold),
           ),

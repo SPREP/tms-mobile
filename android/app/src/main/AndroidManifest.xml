@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.macres">
+    package="com.met.macres">
    <application
         android:label="macres"
         android:name="${applicationName}"

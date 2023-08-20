@@ -67,7 +67,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.black.withOpacity(0.25),
+        backgroundColor: Colors.black.withOpacity(0),
       ),
       body: Container(
         padding: const EdgeInsets.only(bottom: 80),

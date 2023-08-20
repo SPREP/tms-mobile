@@ -1,4 +1,4 @@
-package com.example.macres
+package com.met.macres
 
 import io.flutter.embedding.android.FlutterActivity
 

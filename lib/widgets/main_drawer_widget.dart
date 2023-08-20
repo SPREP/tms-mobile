@@ -64,22 +64,6 @@ class MainDrawerWidget extends StatelessWidget {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.event,
-                size: 26, color: Theme.of(context).colorScheme.onBackground),
-            title: Text(
-              'Weather Report',
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontSize: 18,
-                  ),
-            ),
-            onTap: () {},
-          ),
-          ListTile(
-            trailing: const Icon(
-              Icons.arrow_forward_ios,
-              size: 15,
-            ),
             leading: Icon(Icons.phone,
                 size: 26, color: Theme.of(context).colorScheme.onBackground),
             title: Text(
@@ -158,27 +142,6 @@ class MainDrawerWidget extends StatelessWidget {
               Navigator.pop(context);
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const AboutScreen()),
-              );
-            },
-          ),
-          ListTile(
-            trailing: const Icon(
-              Icons.arrow_forward_ios,
-              size: 15,
-            ),
-            leading: Icon(Icons.feedback,
-                size: 26, color: Theme.of(context).colorScheme.onBackground),
-            title: Text(
-              'App feedback',
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontSize: 18,
-                  ),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const FeedBackScreen()),
               );
             },
           ),

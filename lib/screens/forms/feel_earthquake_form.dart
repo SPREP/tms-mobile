@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:macres/models/settings_model.dart';
 
@@ -17,27 +15,24 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(padding: EdgeInsets.all(20), child: getForm()),
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('Did you feel the earthquake?'),
+      ),
     );
+  }
+
+  void _submitData() {
+    //get the user GEO location to send together with form data
   }
 
   Widget getForm() {
     Location? _selectedLocation;
     String? _selectedRating;
 
-    void _submitData() {
-      //get the user GEO location to send together with form data
-    }
-
     return Form(
       key: _formKey,
       child: Column(
         children: <Widget>[
-          const Text(
-            'Did you feel the earthquake?',
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
           const Text(
             'Fill in the following fields to let us know.',
           ),

@@ -1,4 +1,6 @@
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class EventReportScreen extends StatefulWidget {
   const EventReportScreen({super.key});
@@ -8,6 +10,38 @@ class EventReportScreen extends StatefulWidget {
 }
 
 class _EventReportScreenState extends State<EventReportScreen> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController bodyController = TextEditingController();
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    bodyController.dispose();
+    super.dispose();
+  }
+
+  Future<http.Response> sendData() async {
+    final title = titleController.text;
+    final body = bodyController.text;
+    const username = 'mobile_app';
+    const password = 'intel13!';
+    final basicAuth =
+        'Basic ' + base64.encode(utf8.encode('$username:$password'));
+
+    final response = await http.post(
+      Uri.parse('http://met-api.lndo.site/api/v1/event-report?_format=json'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': basicAuth
+      },
+      body: json.encode([
+        {"nodetype": "event_report", "title": title, "body": body}
+      ]),
+    );
+
+    return response;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,16 +55,18 @@ class _EventReportScreenState extends State<EventReportScreen> {
             "Fill in the following fields, to report an event from your location. For exmaple:  If you see a fire, you can report it here.  If you see a smoke coming out from a Vocano.",
             style: TextStyle(fontSize: 13),
           ),
-          const TextField(
+          TextFormField(
+            controller: titleController,
             maxLength: 50,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               label: Text('Title'),
             ),
           ),
-          const TextField(
+          TextFormField(
+            controller: bodyController,
             keyboardType: TextInputType.multiline,
             maxLines: 5,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               label: Text('Enter the event details here'),
             ),
           ),
@@ -40,7 +76,10 @@ class _EventReportScreenState extends State<EventReportScreen> {
               const Spacer(),
               const SizedBox(width: 16),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  sendData();
+                  showAlertDialog(context);
+                },
                 child: const Text('Submit'),
               ),
             ],
@@ -48,5 +87,29 @@ class _EventReportScreenState extends State<EventReportScreen> {
         ],
       ),
     );
+  }
+
+  showAlertDialog(BuildContext context) {
+    //Button
+    Widget okButton = TextButton(
+      child: const Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: const Text("Event Report Status"),
+      content: const Text("Your event report has been received.  Thank you."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
   }
 }

@@ -91,6 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Form(
               key: userLocationKey,
               child: DropdownButtonFormField(
+                decoration: const InputDecoration(border: OutlineInputBorder()),
                 value: _selectedLocation,
                 items: Location.values.map((value) {
                   return DropdownMenuItem(
@@ -115,6 +116,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   return null;
                 },
               ),
+            ),
+            const SizedBox(
+              height: 20,
             ),
             const Text('Dark Theme:'),
             Switch(

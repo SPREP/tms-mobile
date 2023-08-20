@@ -15,7 +15,51 @@ class HelpScreen extends StatelessWidget {
         padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
         child: Column(children: [
           Text(
-              "Do you need help \n\nLorem ipsum dolor sit amet consectetur. Amet rhoncus blandit enim pellentesque viverra vitae maecenas volutpat. Massa malesuada ullamcorper tellus proin nibh eget lectus integer. Neque scelerisque ornare pulvinar tincidunt semper. Sit cursus scelerisque cras elit. Aliquet ornare pellentesque a aliquet quis sit posuere."),
+            'Phone: ',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text('24/7 Toll Free Number (For Digicel or Ucall): 0800 638'),
+          SizedBox(
+            height: 10,
+          ),
+          Text('General Inquiry:740 0062'),
+          SizedBox(
+            height: 10,
+          ),
+          Text('Weather Forecasts: 35 009'),
+          SizedBox(
+            height: 10,
+          ),
+          Text('Ship Trip Report: 7400093'),
+          SizedBox(
+            height: 10,
+          ),
+          Text('Fax: 35 123'),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            'Email: ',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text('metstaff@met.gov.to'),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            'Facebook Page:',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text('https://www.facebook.com/tongametservice/'),
         ]),
       ),
     );

@@ -8,7 +8,7 @@
 PRODUCT_NAME = macres
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.macres
+PRODUCT_BUNDLE_IDENTIFIER = com.met.macres
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
