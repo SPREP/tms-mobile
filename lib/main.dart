@@ -14,9 +14,13 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final prefs = await SharedPreferences.getInstance();
-  prefs.setBool('showOnboarding', true);
+  bool showOnboarding = prefs.getBool('showOnboarding') ?? true;
 
-  var showOnboarding = prefs.getBool('showOnboarding') ?? true;
+  print("showOnboarding: $showOnboarding");
+
+  if (showOnboarding == true) {
+    prefs.setBool('showOnboarding', false);
+  }
 
   runApp(App(showOnboarding: showOnboarding));
 }

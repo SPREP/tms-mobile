@@ -1,7 +1,12 @@
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:macres/media/get_image_url.dart';
+import 'package:macres/media/upload_file.dart';
 import 'dart:convert';
+import 'dart:io';
+import 'package:macres/widgets/image_input.dart';
+import 'package:path/path.dart' as p;
 
 class EventReportScreen extends StatefulWidget {
   const EventReportScreen({super.key});
@@ -13,6 +18,8 @@ class EventReportScreen extends StatefulWidget {
 class _EventReportScreenState extends State<EventReportScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController bodyController = TextEditingController();
+  List<File> _selectedImages = [];
+  final _formKey = GlobalKey<FormState>();
 
   var _isInProgress = false;
 
@@ -23,7 +30,7 @@ class _EventReportScreenState extends State<EventReportScreen> {
     super.dispose();
   }
 
-  Future<http.Response> sendData() async {
+  Future<http.Response> sendData(imageSourceUrls) async {
     final title = titleController.text;
     final body = bodyController.text;
     const username = 'mobile_app';
@@ -33,85 +40,161 @@ class _EventReportScreenState extends State<EventReportScreen> {
     dynamic res;
 
     try {
-      setState(() {
-        _isInProgress = true;
-      });
-
       res = await http.post(
-        Uri.parse('http://met-api.lndo.site/api/v1/event-report?_format=json'),
+        Uri.parse('http://app.met.gov.to/api/v1/event-report?_format=json'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': basicAuth
         },
         body: json.encode([
-          {"nodetype": "event_report", "title": title, "body": body}
+          {
+            "nodetype": "event_report",
+            "title": title,
+            "body": body,
+            "images": imageSourceUrls
+          }
         ]),
       );
     } catch (e) {
       log(e.toString());
     }
 
-    setState(() {
-      _isInProgress = false;
-    });
-
     return res;
   }
 
-  clearFields() {
+  void clearFields() {
     titleController.text = '';
     bodyController.text = '';
+    _selectedImages.clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 20, left: 10, right: 10),
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 15,
-          ),
-          const Text(
-            "Fill in the following fields, to report an event from your location. For exmaple:  If you see a fire, you can report it here.  If you see a smoke coming out from a Vocano.",
-            style: TextStyle(fontSize: 13),
-          ),
-          const SizedBox(height: 20),
-          TextFormField(
-            controller: titleController,
-            maxLength: 50,
-            decoration: const InputDecoration(
-              label: Text('Title'),
-            ),
-          ),
-          TextFormField(
-            controller: bodyController,
-            keyboardType: TextInputType.multiline,
-            maxLines: 5,
-            decoration: const InputDecoration(
-              label: Text('Enter the event details here'),
-            ),
-          ),
-          const SizedBox(height: 50),
-          Row(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Form(
+        key: _formKey,
+        child: Padding(
+          padding:
+              const EdgeInsets.only(top: 10, bottom: 20, left: 10, right: 10),
+          child: Column(
             children: [
-              const Spacer(),
-              const SizedBox(width: 16),
-              if (_isInProgress) const CircularProgressIndicator(),
-              if (!_isInProgress)
-                ElevatedButton(
-                  onPressed: () async {
-                    await sendData();
-                    showAlertDialog(context);
-                    clearFields();
-                  },
-                  child: const Text('Submit'),
+              const SizedBox(
+                height: 15,
+              ),
+              const Text(
+                "Fill in the following fields, to report an event from your location. For exmaple:  If you see a fire, you can report it here.  If you see a smoke coming out from a Vocano.",
+                style: TextStyle(fontSize: 13),
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: titleController,
+                maxLength: 50,
+                decoration: const InputDecoration(
+                  label: Text('Title'),
                 ),
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
+                    return 'Enter the event title';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: bodyController,
+                maxLines: 5,
+                decoration: const InputDecoration(
+                  label: Text('Enter the event details here'),
+                ),
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
+                    return "Enter the event details";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              ImageInput(
+                onPickImage: (selectedImages) {
+                  _selectedImages = selectedImages;
+                },
+              ),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  const Spacer(),
+                  const SizedBox(width: 16),
+                  TextButton(
+                      onPressed: () {
+                        setState(() {
+                          clearFields();
+                        });
+                      },
+                      child: const Text('Cancel')),
+                  const SizedBox(width: 20),
+                  if (_isInProgress) const CircularProgressIndicator(),
+                  if (!_isInProgress)
+                    ElevatedButton(
+                      onPressed: () async {
+                        final isValid = _formKey.currentState!.validate();
+                        if (!isValid) {
+                          return;
+                        }
+                        _formKey.currentState!.save();
+
+                        setState(() {
+                          _isInProgress = true;
+                        });
+
+                        GetImageUrl imageUrl = GetImageUrl();
+                        List<String> imageSourceUrls = [];
+
+                        if (_selectedImages.isNotEmpty) {
+                          for (var n = 0; n < _selectedImages.length; n++) {
+                            String fileExtension =
+                                p.extension(_selectedImages[n].path);
+                            await imageUrl.call(fileExtension);
+
+                            if (imageUrl.success) {
+                              await uploadFile(context, imageUrl.uploadUrl,
+                                  File(_selectedImages[n].path));
+                            }
+
+                            imageSourceUrls.add(imageUrl.downloadUrl);
+                          }
+                        }
+
+                        await sendData(imageSourceUrls);
+                        showAlertDialog(context);
+                        setState(() {
+                          clearFields();
+                          _isInProgress = false;
+                        });
+                      },
+                      child: const Text('Submit'),
+                    ),
+                ],
+              ),
             ],
           ),
-        ],
+        ),
       ),
     );
+  }
+
+  Future<bool> uploadFile(context, String url, File image) async {
+    try {
+      UploadFile uploadFile = UploadFile();
+      await uploadFile.call(url, image);
+
+      if (uploadFile.isUploaded != false && uploadFile.isUploaded) {
+        return true;
+      } else {
+        throw uploadFile.message;
+      }
+    } catch (e) {
+      throw ("Error ${e.toString()}");
+    }
   }
 
   showAlertDialog(BuildContext context) {
