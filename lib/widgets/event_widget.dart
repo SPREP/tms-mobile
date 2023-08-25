@@ -34,13 +34,15 @@ class EventWidget extends StatelessWidget {
                         eventTypeLabel[event.type].toString(),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
+                      if (event.name != null)
+                        Text("Name: ${event.name.toString()}"),
                       if (event.time != null)
                         Text("Time: ${event.time.toString()}"),
                       if (event.date != null)
                         Text("Date: ${event.date.toString()}"),
-                      if (event.magnitude != null)
+                      if (event.magnitude != null && event.magnitude != 0.0)
                         Text("Magnitude: ${event.magnitude.toString()}"),
-                      if (event.category != null)
+                      if (event.category != null && event.category != 0)
                         Text("Category: ${event.category.toString()}"),
                       if (event.location != null)
                         Text("Location: ${event.location.toString()}"),
@@ -50,6 +52,10 @@ class EventWidget extends StatelessWidget {
                         Text("Kilometer: ${event.km.toString()}"),
                       if (event.depth != null)
                         Text("Depth: ${event.depth.toString()}"),
+                      if (event.lon != null && event.lon != 0.0)
+                        Text("Longitude: ${event.lon.toString()}"),
+                      if (event.lat != null && event.lat != 0.0)
+                        Text("Latitude: ${event.lat.toString()}"),
                     ],
                   ),
                 ),

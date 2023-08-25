@@ -1,5 +1,5 @@
 import 'dart:ffi';
-
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 enum EventType {
@@ -11,6 +11,12 @@ enum EventType {
   flood,
   fire,
   bushfile
+}
+
+extension EventTypeExtension on EventType {
+  static EventType? fromName(String? name) {
+    return EventType.values.firstWhereOrNull((e) => e.name == name);
+  }
 }
 
 const eventTypeLabel = {
@@ -25,23 +31,23 @@ const eventTypeLabel = {
 };
 
 class EventModel {
-  final int level;
   Widget? body;
-  final EventType type;
+  EventType? type;
   String? time;
   String? date;
   num? category;
   num? km;
-  num? depth;
+  String? depth;
   Bool? tsunami;
-  num? magnitude;
+  double? magnitude;
   String? location;
   Bool? evacuate;
   double lat;
   double lon;
+  num? id;
+  String? name;
 
   EventModel({
-    required this.level,
     this.body,
     required this.type,
     this.time,
@@ -55,26 +61,25 @@ class EventModel {
     this.evacuate,
     this.lat = 0,
     this.lon = 0,
+    this.id,
+    this.name,
   });
 
   Icon getIcon() {
-    switch (level) {
-      case 1:
-        return const Icon(Icons.info);
-      case 2:
-      case 3:
-        return const Icon(Icons.warning);
-    }
-    return const Icon(Icons.abc);
+    return const Icon(Icons.info);
   }
 
   Color getColor() {
-    switch (level) {
-      case 1:
+    switch (type) {
+      case EventType.earthquake:
+      case EventType.volcano:
         return const Color.fromARGB(255, 131, 149, 234);
-      case 2:
+      case EventType.cyclone:
+      case EventType.fire:
+      case EventType.bushfile:
         return const Color.fromARGB(255, 216, 193, 113);
-      case 3:
+      case EventType.tsunami:
+      case EventType.tornado:
         return const Color.fromARGB(255, 255, 126, 126);
     }
     return const Color.fromARGB(255, 131, 149, 234);
