@@ -119,7 +119,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             child: Column(
               children: [
                 Text(
-                  eventTypeLabel[widget.eventModel.type].toString(),
+                  eventTypeLabel[widget.eventModel.type].toString() +
+                      " " +
+                      widget.eventModel.name.toString(),
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold),
                 ),
@@ -147,7 +149,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           Icons.wind_power,
                           color: Colors.white,
                         ),
-                        Text("${widget.eventModel.category.toString()} Cat..."),
+                        Text(
+                            "Cat. weve${widget.eventModel.category.toString()}"),
                         Colors.green,
                       ),
                     if (widget.eventModel.type == EventType.earthquake)
@@ -191,7 +194,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ImpactReportForm()),
+                            builder: (context) => ImpactReportForm(
+                                eventId: widget.eventModel.id)),
                       );
                     },
                     label: Text('Create Impact Report')),
@@ -244,8 +248,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     return ClipOval(
       child: DefaultTextStyle.merge(
         child: Container(
-          width: 90,
-          height: 90,
+          width: 95,
+          height: 95,
           color: theColor,
           padding: const EdgeInsets.all(10),
           child: Column(

@@ -34,7 +34,7 @@ class EventWidget extends StatelessWidget {
                         eventTypeLabel[event.type].toString(),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      if (event.name != null)
+                      if (event.name != null && event.name != "")
                         Text("Name: ${event.name.toString()}"),
                       if (event.time != null)
                         Text("Time: ${event.time.toString()}"),

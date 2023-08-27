@@ -51,7 +51,8 @@ class _ImageInputState extends State<ImageInput> {
         const SizedBox(
           height: 20,
         ),
-        SizedBox(
+        Container(
+          color: Color.fromARGB(255, 240, 240, 238),
           height: 200,
           width: double.infinity,
           child: GridView.builder(
