@@ -206,7 +206,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => RequestAssistanceForm()),
+                            builder: (context) => RequestAssistanceForm(
+                                eventId: widget.eventModel.id)),
                       );
                     },
                     label: Text('Request Assistance')),

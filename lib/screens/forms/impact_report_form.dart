@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:macres/models/settings_model.dart';
-
 import '../../widgets/checkbox_widget.dart';
-
 import 'dart:developer';
 import 'package:http/http.dart' as http;
-
 import 'package:macres/media/get_image_url.dart';
 import 'package:macres/media/upload_file.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:macres/widgets/image_input.dart';
 import 'package:path/path.dart' as p;
-
-enum YesNo { yes, no }
 
 class ImpactReportForm extends StatefulWidget {
   const ImpactReportForm({super.key, required this.eventId});
