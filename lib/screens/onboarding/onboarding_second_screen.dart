@@ -1,8 +1,5 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:macres/models/settings_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingSecondScreen extends StatefulWidget {
   const OnboardingSecondScreen({super.key});
@@ -14,22 +11,6 @@ class OnboardingSecondScreen extends StatefulWidget {
 }
 
 class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
-  @override
-  void initState() {
-    super.initState();
-    setupPushNotifications();
-  }
-
-  void setupPushNotifications() async {
-    final fcm = FirebaseMessaging.instance;
-    await fcm.requestPermission();
-
-    final prefs = await SharedPreferences.getInstance();
-    String? location = prefs.getString('user_location');
-
-    // fcm.subscribeToTopic(location);
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

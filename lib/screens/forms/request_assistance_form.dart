@@ -118,21 +118,18 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
   }
 
   Future<http.Response> sendData(imageSourceUrls) async {
-    var username = metapi[Credential.username];
-    var password = metapi[Credential.password];
-    var host = metapi[Credential.host];
-    var endpoint = '/request-assistance?_format=json';
-
+    const username = 'mobile_app';
+    const password = 'intel13!';
     final basicAuth =
         "Basic ${base64.encode(utf8.encode('$username:$password'))}";
     dynamic res;
 
     try {
       res = await http.post(
-        Uri.parse('$host$endpoint'),
+        Uri.parse(
+            'http://met-api.lndo.site/api/v1/request-assistance?_format=json'),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': basicAuth
         },
         body: json.encode([
           {

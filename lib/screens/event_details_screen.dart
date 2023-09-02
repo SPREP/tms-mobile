@@ -55,168 +55,166 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(40),
-                ),
-                border: Border.all(
-                  color: const Color.fromARGB(255, 148, 155, 167),
-                ),
-                color: Color.fromARGB(255, 235, 235, 234),
+      body: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(
+                Radius.circular(40),
               ),
-              height: 300,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(),
-                child: widget.eventModel.lat == 0
-                    ? const Center(child: Text('Map is not available'))
-                    : FlutterMap(
-                        mapController: MapController(),
-                        options: MapOptions(
-                          center: LatLng(
-                              widget.eventModel.lat, widget.eventModel.lon),
-                          zoom: 6,
-                        ),
-                        children: [
-                          FloatingActionButton(
-                              child: const Icon(
-                                Icons.add,
-                                color: Colors.red,
-                              ),
-                              onPressed: () {}),
-                          TileLayer(
-                            urlTemplate:
-                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            userAgentPackageName: 'com.example.app',
-                          ),
-                          MarkerLayer(
-                            markers: [
-                              Marker(
-                                point: LatLng(widget.eventModel.lat,
-                                    widget.eventModel.lon),
-                                width: 50,
-                                height: 50,
-                                builder: (context) => getCentre(),
-                              ),
-                            ],
-                          ),
-                        ],
+              border: Border.all(
+                color: const Color.fromARGB(255, 148, 155, 167),
+              ),
+              color: Color.fromARGB(255, 235, 235, 234),
+            ),
+            height: 300,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(),
+              child: widget.eventModel.lat == 0
+                  ? const Center(child: Text('Map is not available'))
+                  : FlutterMap(
+                      mapController: MapController(),
+                      options: MapOptions(
+                        center: LatLng(
+                            widget.eventModel.lat, widget.eventModel.lon),
+                        zoom: 6,
                       ),
-              ),
+                      children: [
+                        FloatingActionButton(
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {}),
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          userAgentPackageName: 'com.example.app',
+                        ),
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              point: LatLng(
+                                  widget.eventModel.lat, widget.eventModel.lon),
+                              width: 50,
+                              height: 50,
+                              builder: (context) => getCentre(),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
             ),
-            Container(
-              height: 650,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(40)),
-                color: Colors.white,
-              ),
-              width: double.infinity,
-              padding: const EdgeInsets.only(top:20),
-              margin: const EdgeInsets.only(top: 250),
-              child: Column(
-                children: [
-                  Text(
-                    "${eventTypeLabel[widget.eventModel.type]} ${widget.eventModel.name}",
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      roundContent(
-                          const Icon(
-                            Icons.calendar_month,
-                            color: Colors.white,
-                          ),
-                          Text(widget.eventModel.date.toString()),
-                          Colors.blue),
-                      roundContent(
-                          const Icon(
-                            Icons.access_time,
-                            color: Colors.white,
-                          ),
-                          Text(widget.eventModel.time.toString()),
-                          Color.fromARGB(255, 124, 169, 40)),
-                      if (widget.eventModel.type == EventType.cyclone)
-                        roundContent(
-                          const Icon(
-                            Icons.wind_power,
-                            color: Colors.white,
-                          ),
-                          Text(
-                              "Cat. ${widget.eventModel.category.toString()}"),
-                          Colors.green,
+          ),
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(40)),
+              color: Colors.white,
+            ),
+            height: double.infinity,
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.only(top: 250),
+            child: Column(
+              children: [
+                Text(
+                  eventTypeLabel[widget.eventModel.type].toString() +
+                      " " +
+                      widget.eventModel.name.toString(),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    roundContent(
+                        const Icon(
+                          Icons.calendar_month,
+                          color: Colors.white,
                         ),
-                      if (widget.eventModel.type == EventType.earthquake)
-                        roundContent(
-                          const Icon(
-                            HumanitarianIcons.earthquake,
-                            color: Colors.white,
-                          ),
-                          Text("${widget.eventModel.magnitude.toString()} Mag"),
-                          Colors.orange,
+                        Text(widget.eventModel.date.toString()),
+                        Colors.blue),
+                    roundContent(
+                        const Icon(
+                          Icons.access_time,
+                          color: Colors.white,
                         ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  if (widget.eventModel.tsunami != null)
-                    styleLabel('Tsunami Warning', widget.eventModel.tsunami.toString()),
-                  const SizedBox(height: 15),
-                  if (widget.eventModel.type == EventType.earthquake &&
-                      widget.eventModel.feel!.isNotEmpty)
-                    styleLabel('Felt', widget.eventModel.feel.toString()),
-                  const SizedBox(height: 15),
-                  if (widget.eventModel.type == EventType.cyclone)
-                    styleLabel('Affecting', "Tongatapu, Ha'apai, Vava'u, 'Eua"),
-                  const SizedBox(height: 10),
-                  if (widget.eventModel.type == EventType.earthquake)
-                    ElevatedButton.icon(
-                        icon: Icon(HumanitarianIcons.affected_population),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FeelEarthquakeForm(
-                                    eventId: widget.eventModel.id)),
-                          );
-                        },
-                        label: Text('Did you feel it?')),
-                  const SizedBox(height: 20),
+                        Text(widget.eventModel.time.toString()),
+                        Color.fromARGB(255, 124, 169, 40)),
+                    if (widget.eventModel.type == EventType.cyclone)
+                      roundContent(
+                        const Icon(
+                          Icons.wind_power,
+                          color: Colors.white,
+                        ),
+                        Text(
+                            "Cat. weve${widget.eventModel.category.toString()}"),
+                        Colors.green,
+                      ),
+                    if (widget.eventModel.type == EventType.earthquake)
+                      roundContent(
+                        const Icon(
+                          HumanitarianIcons.earthquake,
+                          color: Colors.white,
+                        ),
+                        Text("${widget.eventModel.magnitude.toString()} Mag"),
+                        Colors.orange,
+                      ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                if (widget.eventModel.type == EventType.earthquake)
+                  styleLabel('Tsunami Warning', 'NO'),
+                const SizedBox(height: 15),
+                if (widget.eventModel.type == EventType.earthquake)
+                  styleLabel('Felt', "Tongatapu, Ha'apai, Vava'u, 'Eua"),
+                const SizedBox(height: 15),
+                if (widget.eventModel.type == EventType.cyclone)
+                  styleLabel('Affecting', "Tongatapu, Ha'apai, Vava'u, 'Eua"),
+                const SizedBox(height: 50),
+                if (widget.eventModel.type == EventType.earthquake)
                   ElevatedButton.icon(
-                      icon: Icon(Icons.draw),
+                      icon: Icon(HumanitarianIcons.affected_population),
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ImpactReportForm(
-                                  eventId: widget.eventModel.id)),
+                              builder: (context) => const FeelEarthquakeForm()),
                         );
                       },
-                      label: Text('Create Impact Report')),
-                  const SizedBox(height: 20),
-                  ElevatedButton.icon(
-                      icon: Icon(Icons.assistant),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RequestAssistanceForm(
-                                  eventId: widget.eventModel.id)),
-                        );
-                      },
-                      label: Text('Request Assistance')),
-                ],
-              ),
+                      label: Text('Did you feel it?')),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                    icon: Icon(Icons.draw),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ImpactReportForm(
+                                eventId: widget.eventModel.id)),
+                      );
+                    },
+                    label: Text('Create Impact Report')),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                    icon: Icon(Icons.assistant),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RequestAssistanceForm(
+                                eventId: widget.eventModel.id)),
+                      );
+                    },
+                    label: Text('Request Assistance')),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

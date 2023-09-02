@@ -768,25 +768,4 @@ class ToMaterialLocalizations extends GlobalMaterialLocalizations {
 
   @override
   get scrimLabel => throw UnimplementedError();
-
-  @override
-  get collapsedHint => throw UnimplementedError();
-
-  @override
-  get expandedHint => throw UnimplementedError();
-
-  @override
-  get expansionTileCollapsedHint => throw UnimplementedError();
-
-  @override
-  get expansionTileCollapsedTapHint => throw UnimplementedError();
-
-  @override
-  get expansionTileExpandedHint => throw UnimplementedError();
-
-  @override
-  get expansionTileExpandedTapHint => throw UnimplementedError();
-
-  @override
-  get scanTextButtonLabel => throw UnimplementedError();
 }

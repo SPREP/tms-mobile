@@ -68,21 +68,17 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
   }
 
   Future<http.Response> sendData(imageSourceUrls) async {
-    var username = metapi[Credential.username];
-    var password = metapi[Credential.password];
-    var host = metapi[Credential.host];
-    var endpoint = '/impact-report?_format=json';
-
+    const username = 'mobile_app';
+    const password = 'intel13!';
     final basicAuth =
         "Basic ${base64.encode(utf8.encode('$username:$password'))}";
     dynamic res;
 
     try {
       res = await http.post(
-        Uri.parse('$host$endpoint'),
+        Uri.parse('http://met-api.lndo.site/api/v1/impact-report?_format=json'),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': basicAuth
         },
         body: json.encode([
           {
@@ -247,7 +243,7 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
               },
               validator: (val) {
                 if (val == null) {
-                  String errMsg = "Please select a category";
+                  String errMsg = "Please rate the earthquake";
                   return errMsg;
                 }
                 return null;

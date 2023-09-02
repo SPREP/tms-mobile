@@ -29,13 +29,3 @@ const languageLabel = {
   Language.en: "English",
   Language.to: "Tongan",
 };
-
-enum Credential { host, username, password }
-
-const metapi = {
-  // Credential.host:
-  //  "https://d81f-2001-8003-474c-7400-250a-f61f-c861-fef7.ngrok-free.app/api/v1",
-  Credential.host: "http://app.met.gov.to/api/v1",
-  Credential.username: 'mobile_app',
-  Credential.password: 'intel13!',
-};
