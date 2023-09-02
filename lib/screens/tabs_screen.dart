@@ -27,8 +27,8 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     Widget activePage = const WeatherForcastScreen();
-    String activePageTitle = '';
-    double height = AppBar().preferredSize.height + 60;
+    String activePageTitle = 'Weather Forecast';
+    double height = AppBar().preferredSize.height;
 
     if (_selectedPageIndex == 1) {
       activePage = const EventScreen();
@@ -63,7 +63,9 @@ class _TabsScreenState extends State<TabsScreen> {
         backgroundColor: _selectedPageIndex == 0
             ? const Color.fromARGB(0, 82, 38, 38)
             : null,
-        body: Container(
+        body:
+
+        Container(
           padding: _selectedPageIndex == 0
               ? const EdgeInsets.only(
                   right: 5,
@@ -73,16 +75,19 @@ class _TabsScreenState extends State<TabsScreen> {
           width: double.infinity,
           height: double.infinity,
           child: SingleChildScrollView(
-            child: activePage,
+            child: Padding(padding:EdgeInsets.only(top:5, bottom: 5), child: activePage,),
           ),
         ),
         drawer: const MainDrawerWidget(),
-        appBar: AppBar(
+        appBar: PreferredSize(
+        preferredSize: Size.fromHeight(30.0),
+        child: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(activePageTitle),
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarBrightness: Brightness.light,
           ),
+        ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           onTap: _selectPage,

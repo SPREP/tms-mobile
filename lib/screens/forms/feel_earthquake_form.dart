@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:macres/models/settings_model.dart';
+import 'dart:developer';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:geolocator/geolocator.dart';
 
 class FeelEarthquakeForm extends StatefulWidget {
-  const FeelEarthquakeForm({super.key});
+  const FeelEarthquakeForm({super.key, required this.eventId});
+  final eventId;
 
   @override
   State<FeelEarthquakeForm> createState() => _FeelEarthquakeFormState();
@@ -10,6 +15,9 @@ class FeelEarthquakeForm extends StatefulWidget {
 
 class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
   final _formKey = GlobalKey<FormState>();
+  Location? _selectedLocation;
+  String? _selectedRating;
+  var _isInProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +29,41 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
     );
   }
 
-  void _submitData() {
-    //get the user GEO location to send together with form data
+  Future<http.Response> sendData() async {
+    var username = metapi[Credential.username];
+    var password = metapi[Credential.password];
+    var host = metapi[Credential.host];
+    var endpoint = '/feel-earthquake?_format=json';
+
+    final basicAuth =
+        "Basic ${base64.encode(utf8.encode('$username:$password'))}";
+    dynamic res;
+
+    try {
+      res = await http.post(
+        Uri.parse('$host$endpoint'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': basicAuth
+        },
+        body: json.encode([
+          {
+            "event_id": widget.eventId,
+            "location": _selectedLocation!.name,
+            "rate_earthquake": _selectedRating.toString(),
+            "lat": '',
+            "lng": ''
+          }
+        ]),
+      );
+    } catch (e) {
+      log(e.toString());
+    }
+
+    return res;
   }
 
   Widget getForm() {
-    Location? _selectedLocation;
-    String? _selectedRating;
-
     return Form(
       key: _formKey,
       child: Column(
@@ -38,6 +73,10 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
           ),
           const SizedBox(height: 20),
           DropdownButtonFormField(
+            decoration: const InputDecoration(
+              labelText: 'Choose your location',
+              border: OutlineInputBorder(),
+            ),
             hint: const Text('Choose your location'),
             value: _selectedLocation,
             items: Location.values.map((value) {
@@ -61,8 +100,12 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
           ),
           const SizedBox(height: 20),
           DropdownButtonFormField(
+            decoration: const InputDecoration(
+              labelText: 'Rate the earthquake',
+              border: OutlineInputBorder(),
+            ),
             hint: const Text('Rate the earthquake'),
-            value: _selectedLocation,
+            value: _selectedRating,
             items: <String>['Weak', 'Light', 'Moderate', 'Strong', 'Severe']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
@@ -87,31 +130,62 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
             },
           ),
           const SizedBox(height: 50),
-          Row(
-            children: [
-              const Spacer(),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              const SizedBox(width: 16),
-              ElevatedButton(
-                onPressed: () {
-                  // Validate returns true if the form is valid, or false otherwise.
-                  if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data ...')),
-                    );
-                    //Navigator.pop(context);
-                    _submitData();
-                  }
-                },
-                child: const Text('Submit'),
-              ),
-            ],
-          ),
+          if (_isInProgress) const CircularProgressIndicator(),
+          if (!_isInProgress)
+            Row(
+              children: [
+                const Spacer(),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    // Validate returns true if the form is valid, or false otherwise.
+                    if (_formKey.currentState!.validate()) {
+                      setState(() {
+                        _isInProgress = true;
+                      });
+                      sendData();
+                      showAlertDialog(context);
+                      setState(() {
+                        _selectedRating = null;
+                        _selectedLocation = null;
+                        _isInProgress = false;
+                      });
+                    }
+                  },
+                  child: const Text('Submit'),
+                ),
+              ],
+            ),
         ],
       ),
     );
+  }
+
+  showAlertDialog(BuildContext context) {
+    //Button
+    Widget okButton = TextButton(
+      child: const Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: const Text("Status"),
+      content: const Text("Your message has been received.  Thank you."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
   }
 }

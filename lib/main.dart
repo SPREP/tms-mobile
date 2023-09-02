@@ -1,5 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:macres/models/settings_model.dart';
 import 'package:macres/providers/locale_provider.dart';
 import 'package:macres/screens/tabs_screen.dart';
 import 'package:macres/widgets/onboarding/onboarding_page.dart';
@@ -9,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'to_intl.dart';
+import 'firebase_options.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,20 +20,28 @@ Future main() async {
   final prefs = await SharedPreferences.getInstance();
   bool showOnboarding = prefs.getBool('showOnboarding') ?? true;
 
-  print("showOnboarding: $showOnboarding");
-
   if (showOnboarding == true) {
     prefs.setBool('showOnboarding', false);
   }
 
+  await Firebase.initializeApp(
+    name: 'MACRES',
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(App(showOnboarding: showOnboarding));
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key, required this.showOnboarding});
 
   final bool showOnboarding;
 
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -60,7 +72,9 @@ class App extends StatelessWidget {
               seedColor: const Color.fromARGB(255, 133, 131, 131),
             ),
           ),
-          home: showOnboarding ? const OnboardingPage() : const TabsScreen(),
+          home: widget.showOnboarding
+              ? const OnboardingPage()
+              : const TabsScreen(),
         ),
       ),
     );

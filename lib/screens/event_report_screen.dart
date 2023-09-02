@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:macres/widgets/image_input.dart';
 import 'package:path/path.dart' as p;
+import 'package:macres/models/settings_model.dart';
 
 class EventReportScreen extends StatefulWidget {
   const EventReportScreen({super.key});
@@ -33,15 +34,17 @@ class _EventReportScreenState extends State<EventReportScreen> {
   Future<http.Response> sendData(imageSourceUrls) async {
     final title = titleController.text;
     final body = bodyController.text;
-    const username = 'mobile_app';
-    const password = 'intel13!';
+    var username = metapi[Credential.username];
+    var password = metapi[Credential.password];
+    var host = metapi[Credential.host];
+    var endpoint = '/event-report?_format=json';
     final basicAuth =
         "Basic ${base64.encode(utf8.encode('$username:$password'))}";
     dynamic res;
 
     try {
       res = await http.post(
-        Uri.parse('http://app.met.gov.to/api/v1/event-report?_format=json'),
+        Uri.parse('$host$endpoint'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': basicAuth
