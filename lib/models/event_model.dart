@@ -38,7 +38,6 @@ class EventModel {
   num? category;
   num? km;
   String? depth;
-  Bool? tsunami;
   double? magnitude;
   String? location;
   Bool? evacuate;
@@ -46,24 +45,26 @@ class EventModel {
   double lon;
   num? id;
   String? name;
+  List? feel = [];
+  String? tsunami;
 
-  EventModel({
-    this.body,
-    required this.type,
-    this.time,
-    this.date,
-    this.category,
-    this.km,
-    this.depth,
-    this.tsunami,
-    this.magnitude,
-    this.location,
-    this.evacuate,
-    this.lat = 0,
-    this.lon = 0,
-    this.id,
-    this.name,
-  });
+  EventModel(
+      {this.body,
+      required this.type,
+      this.time,
+      this.date,
+      this.category,
+      this.km,
+      this.depth,
+      this.tsunami,
+      this.magnitude,
+      this.location,
+      this.evacuate,
+      this.lat = 0,
+      this.lon = 0,
+      this.id,
+      this.name,
+      this.feel});
 
   Icon getIcon() {
     return const Icon(Icons.info);

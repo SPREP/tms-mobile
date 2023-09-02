@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:macres/screens/onboarding/onboarding_first_screen.dart';
 import 'package:macres/screens/onboarding/onboarding_second_screen.dart';

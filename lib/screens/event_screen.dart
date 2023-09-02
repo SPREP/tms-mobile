@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:macres/models/event_model.dart';
+import 'package:macres/models/settings_model.dart';
 import 'package:macres/widgets/event_widget.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -20,19 +21,22 @@ class _EventScreen extends State<EventScreen> {
     super.initState();
     setState(() {
       isLoading = true;
+      getEvents();
     });
-    getEvents();
   }
 
   getEvents() async {
-    const username = 'mobile_app';
-    const password = 'intel13!';
+    var username = metapi[Credential.username];
+    var password = metapi[Credential.password];
+    String host = metapi[Credential.host].toString();
+    String endpoint = '/event?_format=json';
+
     final basicAuth =
         "Basic ${base64.encode(utf8.encode('$username:$password'))}";
     dynamic response;
     try {
       response = await http.get(
-        Uri.parse('http://met-api.lndo.site/api/v1/event?_format=json'),
+        Uri.parse('$host$endpoint'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': basicAuth
@@ -40,8 +44,16 @@ class _EventScreen extends State<EventScreen> {
       );
 
       if (response.statusCode == 200) {
+        if (jsonDecode(response.body).isEmpty) {
+          setState(() {
+            isLoading = false;
+          });
+          return [];
+        }
+
         final Map<String, dynamic> listData = jsonDecode(response.body);
-        final List<EventModel> _loadedItems = [];
+        final List<EventModel> loadedItems = [];
+
         for (final item in listData.entries) {
           var magnitude = 0.0;
           var lat = 0.0;
@@ -59,7 +71,7 @@ class _EventScreen extends State<EventScreen> {
             lon = double.parse(location[1]);
           }
 
-          _loadedItems.add(EventModel(
+          loadedItems.add(EventModel(
             type: EventTypeExtension.fromName(item.value['type']),
             id: int.parse(item.value['id']),
             date: item.value['date'],
@@ -70,15 +82,17 @@ class _EventScreen extends State<EventScreen> {
             lon: lon,
             category: int.parse(item.value['field_category'] ?? '0'),
             name: item.value['field_name'] ?? '',
+            feel: item.value['feel'] ?? [],
+            tsunami: item.value['tsunami'] ?? ''
           ));
         }
 
         setState(() {
-          apiData = _loadedItems;
+          apiData = loadedItems;
           isLoading = false;
         });
 
-        return _loadedItems;
+        return loadedItems;
       }
     } catch (e) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -100,10 +114,14 @@ class _EventScreen extends State<EventScreen> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Column(
-                children: apiData.map<Widget>((eventObject) {
-                return EventWidget(event: eventObject);
-              }).toList()),
+            : apiData.isEmpty
+                ? const Center(
+                    child: Text('No events at this time'),
+                  )
+                : Column(
+                    children: apiData.map<Widget>((eventObject) {
+                    return EventWidget(event: eventObject);
+                  }).toList()),
       ),
     );
   }

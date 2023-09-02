@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:macres/screens/about_screen.dart';
-import 'package:macres/screens/feedback_screen.dart';
 import 'package:macres/screens/help_screen.dart';
 import 'package:macres/screens/national_number_screen.dart';
 import 'package:macres/screens/settings_screen.dart';
