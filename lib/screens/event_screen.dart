@@ -83,7 +83,6 @@ class _EventScreen extends State<EventScreen> {
             category: int.parse(item.value['field_category'] ?? '0'),
             name: item.value['field_name'] ?? '',
             feel: item.value['feel'] ?? [],
-            tsunami: item.value['tsunami'] ?? ''
           ));
         }
 
@@ -102,6 +101,7 @@ class _EventScreen extends State<EventScreen> {
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      print(e);
     }
   }
 

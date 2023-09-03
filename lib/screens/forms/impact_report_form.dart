@@ -145,8 +145,11 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            const Text(
-              'Fill in the following fields to report the impact.',
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Fill in the following fields to report the impact.',
+              ),
             ),
             const SizedBox(height: 10),
             TextFormField(
@@ -254,11 +257,15 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
               },
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Select the impacted items from the list below.',
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Select the impacted items from the list below.',
+              ),
             ),
             const SizedBox(height: 20),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CustomCheckBox(
                   label: 'Water tank',
@@ -413,108 +420,99 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
               ],
             ),
             const SizedBox(height: 50),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Has anyone missing?'),
+            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  children: [
-                    const Text('Has anyone missing?'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ListTileTheme(
-                          horizontalTitleGap: 0,
-                          child: SizedBox(
-                            height: 100,
-                            width: 90,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(0),
-                              title: const Text('Yes'),
-                              leading: Radio(
-                                value: 1,
-                                groupValue: _anyoneMissing,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _anyoneMissing = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        ListTileTheme(
-                          horizontalTitleGap: 0,
-                          child: SizedBox(
-                            height: 100,
-                            width: 90,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(0),
-                              title: const Text('No'),
-                              leading: Radio(
-                                value: 0,
-                                groupValue: _anyoneMissing,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _anyoneMissing = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                ListTileTheme(
+                  horizontalTitleGap: 0,
+                  child: SizedBox(
+                    height: 100,
+                    width: 90,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: const Text('Yes'),
+                      leading: Radio(
+                        value: 1,
+                        groupValue: _anyoneMissing,
+                        onChanged: (value) {
+                          setState(() {
+                            _anyoneMissing = value;
+                          });
+                        },
+                      ),
                     ),
-                  ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    const Text('Has anyone passed away?'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ListTileTheme(
-                          horizontalTitleGap: 0,
-                          child: SizedBox(
-                            height: 100,
-                            width: 85,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(0),
-                              title: const Text('Yes'),
-                              leading: Radio(
-                                value: 1,
-                                groupValue: _anyonePassedAway,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _anyonePassedAway = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        ListTileTheme(
-                          horizontalTitleGap: 0,
-                          child: SizedBox(
-                            height: 100,
-                            width: 85,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(0),
-                              title: const Text('No'),
-                              leading: Radio(
-                                value: 0,
-                                groupValue: _anyonePassedAway,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _anyonePassedAway = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                ListTileTheme(
+                  horizontalTitleGap: 0,
+                  child: SizedBox(
+                    height: 100,
+                    width: 90,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: const Text('No'),
+                      leading: Radio(
+                        value: 0,
+                        groupValue: _anyoneMissing,
+                        onChanged: (value) {
+                          setState(() {
+                            _anyoneMissing = value;
+                          });
+                        },
+                      ),
                     ),
-                  ],
+                  ),
+                ),
+              ],
+            ),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Has anyone passed away?'),
+            ),
+            Row(
+              children: [
+                ListTileTheme(
+                  horizontalTitleGap: 0,
+                  child: SizedBox(
+                    height: 100,
+                    width: 85,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: const Text('Yes'),
+                      leading: Radio(
+                        value: 1,
+                        groupValue: _anyonePassedAway,
+                        onChanged: (value) {
+                          setState(() {
+                            _anyonePassedAway = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                ListTileTheme(
+                  horizontalTitleGap: 0,
+                  child: SizedBox(
+                    height: 100,
+                    width: 85,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: const Text('No'),
+                      leading: Radio(
+                        value: 0,
+                        groupValue: _anyonePassedAway,
+                        onChanged: (value) {
+                          setState(() {
+                            _anyonePassedAway = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -536,16 +534,19 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
               },
             ),
             const SizedBox(height: 5),
-            CheckboxListTile(
-              value: true,
-              controlAffinity: ListTileControlAffinity.leading,
-              onChanged: (bool? value) {
-                setState(() {
-                  //key = value;
-                });
-              },
-              title: const Text(
-                  'I declare that all information given above is true and complete.'),
+            ListTileTheme(
+              contentPadding: const EdgeInsets.only(left: 0),
+              child: CheckboxListTile(
+                value: true,
+                controlAffinity: ListTileControlAffinity.leading,
+                onChanged: (bool? value) {
+                  setState(() {
+                    //key = value;
+                  });
+                },
+                title: const Text(
+                    'I declare that all information given above is true and complete.'),
+              ),
             ),
             const SizedBox(height: 30),
             if (_isInProgress) const CircularProgressIndicator(),

@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 
 class NotificationModel {
-  final int level;
-  final String body;
+  num? id;
+  num? level;
+  String? body;
+  String? time;
+  String? date;
+  String? title;
+  String? location;
 
-  const NotificationModel(this.level, this.body);
+  NotificationModel({
+    this.level,
+    this.body,
+    this.time,
+    this.date,
+    this.title,
+    this.location,
+    this.id,
+  });
 
   Icon getIcon() {
     switch (level) {

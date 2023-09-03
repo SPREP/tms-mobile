@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +39,7 @@ class EventModel {
   String? depth;
   double? magnitude;
   String? location;
-  Bool? evacuate;
+  bool? evacuate;
   double lat;
   double lon;
   num? id;

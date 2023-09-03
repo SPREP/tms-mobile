@@ -24,7 +24,7 @@ class NotificationWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 width: mWidth,
-                child: Text(notification.body),
+                child: Text(notification.body.toString()),
               ),
             ],
           ),

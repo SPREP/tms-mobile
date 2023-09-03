@@ -7,6 +7,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
 import 'package:macres/screens/forms/impact_report_form.dart';
 import 'package:macres/screens/forms/request_assistance_form.dart';
+import 'package:macres/widgets/big_map_widget.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
 class EventDetailsScreen extends StatefulWidget {
@@ -34,6 +35,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           size: 10,
         ),
       ),
+    );
+  }
+
+  void _openMapOverlay() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => BigMapWidget(eventModel: widget.eventModel),
     );
   }
 
@@ -67,7 +77,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 border: Border.all(
                   color: const Color.fromARGB(255, 148, 155, 167),
                 ),
-                color: Color.fromARGB(255, 235, 235, 234),
+                color: const Color.fromARGB(255, 235, 235, 234),
               ),
               height: 300,
               child: ClipRRect(
@@ -82,12 +92,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           zoom: 6,
                         ),
                         children: [
-                          FloatingActionButton(
-                              child: const Icon(
-                                Icons.add,
-                                color: Colors.red,
-                              ),
-                              onPressed: () {}),
                           TileLayer(
                             urlTemplate:
                                 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -104,6 +108,19 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                               ),
                             ],
                           ),
+                          Positioned(
+                            right: 10,
+                            bottom: 60,
+                            child: FloatingActionButton(
+                                tooltip: 'View large map',
+                                child: const Icon(
+                                  Icons.center_focus_weak_sharp,
+                                  color: Color.fromARGB(255, 121, 119, 119),
+                                ),
+                                onPressed: () {
+                                  _openMapOverlay();
+                                }),
+                          ),
                         ],
                       ),
               ),
@@ -115,7 +132,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 color: Colors.white,
               ),
               width: double.infinity,
-              padding: const EdgeInsets.only(top:20),
+              padding: const EdgeInsets.only(top: 20),
               margin: const EdgeInsets.only(top: 250),
               child: Column(
                 children: [
@@ -141,15 +158,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             color: Colors.white,
                           ),
                           Text(widget.eventModel.time.toString()),
-                          Color.fromARGB(255, 124, 169, 40)),
+                          const Color.fromARGB(255, 124, 169, 40)),
                       if (widget.eventModel.type == EventType.cyclone)
                         roundContent(
                           const Icon(
                             Icons.wind_power,
                             color: Colors.white,
                           ),
-                          Text(
-                              "Cat. ${widget.eventModel.category.toString()}"),
+                          Text("Cat. ${widget.eventModel.category.toString()}"),
                           Colors.green,
                         ),
                       if (widget.eventModel.type == EventType.earthquake)
@@ -166,52 +182,62 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   const SizedBox(
                     height: 50,
                   ),
-                  if (widget.eventModel.tsunami != null)
-                    styleLabel('Tsunami Warning', widget.eventModel.tsunami.toString()),
+                  if (widget.eventModel.tsunami != null &&
+                      widget.eventModel.tsunami != '')
+                    styleLabel('Tsunami Warning',
+                        widget.eventModel.tsunami.toString()),
                   const SizedBox(height: 15),
                   if (widget.eventModel.type == EventType.earthquake &&
                       widget.eventModel.feel!.isNotEmpty)
                     styleLabel('Felt', widget.eventModel.feel.toString()),
                   const SizedBox(height: 15),
                   if (widget.eventModel.type == EventType.cyclone)
-                    styleLabel('Affecting', "Tongatapu, Ha'apai, Vava'u, 'Eua"),
-                  const SizedBox(height: 10),
+                    // styleLabel('Affecting', "Tongatapu, Ha'apai, Vava'u, 'Eua"),
+                    const SizedBox(height: 10),
                   if (widget.eventModel.type == EventType.earthquake)
-                    ElevatedButton.icon(
-                        icon: Icon(HumanitarianIcons.affected_population),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FeelEarthquakeForm(
-                                    eventId: widget.eventModel.id)),
-                          );
-                        },
-                        label: Text('Did you feel it?')),
+                    SizedBox(
+                      width: 300.0,
+                      child: ElevatedButton.icon(
+                          icon:
+                              const Icon(HumanitarianIcons.affected_population),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FeelEarthquakeForm(
+                                      eventId: widget.eventModel.id)),
+                            );
+                          },
+                          label: const Text('Did you feel it?')),
+                    ),
                   const SizedBox(height: 20),
-                  ElevatedButton.icon(
-                      icon: Icon(Icons.draw),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ImpactReportForm(
-                                  eventId: widget.eventModel.id)),
-                        );
-                      },
-                      label: Text('Create Impact Report')),
+                  SizedBox(
+                      width: 300.0,
+                      child: ElevatedButton.icon(
+                          icon: const Icon(Icons.draw),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ImpactReportForm(
+                                      eventId: widget.eventModel.id)),
+                            );
+                          },
+                          label: const Text('Create Impact Report'))),
                   const SizedBox(height: 20),
-                  ElevatedButton.icon(
-                      icon: Icon(Icons.assistant),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RequestAssistanceForm(
-                                  eventId: widget.eventModel.id)),
-                        );
-                      },
-                      label: Text('Request Assistance')),
+                  SizedBox(
+                      width: 300.0,
+                      child: ElevatedButton.icon(
+                          icon: const Icon(Icons.assistant),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RequestAssistanceForm(
+                                      eventId: widget.eventModel.id)),
+                            );
+                          },
+                          label: const Text('Request Assistance'))),
                 ],
               ),
             ),

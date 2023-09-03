@@ -35,64 +35,67 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Column(
-        children: [
-          Image.asset(
-            'assets/images/onboarding2.png',
-            fit: BoxFit.cover,
-            height: size.height * 0.4,
-            width: size.width,
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-            child: Column(
-              children: [
-                Text(AppLocalizations.of(context).onBoardingHeadingText),
-                const SizedBox(height: 20),
-                ListTile(
-                  horizontalTitleGap: 1,
-                  leading: const Icon(
-                    Icons.check_circle_rounded,
-                    color: Colors.green,
-                  ),
-                  title: Text(AppLocalizations.of(context).onBoardListItem1),
-                ),
-                ListTile(
-                  horizontalTitleGap: 1,
-                  leading: const Icon(
-                    Icons.check_circle_rounded,
-                    color: Colors.green,
-                  ),
-                  title: Text(AppLocalizations.of(context).onBoardListItem2),
-                ),
-                ListTile(
-                  horizontalTitleGap: 1,
-                  leading: const Icon(
-                    Icons.check_circle_rounded,
-                    color: Colors.green,
-                  ),
-                  title: Text(AppLocalizations.of(context).onBoardListItem3),
-                ),
-                ListTile(
-                  horizontalTitleGap: 1,
-                  leading: const Icon(
-                    Icons.check_circle_rounded,
-                    color: Colors.green,
-                  ),
-                  title: Text(AppLocalizations.of(context).onBoardListItem4),
-                ),
-                ListTile(
-                  horizontalTitleGap: 1,
-                  leading: const Icon(
-                    Icons.check_circle_rounded,
-                    color: Colors.green,
-                  ),
-                  title: Text(AppLocalizations.of(context).onBoardListItem5),
-                ),
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/images/onboarding2.png',
+              fit: BoxFit.cover,
+              height: size.height * 0.4,
+              width: size.width,
             ),
-          ),
-        ],
+            Container(
+              height: 400,
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
+              child: Column(
+                children: [
+                  Text(AppLocalizations.of(context).onBoardingHeadingText),
+                  const SizedBox(height: 20),
+                  ListTile(
+                    horizontalTitleGap: 1,
+                    leading: const Icon(
+                      Icons.check_circle_rounded,
+                      color: Colors.green,
+                    ),
+                    title: Text(AppLocalizations.of(context).onBoardListItem1),
+                  ),
+                  ListTile(
+                    horizontalTitleGap: 1,
+                    leading: const Icon(
+                      Icons.check_circle_rounded,
+                      color: Colors.green,
+                    ),
+                    title: Text(AppLocalizations.of(context).onBoardListItem2),
+                  ),
+                  ListTile(
+                    horizontalTitleGap: 1,
+                    leading: const Icon(
+                      Icons.check_circle_rounded,
+                      color: Colors.green,
+                    ),
+                    title: Text(AppLocalizations.of(context).onBoardListItem3),
+                  ),
+                  ListTile(
+                    horizontalTitleGap: 1,
+                    leading: const Icon(
+                      Icons.check_circle_rounded,
+                      color: Colors.green,
+                    ),
+                    title: Text(AppLocalizations.of(context).onBoardListItem4),
+                  ),
+                  ListTile(
+                    horizontalTitleGap: 1,
+                    leading: const Icon(
+                      Icons.check_circle_rounded,
+                      color: Colors.green,
+                    ),
+                    title: Text(AppLocalizations.of(context).onBoardListItem5),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

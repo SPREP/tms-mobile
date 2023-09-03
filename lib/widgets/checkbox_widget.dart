@@ -16,13 +16,18 @@ class CustomCheckBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 40,
-      width: 180,
-      child: CheckboxListTile(
-        value: value,
-        activeColor: Colors.blue,
-        controlAffinity: ListTileControlAffinity.leading,
-        title: Text(label),
-        onChanged: onChanged,
+      width: 140,
+      child: ListTileTheme(
+        contentPadding: const EdgeInsets.only(left:0),
+        horizontalTitleGap: 0,
+        child: CheckboxListTile(
+          dense: true,
+          value: value,
+          activeColor: Colors.blue,
+          controlAffinity: ListTileControlAffinity.leading,
+          title: Text(label),
+          onChanged: onChanged,
+        ),
       ),
     );
   }

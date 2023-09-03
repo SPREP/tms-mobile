@@ -272,14 +272,10 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
               },
             ),
             const SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    const Text('Do you have water?'),
+
+            const Align( alignment: Alignment.centerLeft, child: Text('Do you have water?')),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                       children: [
                         ListTileTheme(
                           horizontalTitleGap: 0,
@@ -323,13 +319,9 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
                         ),
                       ],
                     ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    const Text('Do you have food?'),
+              const Align( alignment: Alignment.centerLeft, child: Text('Do you have food?')),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                       children: [
                         ListTileTheme(
                           horizontalTitleGap: 0,
@@ -373,10 +365,6 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ],
-            ),
             const Align(
               alignment: Alignment.centerLeft,
               child: Text('Do you have house/shelter?'),
@@ -703,16 +691,20 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
               },
             ),
             const SizedBox(height: 5),
-            CheckboxListTile(
-              value: true,
-              controlAffinity: ListTileControlAffinity.leading,
-              onChanged: (bool? value) {
-                setState(() {
-                  //key = value;
-                });
-              },
-              title: const Text(
-                  'I declare that all information given above is true and complete.'),
+
+            ListTileTheme(
+              contentPadding: const EdgeInsets.only(left: 0),
+              child: CheckboxListTile(
+                value: true,
+                controlAffinity: ListTileControlAffinity.leading,
+                onChanged: (bool? value) {
+                  setState(() {
+                    //key = value;
+                  });
+                },
+                title: const Text(
+                    'I declare that all information given above is true and complete.'),
+              ),
             ),
             const SizedBox(height: 30),
             if (_isInProgress) const CircularProgressIndicator(),
