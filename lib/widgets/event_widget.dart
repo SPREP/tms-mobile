@@ -52,10 +52,6 @@ class EventWidget extends StatelessWidget {
                         Text("Kilometer: ${event.km.toString()}"),
                       if (event.depth != null)
                         Text("Depth: ${event.depth.toString()}"),
-                      if (event.lon != null && event.lon != 0.0)
-                        Text("Longitude: ${event.lon.toString()}"),
-                      if (event.lat != null && event.lat != 0.0)
-                        Text("Latitude: ${event.lat.toString()}"),
                     ],
                   ),
                 ),
