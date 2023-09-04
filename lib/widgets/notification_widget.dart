@@ -20,7 +20,7 @@ class NotificationWidget extends StatelessWidget {
                 Container(
                   color: notification.getColor(),
                   padding: const EdgeInsets.all(10),
-                  height: 120,
+                  height: 150,
                   child: notification.getIcon(),
                 ),
                 Container(
@@ -46,18 +46,34 @@ class NotificationWidget extends StatelessWidget {
                       const SizedBox(
                         height: 5,
                       ),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Text(
-                            "Time: ${notification.time} ${notification.date}",
-                            style: const TextStyle(
-                              backgroundColor:
-                                  Color.fromARGB(255, 250, 202, 165),
+                      Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Chip(
+                              avatar: const CircleAvatar(
+                                child: Icon(
+                                  Icons.timelapse,
+                                  size: 17,
+                                ),
+                              ),
+                              label: Text(notification.date.toString()),
                             ),
                           ),
-                        ),
+                          const SizedBox(width: 10.0),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Chip(
+                              avatar: const CircleAvatar(
+                                child: Icon(
+                                  Icons.calendar_today,
+                                  size: 15,
+                                ),
+                              ),
+                              label: Text(notification.time.toString()),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -78,6 +94,9 @@ class NotificationWidget extends StatelessWidget {
               ),
             );
           },
+        ),
+        const SizedBox(
+          height: 5.0,
         ),
       ],
     );

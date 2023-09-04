@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:collection/collection.dart';
 
 final formatter = DateFormat.yMd();
 
 enum Language { en, to }
 
 enum Location { tongatapu, haapai, vavau, niuafoou, niuatoputapu, eua }
+
+extension LocationExtension on Location {
+  static Location? fromName(String? name) {
+    return Location.values.firstWhereOrNull((e) => e.name == name);
+  }
+}
 
 const locationLabel = {
   Location.tongatapu: "Tongatapu",

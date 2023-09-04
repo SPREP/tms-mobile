@@ -189,7 +189,16 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   const SizedBox(height: 15),
                   if (widget.eventModel.type == EventType.earthquake &&
                       widget.eventModel.feel!.isNotEmpty)
-                    styleLabel('Felt', widget.eventModel.feel.toString()),
+                    styleLabel(
+                      'Felt',
+                      widget.eventModel.feel!
+                          .map((item) {
+                            return locationLabel[
+                                LocationExtension.fromName(item)];
+                          })
+                          .toList()
+                          .toString(),
+                    ),
                   const SizedBox(height: 15),
                   if (widget.eventModel.type == EventType.cyclone)
                     // styleLabel('Affecting', "Tongatapu, Ha'apai, Vava'u, 'Eua"),
@@ -249,6 +258,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   Widget styleLabel(String label, String value) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           padding: const EdgeInsets.all(8),
