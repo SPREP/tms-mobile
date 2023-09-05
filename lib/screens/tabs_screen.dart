@@ -17,6 +17,7 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedPageIndex = 0;
+  String _unit = 'f';
 
   void _selectPage(int index) {
     setState(() {
@@ -24,25 +25,73 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
 
+  toFahrenheit(c) {
+    return (c / 5) * 9 + 32;
+  }
+
+  void handleSelection(String value) {}
+
   @override
   Widget build(BuildContext context) {
     Widget activePage = const WeatherForcastScreen();
     String activePageTitle = 'Weather Forecast';
     double height = AppBar().preferredSize.height;
+    List<Widget> actionButtons = [
+      Padding(
+        padding: const EdgeInsets.only(right: 15.0),
+        child: PopupMenuButton<String>(
+          onSelected: handleSelection,
+          icon: const Icon(Icons.more_vert),
+          itemBuilder: (BuildContext context) {
+            return {'Celsius', 'Fahrenheit'}.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        _unit == 'c' && choice == 'Celsius'
+                            ? const Icon(Icons.check)
+                            : const Text(''),
+                        _unit == 'f' && choice == 'Fahrenheit'
+                            ? const Icon(Icons.check)
+                            : const Text(''),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(choice),
+                        const Spacer(),
+                        choice == 'Celsius'
+                            ? const Text('°C')
+                            : const Text('°F'),
+                      ],
+                    ),
+                    const Divider(),
+                  ],
+                ),
+              );
+            }).toList();
+          },
+        ),
+      ),
+    ];
 
     if (_selectedPageIndex == 1) {
       activePage = const EventScreen();
       activePageTitle = 'Events';
-    }
-
-    if (_selectedPageIndex == 2) {
-      activePage = const NotificationScreen();
-      activePageTitle = 'Notifications';
+      actionButtons = [];
     }
 
     if (_selectedPageIndex == 3) {
+      activePage = const NotificationScreen();
+      activePageTitle = 'Notifications';
+      actionButtons = [];
+    }
+
+    if (_selectedPageIndex == 2) {
       activePage = const EventReportScreen();
       activePageTitle = 'Event Report';
+      actionButtons = [];
     }
 
     void openEventReportOverlay() {
@@ -83,8 +132,10 @@ class _TabsScreenState extends State<TabsScreen> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(30.0),
           child: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: Colors.transparent,
             title: Text(activePageTitle),
+            actions: actionButtons,
             systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarBrightness: Brightness.light,
             ),
@@ -106,12 +157,17 @@ class _TabsScreenState extends State<TabsScreen> {
               label: 'Events',
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.add),
+              label: 'Report',
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.notifications),
               label: 'Notification',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month),
-              label: 'Event Report',
+              //icon: Icon(Icons.more_vert),
+              icon: Icon(Icons.menu),
+              label: 'Menu',
             ),
           ],
           currentIndex: _selectedPageIndex,
