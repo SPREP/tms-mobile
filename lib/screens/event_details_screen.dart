@@ -40,7 +40,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   void _openMapOverlay() {
     showModalBottomSheet(
-      useSafeArea: true,
+      useSafeArea: false,
       isScrollControlled: true,
       context: context,
       builder: (ctx) => BigMapWidget(eventModel: widget.eventModel),

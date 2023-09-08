@@ -90,7 +90,7 @@ class _EventReportScreenState extends State<EventReportScreen> {
                   height: 15,
                 ),
                 const Text(
-                  "Fill in the following fields, to report an event from your location. For exmaple:  If you see a fire, you can report it here.  If you see a smoke coming out from a Vocano.",
+                  "Fill in the following fields, to report an event from your location. For exmaple:  If you see a fire, you can report it here.  If you see a smoke coming out from a Volcano.",
                   style: TextStyle(fontSize: 13),
                 ),
                 const SizedBox(height: 20),

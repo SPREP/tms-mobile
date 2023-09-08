@@ -47,7 +47,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
   Widget options() {
     double width = MediaQuery.of(context).size.width;
-    double boxWidth = 150;
+    double boxWidth = 151;
     double fontSize = 15;
 
     if (width <= 300) {
@@ -184,7 +184,7 @@ class _ReportScreenState extends State<ReportScreen> {
                           color: Colors.orange,
                         ),
                         Text(
-                          'Assitance Request',
+                          'Assistance Request',
                           style: TextStyle(fontSize: fontSize),
                         ),
                       ]),
