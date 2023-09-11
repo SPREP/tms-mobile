@@ -21,7 +21,7 @@ class EventWidget extends StatelessWidget {
                 Container(
                   color: event.getColor(),
                   padding: const EdgeInsets.all(10),
-                  height: 100,
+                  height: 105,
                   child: const Text(''),
                 ),
                 Container(

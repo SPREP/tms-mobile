@@ -19,7 +19,8 @@ import 'package:http/http.dart' as http;
 class WeatherForcastScreen extends StatefulWidget {
   const WeatherForcastScreen({super.key, required this.onCurrentWeatherChange});
 
-  final String Function(String filepath) onCurrentWeatherChange;
+  final String Function(String filepath, String dayOrNight)
+      onCurrentWeatherChange;
 
   @override
   State<WeatherForcastScreen> createState() {
@@ -141,21 +142,31 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
   void changeBgImage() {
     String filePath = '';
-    switch (currentData.getIconDefinition()) {
-      case 'rain':
-        filePath = 'assets/images/rain.jpg';
+    switch (currentData.iconId) {
+      case 5:
+      case 6:
+      case 7:
+        filePath = currentData.dayOrNight == 'day'
+            ? 'assets/images/day_rain.jpg'
+            : 'assets/images/night_rain.jpg';
         break;
-      case 'sunny':
-        filePath = 'assets/images/sunny_day.jpg';
+      case 1:
+        filePath = currentData.dayOrNight == 'day'
+            ? 'assets/images/sunny_day.jpg'
+            : 'assets/images/clear_night.jpg';
         break;
-      case 'cloudy':
-        filePath = 'assets/images/cloudy_day.jpg';
-        break;
-      case 'windy':
-        filePath = 'assets/images/windy_day.jpg';
+      case 2:
+      case 3:
+      case 4:
+      case 8:
+      case 9:
+      case 10:
+        filePath = currentData.dayOrNight == 'day'
+            ? 'assets/images/cloudy_day.jpg'
+            : 'assets/images/cloudy_night.jpg';
         break;
     }
-    widget.onCurrentWeatherChange(filePath);
+    widget.onCurrentWeatherChange(filePath, currentData.dayOrNight);
   }
 
   void changeLocation(Location newLocation) async {
@@ -363,6 +374,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                       const SizedBox(
                         height: 20,
                       ),
+                      Text(currentData.getIconDefinition().toString()),
                       Row(
                         children: [
                           const Spacer(),
@@ -374,7 +386,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           Column(
                             children: [
                               Text(
-                                'SUNNY ${currentData.minTemp}/${currentData.maxTemp}',
+                                '${currentData.minTemp}\u00B0/${currentData.maxTemp}\u00B0',
                                 style: const TextStyle(
                                   fontSize: 16,
                                 ),
@@ -442,8 +454,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20),
-                      const Text('Cloudy periods with few showers'),
                     ],
                   ),
                 ),

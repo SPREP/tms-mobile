@@ -41,17 +41,17 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
             ),
             for (final item in tenDaysProvider.currentTenDaysData)
               ListTile(
-                contentPadding:
-                    EdgeInsets.only(top: 0, bottom: 0, left: 30.0, right: 30.0),
+                contentPadding: const EdgeInsets.only(
+                    top: 0, bottom: 0, left: 30.0, right: 30.0),
                 dense: true,
                 leading: item.getIcon(20, Colors.white),
                 title: Padding(
-                    padding: EdgeInsets.only(top: 6),
+                    padding: const EdgeInsets.only(top: 6),
                     child: Text(item.day.toString(),
                         style: const TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold))),
                 trailing: Text(
-                  '${item.maxTemp}/${item.minTemp}',
+                  '${item.maxTemp}\u00B0/${item.minTemp}\u00B0',
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 15,

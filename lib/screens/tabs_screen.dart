@@ -27,10 +27,12 @@ class _TabsScreenState extends State<TabsScreen> {
   String activePageTitle = '';
   List<Widget> actionButtons = [];
   String bgFilePath = '';
+  String dayOrNightStatus = 'day';
 
-  String _onCurrentWeatherChange(String filepath) {
+  String _onCurrentWeatherChange(String filepath, String dayOrNight) {
     setState(() {
       bgFilePath = filepath;
+      dayOrNightStatus = dayOrNight;
     });
 
     return filepath;
@@ -62,6 +64,33 @@ class _TabsScreenState extends State<TabsScreen> {
       shadowColor: Colors.grey[60],
       padding: EdgeInsets.all(8.0),
     );
+  }
+
+  getAppBar() {
+    if (dayOrNightStatus == 'night' &&
+        (_selectedPageIndex == 0 || _selectedPageIndex == 2)) {
+      return PreferredSize(
+        preferredSize: const Size.fromHeight(30.0),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(activePageTitle),
+          actions: actionButtons,
+          foregroundColor: Colors.white,
+        ),
+      );
+    } else {
+      return PreferredSize(
+        preferredSize: const Size.fromHeight(30.0),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(activePageTitle),
+          actions: actionButtons,
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -109,41 +138,38 @@ class _TabsScreenState extends State<TabsScreen> {
           ),
         ),
         drawer: const MainDrawerWidget(),
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(30.0),
-          child: AppBar(
-            backgroundColor: Colors.transparent,
-            title: Text(activePageTitle),
-            actions: actionButtons,
-            systemOverlayStyle: const SystemUiOverlayStyle(
-              statusBarBrightness: Brightness.light,
-            ),
+        appBar: getAppBar(),
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                  top: BorderSide(
+                      color: Color.fromARGB(255, 233, 232, 232), width: 1.0))),
+          child: BottomNavigationBar(
+            onTap: _selectPage,
+            unselectedItemColor: const Color.fromARGB(133, 18, 17, 17),
+            selectedItemColor: const Color.fromARGB(255, 42, 35, 228),
+            type: BottomNavigationBarType.fixed,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.event_available_rounded),
+                label: 'Events',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.add_circle_outline),
+                label: 'Report',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                label: 'Notification',
+              ),
+            ],
+            currentIndex: _selectedPageIndex,
           ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: _selectPage,
-          unselectedItemColor: const Color.fromARGB(133, 18, 17, 17),
-          selectedItemColor: const Color.fromARGB(255, 42, 35, 228),
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.event_available_rounded),
-              label: 'Events',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle_outline),
-              label: 'Report',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: 'Notification',
-            ),
-          ],
-          currentIndex: _selectedPageIndex,
         ),
       ),
     );
@@ -156,7 +182,7 @@ class _TabsScreenState extends State<TabsScreen> {
       if (_selectedPageIndex == 0 || _selectedPageIndex == 2) {
         activePage = WeatherForcastScreen(
             onCurrentWeatherChange: _onCurrentWeatherChange);
-        activePageTitle = '${dt.day} ${dt.month} ${dt.year}';
+        activePageTitle = DateFormat("EEE dd MMM yyyy").format(DateTime.now());
         actionButtons = [actionFilter()];
       }
 

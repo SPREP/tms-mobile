@@ -16,6 +16,8 @@ class WeatherModel {
   String? location;
   String? day;
 
+  String dayOrNight = 'day';
+
   WeatherModel(
       {this.iconId,
       this.humidity,
@@ -29,7 +31,10 @@ class WeatherModel {
       this.caption,
       this.warning,
       this.location,
-      this.day});
+      this.day}) {
+    int hours = DateTime.now().hour;
+    dayOrNight = (hours >= 7 && hours <= 20) ? 'day' : 'night';
+  }
 
   void celsiusToFahrenheight() {
     minTemp = toFahrenheight(minTemp);
@@ -43,61 +48,94 @@ class WeatherModel {
   }
 
   Icon getIcon(double size, color) {
+    IconData icon;
+
     switch (iconId) {
       case 1:
-        return Icon(
-          WeatherIcons.day_sunny,
-          color: color,
-          size: size,
-        );
+        icon = dayOrNight == 'day'
+            ? WeatherIcons.day_sunny
+            : WeatherIcons.night_clear;
+        break;
       case 2:
-        return Icon(
-          WeatherIcons.day_rain,
-          color: color,
-          size: size,
-        );
+        icon = dayOrNight == 'day'
+            ? WeatherIcons.day_sunny_overcast
+            : WeatherIcons.night_partly_cloudy;
+        break;
       case 3:
-        return Icon(
-          WeatherIcons.cloudy,
-          color: color,
-          size: size,
-        );
+        icon = dayOrNight == 'day'
+            ? WeatherIcons.day_cloudy
+            : WeatherIcons.night_cloudy;
+        break;
       case 4:
-        return Icon(
-          WeatherIcons.showers,
-          color: color,
-          size: size,
-        );
+        icon = dayOrNight == 'day'
+            ? WeatherIcons.day_showers
+            : WeatherIcons.night_showers;
+        break;
       case 5:
-        return Icon(
-          WeatherIcons.night_clear,
-          color: color,
-          size: size,
-        );
+        icon = dayOrNight == 'day'
+            ? WeatherIcons.day_rain_mix
+            : WeatherIcons.night_rain_mix;
+        break;
       case 6:
-        return Icon(
-          WeatherIcons.rain,
-          color: color,
-          size: size,
-        );
+        icon = dayOrNight == 'day'
+            ? WeatherIcons.day_sleet
+            : WeatherIcons.night_sleet;
+        break;
+      case 7:
+        icon = dayOrNight == 'day'
+            ? WeatherIcons.day_rain
+            : WeatherIcons.night_rain;
+        break;
+      case 8:
+        icon = dayOrNight == 'day'
+            ? WeatherIcons.day_thunderstorm
+            : WeatherIcons.night_thunderstorm;
+        break;
+      case 9:
+        icon = dayOrNight == 'day'
+            ? WeatherIcons.day_lightning
+            : WeatherIcons.night_lightning;
+        break;
+      case 10:
+        icon = dayOrNight == 'day'
+            ? WeatherIcons.day_showers
+            : WeatherIcons.night_showers;
+        break;
+      default:
+        throw ('No icon found');
     }
-    throw ('Unable to find an icon');
+
+    return Icon(
+      icon,
+      color: color,
+      size: size,
+    );
   }
 
-  // @TODO: Complete this function later
   String getIconDefinition() {
     switch (iconId) {
       case 1:
-        return 'sunny';
+        return 'Fine Weather';
       case 2:
-      case 6:
-        return 'rain';
+        return 'Partly Cloudy';
       case 3:
-        return 'cloudy';
+        return 'Cloudy';
       case 4:
-        return 'windy';
+        return 'Cloudy periods with showers';
+      case 5:
+        return 'Light Rain';
+      case 6:
+        return 'Moderate Rain';
+      case 7:
+        return 'Heavy Rain';
+      case 8:
+        return 'Partly cloudy with thunderstorm';
+      case 9:
+        return 'Thunderstorm';
+      case 10:
+        return 'Squally Showers';
     }
-    return 'sunny';
+    return '';
   }
 }
 
@@ -109,6 +147,52 @@ class TenDaysForecastModel extends WeatherModel {
     super.minTemp,
     super.location,
   });
+
+  @override
+  Icon getIcon(double size, color) {
+    IconData icon;
+
+    switch (iconId) {
+      case 1:
+        icon = WeatherIcons.day_sunny;
+        break;
+      case 2:
+        icon = WeatherIcons.day_sunny_overcast;
+        break;
+      case 3:
+        icon = WeatherIcons.day_cloudy;
+        break;
+      case 4:
+        icon = WeatherIcons.day_showers;
+        break;
+      case 5:
+        icon = WeatherIcons.day_rain_mix;
+        break;
+      case 6:
+        icon = WeatherIcons.day_sleet;
+        break;
+      case 7:
+        icon = WeatherIcons.day_rain;
+        break;
+      case 8:
+        icon = WeatherIcons.day_thunderstorm;
+        break;
+      case 9:
+        icon = WeatherIcons.day_lightning;
+        break;
+      case 10:
+        icon = WeatherIcons.day_showers;
+        break;
+      default:
+        throw ('No icon found');
+    }
+
+    return Icon(
+      icon,
+      color: color,
+      size: size,
+    );
+  }
 }
 
 class CurrentWeatherModel extends WeatherModel {
