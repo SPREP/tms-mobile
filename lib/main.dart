@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:macres/models/settings_model.dart';
 import 'package:macres/providers/locale_provider.dart';
+import 'package:macres/providers/ten_days_provider.dart';
+import 'package:macres/providers/three_hours_provider.dart';
+import 'package:macres/providers/twentyfour_hours_provider.dart';
 import 'package:macres/screens/tabs_screen.dart';
 import 'package:macres/widgets/onboarding/onboarding_page.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +49,10 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => LocaleProvider())
+        ChangeNotifierProvider(create: (context) => LocaleProvider()),
+        ChangeNotifierProvider(create: (context) => TenDaysProvider()),
+        ChangeNotifierProvider(create: (context) => ThreeHoursProvider()),
+        ChangeNotifierProvider(create: (context) => TwentyFourHoursProvider())
       ],
       child: Consumer<LocaleProvider>(
         builder: (context, localeProvider, child) => MaterialApp(

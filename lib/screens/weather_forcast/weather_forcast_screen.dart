@@ -1,9 +1,14 @@
+import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:humanitarian_icons/humanitarian_icons.dart';
 import 'package:macres/models/weather_model.dart';
-import 'package:macres/screens/weather_forcast/sun_moon_slide.dart';
-import 'package:macres/screens/weather_forcast/tide_slide.dart';
-import 'package:macres/screens/weather_forcast/weather_slide.dart';
+import 'package:macres/providers/ten_days_provider.dart';
+import 'package:macres/providers/three_hours_provider.dart';
+import 'package:macres/providers/twentyfour_hours_provider.dart';
+import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
+import 'package:macres/screens/weather_forcast/tendays_slide.dart';
+import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide%20copy.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_icons/weather_icons.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -12,7 +17,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class WeatherForcastScreen extends StatefulWidget {
-  const WeatherForcastScreen({super.key});
+  const WeatherForcastScreen({super.key, required this.onCurrentWeatherChange});
+
+  final String Function(String filepath) onCurrentWeatherChange;
 
   @override
   State<WeatherForcastScreen> createState() {
@@ -26,24 +33,41 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   );
   final _itemCount = 3;
   dynamic activeSlide;
+  String selectedTempretureUnit = 'c';
 
   Location selectedLocation = Location.tongatapu;
   CurrentWeatherModel currentData = CurrentWeatherModel();
+  List<TenDaysForecastModel> currentTenDaysData = [];
+  ThreeHoursForecastModel currentThreeHoursData = ThreeHoursForecastModel();
+  TwentyFourHoursForecastModel currentTwentyFourHoursData =
+      TwentyFourHoursForecastModel();
+
   List<CurrentWeatherModel> currentWeatherData = [];
   List<TwentyFourHoursForecastModel> twentyFourHoursData = [];
   List<ThreeHoursForecastModel> threeHoursData = [];
   List<TenDaysForecastModel> tenDaysData = [];
 
   bool isLoading = false;
+  late Timer timer;
 
   @override
   void initState() {
     super.initState();
+
+    timer =
+        Timer.periodic(const Duration(minutes: 2), (Timer t) => getWeather());
+
     setLocation();
     setState(() {
       isLoading = true;
       getWeather();
     });
+  }
+
+  @override
+  void dispose() {
+    timer.cancel(); //cancel the timer here
+    super.dispose();
   }
 
   void setLocation() async {
@@ -57,12 +81,81 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     }
   }
 
+  void setTempretureUnit() async {
+    final prefs = await SharedPreferences.getInstance();
+    final tempUnit = prefs.getString('tempreture_unit');
+
+    if (tempUnit == null) {
+      prefs.setString('tempreture_unit', selectedTempretureUnit);
+    } else {
+      selectedTempretureUnit = tempUnit;
+    }
+  }
+
   void changeCurrentData() {
+    //Load data for current weather forcast
     for (final item in currentWeatherData) {
       if (convertToLocation(item.location.toString()) == selectedLocation) {
         currentData = item;
       }
     }
+    //Load data for 10days forcast
+    currentTenDaysData.clear();
+    for (final item in tenDaysData) {
+      if (convertToLocation(item.location.toString()) == selectedLocation) {
+        currentTenDaysData.add(item);
+      }
+    }
+
+    //Load data for 3 hours forcast
+    for (final item in threeHoursData) {
+      if (convertToLocation(item.location.toString()) == selectedLocation) {
+        currentThreeHoursData = item;
+      }
+    }
+
+    //Load data for 24 hours forcast
+    for (final item in twentyFourHoursData) {
+      if (convertToLocation(item.location.toString()) == selectedLocation) {
+        currentTwentyFourHoursData = item;
+      }
+    }
+
+    //Update the provider ten days
+    TenDaysProvider tenDaysProvider =
+        Provider.of<TenDaysProvider>(context, listen: false);
+    tenDaysProvider.setData(currentTenDaysData);
+
+    //Three hours
+    ThreeHoursProvider threeHoursProvider =
+        Provider.of<ThreeHoursProvider>(context, listen: false);
+    threeHoursProvider.setData(currentThreeHoursData);
+
+    //Twenty Four Hours
+    TwentyFourHoursProvider twentyFourHoursProvider =
+        Provider.of<TwentyFourHoursProvider>(context, listen: false);
+    twentyFourHoursProvider.setData(currentTwentyFourHoursData);
+
+    changeBgImage();
+  }
+
+  void changeBgImage() {
+    String filePath = '';
+    switch (currentData.getIconDefinition()) {
+      case 'rain':
+        filePath = 'assets/images/rain.jpg';
+        break;
+      case 'sunny':
+        filePath = 'assets/images/sunny_day.jpg';
+        break;
+      case 'cloudy':
+        filePath = 'assets/images/cloudy_day.jpg';
+        break;
+      case 'windy':
+        filePath = 'assets/images/windy_day.jpg';
+        break;
+    }
+    widget.onCurrentWeatherChange(filePath);
   }
 
   void changeLocation(Location newLocation) async {
@@ -119,6 +212,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         final Map<String, dynamic> listData = jsonDecode(response.body);
 
         if (listData['10days'].length > 0) {
+          tenDaysData.clear();
           for (final item in listData['10days']) {
             var dataModel = TenDaysForecastModel(
                 iconId: int.parse(item[1]),
@@ -132,6 +226,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         }
 
         if (listData['current'].length > 0) {
+          currentWeatherData.clear();
           for (final item in listData['current']) {
             var dataModel = CurrentWeatherModel(
               location: item[0],
@@ -147,13 +242,11 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
             );
 
             currentWeatherData.add(dataModel);
-            if (convertToLocation(item[0]) == selectedLocation) {
-              currentData = dataModel;
-            }
           }
         }
 
         if (listData['3hrs'].length > 0) {
+          threeHoursData.clear();
           for (final item in listData['3hrs']) {
             threeHoursData.add(ThreeHoursForecastModel(
               location: item[0],
@@ -168,6 +261,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         }
 
         if (listData['24hrs'].length > 0) {
+          twentyFourHoursData.clear();
           for (final item in listData['24hrs']) {
             twentyFourHoursData.add(TwentyFourHoursForecastModel(
               location: item[0],
@@ -184,6 +278,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
         setState(() {
           isLoading = false;
+          changeCurrentData();
         });
       }
     } catch (e) {
@@ -194,7 +289,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      print(e);
     }
   }
 
@@ -245,22 +339,25 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                             },
                           ),
                           const Spacer(),
-                          const Icon(
-                            Icons.favorite_sharp,
+                          Icon(
+                            selectedTempretureUnit == 'c'
+                                ? WeatherIcons.celsius
+                                : WeatherIcons.fahrenheit,
                             color: Colors.white,
+                            size: 30.0,
                           ),
                           /*
-                    const Spacer(),
-                    const Row(
-                      children: [
-                        Text('\u2103'),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('\u2109'),
-                      ],
-                    ),
-                    */
+                      const Spacer(),
+                      const Row(
+                        children: [
+                          Text('\u2103'),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text('\u2109'),
+                        ],
+                      ),
+                      */
                         ],
                       ),
                       const SizedBox(
@@ -282,7 +379,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                   fontSize: 16,
                                 ),
                               ),
-                              currentData.getIcon(40.0, Colors.white),
+                              currentData.getIcon(50.0, Colors.white),
                             ],
                           ),
                           const Spacer(),
@@ -352,7 +449,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                 ),
                 const SizedBox(height: 10),
                 Container(
-                  height: 350,
+                  height: 700,
                   decoration: const BoxDecoration(
                     color: Color.fromARGB(210, 0, 37, 42),
                     borderRadius: BorderRadius.all(
@@ -383,11 +480,16 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           controller: myController,
                           itemCount: _itemCount,
                           itemBuilder: (_, index) {
-                            if (index == 0) activeSlide = const WeatherSlide();
+                            if (index == 0) {
+                              activeSlide = const TenDaysSlide();
+                            }
+                            if (index == 1) {
+                              activeSlide = const ThreeHoursSlide();
+                            }
 
-                            if (index == 1) activeSlide = const TideSlide();
-
-                            if (index == 2) activeSlide = const SunMoonSlide();
+                            if (index == 2) {
+                              activeSlide = const TwentyFourHoursSlide();
+                            }
 
                             //if (index == 3) activeSlide = const RainfallSlide();
 

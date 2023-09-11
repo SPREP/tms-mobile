@@ -31,6 +31,17 @@ class WeatherModel {
       this.location,
       this.day});
 
+  void celsiusToFahrenheight() {
+    minTemp = toFahrenheight(minTemp);
+    maxTemp = toFahrenheight(maxTemp);
+    currentTemp = toFahrenheight(currentTemp);
+  }
+
+  toFahrenheight(value) {
+    if (value == '' || value == null) return;
+    return ((int.parse(value) * 9 / 5) + 32).toStringAsFixed(0);
+  }
+
   Icon getIcon(double size, color) {
     switch (iconId) {
       case 1:
@@ -71,6 +82,22 @@ class WeatherModel {
         );
     }
     throw ('Unable to find an icon');
+  }
+
+  // @TODO: Complete this function later
+  String getIconDefinition() {
+    switch (iconId) {
+      case 1:
+        return 'sunny';
+      case 2:
+      case 6:
+        return 'rain';
+      case 3:
+        return 'cloudy';
+      case 4:
+        return 'windy';
+    }
+    return 'sunny';
   }
 }
 

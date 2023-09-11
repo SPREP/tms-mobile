@@ -1,11 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:macres/screens/event_report_screen.dart';
 import 'package:macres/screens/event_screen.dart';
 import 'package:macres/screens/notification_screen.dart';
 import 'package:macres/screens/report_screen.dart';
 import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:macres/widgets/main_drawer_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -17,27 +21,68 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
+  DateTime dt = DateTime.now();
   int _selectedPageIndex = 0;
-  final String _unit = 'f';
-  Widget activePage = const WeatherForcastScreen();
-  String activePageTitle = 'Weather Forecast';
+  late Widget activePage;
+  String activePageTitle = '';
   List<Widget> actionButtons = [];
+  String bgFilePath = '';
+
+  String _onCurrentWeatherChange(String filepath) {
+    setState(() {
+      bgFilePath = filepath;
+    });
+
+    return filepath;
+  }
 
   @override
   void initState() {
     actionButtons = [actionFilter()];
+    activePageTitle = DateFormat("EEE dd MMM yyyy").format(DateTime.now());
+
     super.initState();
+  }
+
+  Widget _buildChip(String label, Color color) {
+    return Chip(
+      labelPadding: EdgeInsets.all(2.0),
+      avatar: CircleAvatar(
+        backgroundColor: Colors.white70,
+        child: Text(label[0].toUpperCase()),
+      ),
+      label: Text(
+        label,
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: color,
+      elevation: 6.0,
+      shadowColor: Colors.grey[60],
+      padding: EdgeInsets.all(8.0),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    double height = AppBar().preferredSize.height;
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
+    if (_selectedPageIndex == 0 || _selectedPageIndex == 2) {
+      activePage =
+          WeatherForcastScreen(onCurrentWeatherChange: _onCurrentWeatherChange);
+      if (bgFilePath == '') {
+        bgFilePath = 'assets/images/sunny_day.jpg';
+      }
+    }
 
     return Container(
+      width: width,
       decoration: _selectedPageIndex == 0 || _selectedPageIndex == 2
-          ? const BoxDecoration(
+          ? BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/windy_day.jpg'),
+                image: AssetImage(bgFilePath),
                 fit: BoxFit.cover,
               ),
             )
@@ -46,19 +91,20 @@ class _TabsScreenState extends State<TabsScreen> {
         backgroundColor: _selectedPageIndex == 0 || _selectedPageIndex == 2
             ? const Color.fromARGB(0, 82, 38, 38)
             : null,
-        body: Container(
-          padding: _selectedPageIndex == 0 || _selectedPageIndex == 2
-              ? const EdgeInsets.only(
-                  right: 5,
-                  left: 5,
-                )
-              : null,
-          width: double.infinity,
-          height: double.infinity,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 5, bottom: 5),
-              child: activePage,
+        body: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: height),
+            child: Container(
+              padding: _selectedPageIndex == 0 || _selectedPageIndex == 2
+                  ? const EdgeInsets.only(
+                      right: 5,
+                      left: 5,
+                    )
+                  : null,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5, bottom: 5),
+                child: activePage,
+              ),
             ),
           ),
         ),
@@ -76,8 +122,8 @@ class _TabsScreenState extends State<TabsScreen> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           onTap: _selectPage,
-          unselectedItemColor: Color.fromARGB(133, 18, 17, 17),
-          selectedItemColor: Color.fromARGB(255, 42, 35, 228),
+          unselectedItemColor: const Color.fromARGB(133, 18, 17, 17),
+          selectedItemColor: const Color.fromARGB(255, 42, 35, 228),
           type: BottomNavigationBarType.fixed,
           items: const [
             BottomNavigationBarItem(
@@ -108,8 +154,9 @@ class _TabsScreenState extends State<TabsScreen> {
       _selectedPageIndex = index;
 
       if (_selectedPageIndex == 0 || _selectedPageIndex == 2) {
-        activePage = const WeatherForcastScreen();
-        activePageTitle = 'Weather Forecast';
+        activePage = WeatherForcastScreen(
+            onCurrentWeatherChange: _onCurrentWeatherChange);
+        activePageTitle = '${dt.day} ${dt.month} ${dt.year}';
         actionButtons = [actionFilter()];
       }
 
@@ -131,11 +178,40 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
 
+  getSavedTempUnit() async {
+    var prefs = await SharedPreferences.getInstance();
+    var tempUnit = prefs.getString('tempreture_unit');
+    return tempUnit;
+  }
+
+  saveTempUnit(String value) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString('tempreture_unit', value);
+  }
+
   actionFilter() {
+    var selectedTempUnit = 'c';
+    var savedUnit = getSavedTempUnit();
+
     return Padding(
       padding: const EdgeInsets.only(right: 15.0),
       child: PopupMenuButton<String>(
-        onSelected: handleSelection,
+        onSelected: (value) {
+          if (savedUnit == '') {
+            if (value.toLowerCase() == 'fahrenheit') {
+              saveTempUnit('f');
+              selectedTempUnit = 'f';
+            }
+
+            if (value.toLowerCase() == 'celsius') {
+              saveTempUnit('s');
+              selectedTempUnit = 's';
+            }
+          } else {
+            selectedTempUnit = savedUnit.toString();
+          }
+          setState(() {});
+        },
         icon: const Icon(Icons.more_vert),
         itemBuilder: (BuildContext context) {
           return {'Celsius', 'Fahrenheit'}.map((String choice) {
@@ -145,10 +221,10 @@ class _TabsScreenState extends State<TabsScreen> {
                 children: [
                   Row(
                     children: [
-                      _unit == 'c' && choice == 'Celsius'
+                      selectedTempUnit == 'c' && choice == 'Celsius'
                           ? const Icon(Icons.check)
                           : const Text(''),
-                      _unit == 'f' && choice == 'Fahrenheit'
+                      selectedTempUnit == 'f' && choice == 'Fahrenheit'
                           ? const Icon(Icons.check)
                           : const Text(''),
                       const SizedBox(
@@ -167,10 +243,6 @@ class _TabsScreenState extends State<TabsScreen> {
         },
       ),
     );
-  }
-
-  toFahrenheit(c) {
-    return (c / 5) * 9 + 32;
   }
 
   void handleSelection(String value) {}
