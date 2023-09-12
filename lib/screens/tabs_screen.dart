@@ -102,7 +102,7 @@ class _TabsScreenState extends State<TabsScreen> {
       activePage =
           WeatherForcastScreen(onCurrentWeatherChange: _onCurrentWeatherChange);
       if (bgFilePath == '') {
-        bgFilePath = 'assets/images/sunny_day.jpg';
+        bgFilePath = 'assets/images/splash.jpg';
       }
     }
 
@@ -248,10 +248,16 @@ class _TabsScreenState extends State<TabsScreen> {
                   Row(
                     children: [
                       selectedTempUnit == 'c' && choice == 'Celsius'
-                          ? const Icon(Icons.check)
+                          ? const Icon(
+                              Icons.check,
+                              color: Colors.black,
+                            )
                           : const Text(''),
                       selectedTempUnit == 'f' && choice == 'Fahrenheit'
-                          ? const Icon(Icons.check)
+                          ? const Icon(
+                              Icons.check,
+                              color: Colors.black,
+                            )
                           : const Text(''),
                       const SizedBox(
                         width: 10,

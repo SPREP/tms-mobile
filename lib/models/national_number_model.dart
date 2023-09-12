@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:humanitarian_icons/humanitarian_icons.dart';
 
-enum Category { hospital, fire, police, ambulance }
+enum Category { hospital, fire, police, ambulance, wccc, majestyArmedForces }
 
 const categoryLabel = {
   Category.hospital: "Hospital",
   Category.fire: "Fire Service",
   Category.police: "Police",
   Category.ambulance: "Ambulance",
+  Category.wccc: 'Women Chrildrens Crisis Centre',
+  Category.majestyArmedForces: 'Majesty Armed Forces'
 };
 
 const categoryIcon = {
@@ -25,6 +27,14 @@ const categoryIcon = {
   ),
   Category.ambulance: Icon(
     HumanitarianIcons.ambulance,
+    color: Color.fromARGB(255, 64, 160, 77),
+  ),
+  Category.wccc: Icon(
+    HumanitarianIcons.children,
+    color: Color.fromARGB(255, 64, 160, 77),
+  ),
+  Category.majestyArmedForces: Icon(
+    HumanitarianIcons.national_army,
     color: Color.fromARGB(255, 64, 160, 77),
   ),
 };

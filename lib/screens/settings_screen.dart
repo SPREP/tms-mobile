@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:macres/models/settings_model.dart';
 
@@ -136,20 +135,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const SizedBox(height: 10),
             const Text('Font Size:'),
-            SfSlider(
-                showTicks: true,
-                showLabels: true,
-                enableTooltip: true,
-                stepSize: 50.0,
-                min: 0.0,
-                max: 100.0,
-                interval: 50,
-                value: _value,
-                onChanged: (dynamic value) {
-                  setState(() {
-                    _value = value;
-                  });
-                }),
             const SizedBox(height: 50),
             Row(
               children: [

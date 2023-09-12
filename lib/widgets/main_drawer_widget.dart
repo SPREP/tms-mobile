@@ -144,6 +144,16 @@ class MainDrawerWidget extends StatelessWidget {
               );
             },
           ),
+          const Spacer(),
+          const Text(
+            'Version 1.0',
+            style: TextStyle(fontSize: 13),
+          ),
+          const Text('Tonga Meteorological Service',
+              style: TextStyle(fontSize: 13)),
+          const SizedBox(
+            height: 50,
+          ),
         ],
       ),
     );

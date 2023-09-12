@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:macres/models/settings_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:macres/models/national_number_model.dart';
@@ -7,18 +10,16 @@ class NationalNumberWidget extends StatelessWidget {
   const NationalNumberWidget({super.key, required this.contactNumber});
   final dynamic contactNumber;
 
+  Future callThisNumber(String number) async {
+    try {
+      await FlutterPhoneDirectCaller.callNumber(number);
+    } on Exception catch (_, e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future callThisNumber(String number) async {
-      Uri url = Uri.parse('tel:$number');
-
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url);
-      } else {
-        throw 'Could not launch $url';
-      }
-    }
-
     return Column(
       children: [
         Card(
@@ -41,23 +42,24 @@ class NationalNumberWidget extends StatelessWidget {
                     textColor: Colors.white,
                   )
                 else
-                  ListTile(
-                    onTap: () {
-                      //callThisNumber('67689332');
-                    },
-                    visualDensity: const VisualDensity(vertical: -3),
-                    dense: true,
-                    leading: categoryIcon[contact.key],
-                    title: Text(
-                      categoryLabel[contact.key].toString(),
-                    ),
-                    trailing: Text(
-                      contact.value.toString(),
-                      style: const TextStyle(
-                        fontSize: 13,
+                  for (var n = 0; n < contact.value.length; n++)
+                    ListTile(
+                      onTap: () {
+                        callThisNumber(contact.value[n].toString());
+                      },
+                      visualDensity: const VisualDensity(vertical: -3),
+                      dense: true,
+                      leading: categoryIcon[contact.key],
+                      title: Text(
+                        categoryLabel[contact.key].toString(),
+                      ),
+                      trailing: Text(
+                        contact.value[n].toString(),
+                        style: const TextStyle(
+                          fontSize: 13,
+                        ),
                       ),
                     ),
-                  )
             ],
           ),
         ),

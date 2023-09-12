@@ -203,6 +203,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  flutter_phone_direct_caller:
+    dependency: "direct main"
+    description:
+      name: flutter_phone_direct_caller
+      sha256: a50abfb49656d39e777278348742d0d09ecfa5d4918bbc4e0b19df46e8dfd858
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -674,22 +682,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  syncfusion_flutter_core:
-    dependency: transitive
-    description:
-      name: syncfusion_flutter_core
-      sha256: "8db8f55c77f56968681447d3837c10f27a9e861e238a898fda116c7531def979"
-      url: "https://pub.dev"
-    source: hosted
-    version: "21.2.10"
-  syncfusion_flutter_sliders:
-    dependency: "direct main"
-    description:
-      name: syncfusion_flutter_sliders
-      sha256: e7e3feaa16ab5821b0062b7addcb98f7d4bd734cff37909c5169e494fb717d91
-      url: "https://pub.dev"
-    source: hosted
-    version: "21.2.4"
   term_glyph:
     dependency: transitive
     description:

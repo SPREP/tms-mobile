@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:macres/models/settings_model.dart';
 import 'package:macres/providers/locale_provider.dart';
@@ -32,7 +33,10 @@ Future main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(App(showOnboarding: showOnboarding));
+  //set page orientation
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(App(showOnboarding: showOnboarding)));
 }
 
 class App extends StatefulWidget {

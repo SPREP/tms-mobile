@@ -10,50 +10,53 @@ class NationalNumberScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const tongatapuNumbers = {
       Location: Location.tongatapu,
-      Category.ambulance: "+676 387221",
-      Category.police: "+676 387856",
-      Category.fire: "+676 387332",
-      Category.hospital: "+676 387976",
+      Category.majestyArmedForces: ["+676 926", "+676 23099"],
+      Category.police: ["+676 922", "+676 23406"],
+      Category.fire: ["+676 999", "+676 927", "+676 928", "+676 7401064"],
+      Category.hospital: ["+676 933", "+676 7400200", "+676 7400403"],
+      Category.wccc: ["+676 22240"],
     };
 
     const haapaiNumbers = {
       Location: Location.haapai,
-      Category.ambulance: "+676 38564",
-      Category.police: "+676 387444",
-      Category.fire: "+676 38756443",
-      Category.hospital: "+676 38734333",
+      Category.majestyArmedForces: ["+676 60700"],
+      Category.police: ["+676 60222", "+676 60544"],
+      Category.fire: ["+676 60771"],
+      Category.hospital: ["+676 60203"],
+      Category.wccc: ["+676 60444"],
     };
 
     const vavauNumbers = {
       Location: Location.vavau,
-      Category.ambulance: "+676 387754",
-      Category.police: "+676 387244",
-      Category.fire: "+676 387299",
-      Category.hospital: "+676 387543",
+      Category.majestyArmedForces: ["+676 70722", "+676 70499"],
+      Category.police: ["+676 999", "+676 70233"],
+      Category.fire: ["+676 70699"],
+      Category.hospital: ["+676 933", "+676 70201"],
+      Category.wccc: ["+676 70120"],
     };
 
     const niuafoouNumbers = {
       Location: Location.niuafoou,
-      Category.ambulance: "+676 38332",
-      Category.police: "+676 387854",
-      Category.fire: "+676 38444",
-      Category.hospital: "+676 3873329",
+      Category.wccc: ["+676 7581697"],
+      Category.police: ["+676 80007"],
+      Category.fire: ["+676 80007"],
+      Category.hospital: ["+676 80100"]
     };
 
     const niuatoputapuNumbers = {
       Location: Location.niuatoputapu,
-      Category.ambulance: "+676 387333",
-      Category.police: "+676 38222",
-      Category.fire: "+676 387555",
-      Category.hospital: "+676 38666",
+      Category.police: ["+676 7585030"],
+      Category.fire: ["+676 7585180"],
+      Category.hospital: ["+676 7585605"]
     };
 
     const euaNumbers = {
       Location: Location.eua,
-      Category.ambulance: "+676 387444",
-      Category.police: "+676 3874",
-      Category.fire: "+676 38723129",
-      Category.hospital: "+676 387543",
+      Category.majestyArmedForces: ["+676 50129"],
+      Category.police: ["+676 50112", "+676 50313"],
+      Category.fire: ["+676 50561"],
+      Category.hospital: ["+676 50111"],
+      Category.wccc: ["+676 7320547"],
     };
 
     return Scaffold(
@@ -66,7 +69,7 @@ class NationalNumberScreen extends StatelessWidget {
         child: Column(
           children: [
             Padding(padding: EdgeInsets.only(top: 30)),
-            Text("You will find here the national telephone numbers."),
+            Text("Just tap the number you want to call"),
             SizedBox(height: 10),
             NationalNumberWidget(contactNumber: tongatapuNumbers),
             SizedBox(height: 10),
