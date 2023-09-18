@@ -51,6 +51,19 @@ class _BigMapWidgetState extends State<BigMapWidget> {
             ),
           ],
         ),
+        Positioned(
+          right: 10,
+          bottom: 60,
+          child: FloatingActionButton(
+              tooltip: 'Close',
+              child: const Icon(
+                Icons.close,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ),
       ],
       children: [
         TileLayer(
@@ -66,19 +79,6 @@ class _BigMapWidgetState extends State<BigMapWidget> {
               builder: (context) => getCentre(),
             ),
           ],
-        ),
-        Positioned(
-          right: 10,
-          bottom: 60,
-          child: FloatingActionButton(
-              tooltip: 'Close',
-              child: const Icon(
-                Icons.close,
-                color: Colors.red,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
         ),
       ],
     );

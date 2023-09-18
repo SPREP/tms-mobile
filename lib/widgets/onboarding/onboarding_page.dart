@@ -1,5 +1,6 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:macres/screens/onboarding/onboarding_first_screen.dart';
 import 'package:macres/screens/onboarding/onboarding_second_screen.dart';
 import 'package:macres/screens/tabs_screen.dart';
@@ -22,8 +23,22 @@ class _OnboardingPageState extends State<OnboardingPage> {
   String _selectedLocation = 'Select your location';
   String _selectedLanguage = 'English';
   final _userLocationKey = GlobalKey<FormState>();
+  //late FirebaseMessaging fcmInstance;
 
   bool isError = false;
+/*
+  void setupPushNotifications() async {
+    final fcm = FirebaseMessaging.instance;
+    fcm.requestPermission();
+    fcmInstance = fcm;
+  }
+  */
+
+  @override
+  void initState() {
+    super.initState();
+    //setupPushNotifications();
+  }
 
   void _selectedUserLocation(String value) {
     _selectedLocation = value;
@@ -48,6 +63,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
         prefs.setString('user_location', _selectedLocation);
         prefs.setString('user_language', _selectedLanguage);
+
+        //Push notification subscribe user
+        //fcmInstance.subscribeToTopic(_selectedLanguage.toLowerCase());
+        //fcmInstance.subscribeToTopic(_selectedLocation.toLowerCase());
       }
     }
   }
@@ -65,6 +84,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -85,6 +106,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           children: [
             OnboardingFirstScreen(
               validateLocation: _selectedUserLocation,
+              validateLanguage: _selectedUserLanguage,
               userLocationKey: _userLocationKey,
             ),
             const OnboardingSecondScreen(),
@@ -105,7 +127,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                 const Spacer(),
                 Text(
-                  AppLocalizations.of(context).onBoardingGetStartedButton,
+                  localizations.onBoardingGetStartedButton,
                   style: const TextStyle(fontSize: 24),
                 ),
                 const Icon(
@@ -164,7 +186,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     child: Row(
                       children: [
                         Text(
-                          AppLocalizations.of(context).onBoardingNextButton,
+                          localizations.onBoardingNextButton,
                           style: const TextStyle(color: Colors.white),
                         ),
                         const Icon(

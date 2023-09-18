@@ -23,6 +23,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -42,7 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Consumer(
               builder: (context, localeProvider, child) => Row(
                 children: [
-                  Text("${AppLocalizations.of(context).onBoardingLanguage}:"),
+                  Text("${localizations.onBoardingLanguage}:"),
                   Radio(
                     value: Language.en,
                     groupValue: _selectedLanguage,

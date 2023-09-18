@@ -38,10 +38,3 @@ const languageLabel = {
 };
 
 enum Credential { host, username, password }
-
-const metapi = {
-  Credential.host: "http://met-api.lndo.site/api/v1",
-  //Credential.host: "http://app.met.gov.to/api/v1",
-  Credential.username: 'mobile_app',
-  Credential.password: 'intel13!',
-};

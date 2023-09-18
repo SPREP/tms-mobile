@@ -23,7 +23,7 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
   get isPaused => ttsState == TtsState.paused;
   get isContinued => ttsState == TtsState.continued;
 
-  double volume = 0.5;
+  double volume = 1.0;
   double pitch = 1.0;
   double rate = 0.5;
 
@@ -41,8 +41,12 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
     initTts();
   }
 
-  initTts() {
+  initTts() async {
     flutterTts = FlutterTts();
+
+    await flutterTts.setSharedInstance(true);
+    await flutterTts.setIosAudioCategory(IosTextToSpeechAudioCategory.playback,
+        [], IosTextToSpeechAudioMode.defaultMode);
 
     flutterTts.setStartHandler(() {
       setState(() {

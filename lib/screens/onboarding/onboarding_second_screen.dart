@@ -27,12 +27,13 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
     final prefs = await SharedPreferences.getInstance();
     String? location = prefs.getString('user_location');
 
-    // fcm.subscribeToTopic(location);
+    fcm.subscribeToTopic(location!);
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    AppLocalizations localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -49,7 +50,7 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
               padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
               child: Column(
                 children: [
-                  Text(AppLocalizations.of(context).onBoardingHeadingText),
+                  Text(localizations.onBoardingHeadingText),
                   const SizedBox(height: 20),
                   ListTile(
                     horizontalTitleGap: 1,
@@ -57,7 +58,7 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
                       Icons.check_circle_rounded,
                       color: Colors.green,
                     ),
-                    title: Text(AppLocalizations.of(context).onBoardListItem1),
+                    title: Text(localizations.onBoardListItem1),
                   ),
                   ListTile(
                     horizontalTitleGap: 1,
@@ -65,7 +66,7 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
                       Icons.check_circle_rounded,
                       color: Colors.green,
                     ),
-                    title: Text(AppLocalizations.of(context).onBoardListItem2),
+                    title: Text(localizations.onBoardListItem2),
                   ),
                   ListTile(
                     horizontalTitleGap: 1,
@@ -73,7 +74,7 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
                       Icons.check_circle_rounded,
                       color: Colors.green,
                     ),
-                    title: Text(AppLocalizations.of(context).onBoardListItem3),
+                    title: Text(localizations.onBoardListItem3),
                   ),
                   ListTile(
                     horizontalTitleGap: 1,
@@ -81,7 +82,7 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
                       Icons.check_circle_rounded,
                       color: Colors.green,
                     ),
-                    title: Text(AppLocalizations.of(context).onBoardListItem4),
+                    title: Text(localizations.onBoardListItem4),
                   ),
                   ListTile(
                     horizontalTitleGap: 1,
@@ -89,7 +90,7 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
                       Icons.check_circle_rounded,
                       color: Colors.green,
                     ),
-                    title: Text(AppLocalizations.of(context).onBoardListItem5),
+                    title: Text(localizations.onBoardListItem5),
                   ),
                 ],
               ),

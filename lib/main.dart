@@ -12,11 +12,14 @@ import 'package:macres/screens/tabs_screen.dart';
 import 'package:macres/widgets/onboarding/onboarding_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'to_intl.dart';
 import 'firebase_options.dart';
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message");
+}
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,14 +32,19 @@ Future main() async {
   }
 
   await Firebase.initializeApp(
-    name: 'MACRES',
+    name: 'macres',
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   //set page orientation
+
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(App(showOnboarding: showOnboarding)));
+
+  //runApp(App(showOnboarding: showOnboarding));
 }
 
 class App extends StatefulWidget {
@@ -61,11 +69,11 @@ class _AppState extends State<App> {
       child: Consumer<LocaleProvider>(
         builder: (context, localeProvider, child) => MaterialApp(
           localizationsDelegates: const [
+            ToMaterialLocalizations.delegate,
             AppLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
-            ToMaterialLocalizations.delegate,
           ],
           supportedLocales: const [Locale('to'), Locale('en', 'US')],
           locale: localeProvider.selectedLocale,

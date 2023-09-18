@@ -46,3 +46,4 @@ app.*.map.json
 # Google keys
 google-services.json
 
+key.properties

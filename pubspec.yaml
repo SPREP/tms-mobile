@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   provider:
+  collection: any
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -52,14 +53,22 @@ dependencies:
   path: ^1.8.3
   geolocator: ^10.0.0
   firebase_core: ^2.15.1
-  firebase_messaging: ^14.6.7
   flutter_tts: ^3.8.1
   flutter_phone_direct_caller: ^2.1.1
+  firebase_messaging: ^14.6.7
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  remove_alpha_ios: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -91,6 +100,7 @@ flutter:
     - assets/images/sunny_day.jpg
     - assets/images/cloudy_day.jpg
     - assets/images/splash.jpg
+    - assets/images/app_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -8,9 +8,11 @@ class OnboardingFirstScreen extends StatefulWidget {
   const OnboardingFirstScreen(
       {super.key,
       required this.validateLocation,
+      required this.validateLanguage,
       required this.userLocationKey});
 
   final void Function(String) validateLocation;
+  final void Function(String) validateLanguage;
   final GlobalKey<FormState> userLocationKey;
 
   @override
@@ -26,6 +28,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    AppLocalizations localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -51,7 +54,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    AppLocalizations.of(context).onBoardingSubtitle,
+                    localizations.onBoardingSubtitle,
                     style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -59,7 +62,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    AppLocalizations.of(context).onBoardingUnderSubtitle,
+                    localizations.onBoardingUnderSubtitle,
                   ),
                   const SizedBox(height: 20),
                   const Divider(),
@@ -68,19 +71,18 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                     child: Consumer<LocaleProvider>(
                       builder: (context, localeProvider, child) => Row(
                         children: [
-                          Text(
-                              "${AppLocalizations.of(context).onBoardingLanguage}:"),
+                          Text("${localizations.onBoardingLanguage}:"),
                           Radio(
                             value: Language.en,
                             groupValue: _selectedLanguage,
                             onChanged: (val) {
+                              widget.validateLanguage(val!.name.toString());
                               setState(() {
                                 _selectedLanguage = val;
 
                                 if (val == null) return;
-                                int idx = val.toString().indexOf(".") + 1;
-                                localeProvider.setLocale(
-                                    val.toString().substring(idx).trim());
+
+                                localeProvider.setLocale(val.name);
                               });
                             },
                           ),
@@ -98,9 +100,8 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                                 _selectedLanguage = val;
 
                                 if (val == null) return;
-                                int idx = val.toString().indexOf(".") + 1;
-                                localeProvider.setLocale(
-                                    val.toString().substring(idx).trim());
+
+                                localeProvider.setLocale(val.name);
                               });
                             },
                           ),
@@ -133,7 +134,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                         );
                       }).toList(),
                       onChanged: (val) {
-                        widget.validateLocation(val.toString());
+                        widget.validateLocation(val!.name.toString());
                         setState(() {
                           _selectedLocation = val!;
                         });
@@ -142,7 +143,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                         if (val == null) {
                           String errMsg = "";
                           setState(() {
-                            errMsg = AppLocalizations.of(context)
+                            errMsg = AppLocalizations.of(context)!
                                 .onBoardingLocationError;
                           });
                           return errMsg;

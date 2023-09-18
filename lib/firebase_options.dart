@@ -50,20 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDvjibXBuktwwDZtxUp6OJfOBP9M-VoQ24',
-    appId: '1:1080805547010:android:b378c7613e926e65b4db1b',
-    messagingSenderId: '1080805547010',
-    projectId: 'macres-d75f2',
-    storageBucket: 'macres-d75f2.appspot.com',
+    apiKey: 'AIzaSyCAk6o1x3m0RKmB50X8yLXYF8b1uKsbPGI',
+    appId: '1:563865840743:android:7c5214ad275ca2037e78c2',
+    messagingSenderId: '563865840743',
+    projectId: 'macres-a8427',
+    storageBucket: 'macres-a8427.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCh3fdoEvKcRyeHYFzVAyG68wzW5WHYnCU',
-    appId: '1:1080805547010:ios:36fd4270e73a55c0b4db1b',
-    messagingSenderId: '1080805547010',
-    projectId: 'macres-d75f2',
-    storageBucket: 'macres-d75f2.appspot.com',
-    iosClientId: '1080805547010-o6a24am53t1fp93recm2rbplimocouin.apps.googleusercontent.com',
-    iosBundleId: 'com.met.macres',
+    apiKey: 'AIzaSyAc7t9e742D4bPSmS5cXd-gpQBT5KUfdP0',
+    appId: '1:563865840743:ios:227f93f2037fabc07e78c2',
+    messagingSenderId: '563865840743',
+    projectId: 'macres-a8427',
+    storageBucket: 'macres-a8427.appspot.com',
+    iosBundleId: 'com.metgov.macres',
   );
 }
