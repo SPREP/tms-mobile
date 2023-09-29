@@ -1,30 +1,16 @@
-class User {
-  int? userId;
+class UserModel {
+  String? userId;
   String? name;
   String? email;
-  String? phone;
-  String? type;
   String? token;
-  String? renewalToken;
 
-  User({
-    this.userId,
-    this.name,
-    this.email,
-    this.phone,
-    this.type,
-    this.token,
-    this.renewalToken,
-  });
+  UserModel({this.userId, this.name, this.email, this.token});
 
-  factory User.fromJson(Map<String, dynamic> responseData) {
-    return User(
+  factory UserModel.fromJson(Map<String, dynamic> responseData) {
+    return UserModel(
         userId: responseData['id'],
         name: responseData['name'],
-        email: responseData['email'],
-        phone: responseData['phone'],
-        type: responseData['type'],
-        token: responseData['access_token'],
-        renewalToken: responseData['renewal_token']);
+        email: responseData['mail'],
+        token: responseData['token']);
   }
 }

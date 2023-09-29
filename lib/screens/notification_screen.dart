@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:macres/config/app_config.dart';
 import 'package:macres/models/notification_model.dart';
 import 'package:macres/widgets/notification_widget.dart';
 import 'package:macres/models/settings_model.dart';
@@ -26,9 +27,9 @@ class _NotificationScreen extends State<NotificationScreen> {
   }
 
   getEvents() async {
-    var username = metapi[Credential.username];
-    var password = metapi[Credential.password];
-    String host = metapi[Credential.host].toString();
+    var username = AppConfig.userName;
+    var password = AppConfig.password;
+    var host = AppConfig.baseUrl;
     String endpoint = '/notification?_format=json';
 
     final basicAuth =

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
@@ -30,9 +31,9 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
   }
 
   Future<http.Response> sendData() async {
-    var username = metapi[Credential.username];
-    var password = metapi[Credential.password];
-    var host = metapi[Credential.host];
+    var username = AppConfig.userName;
+    var password = AppConfig.password;
+    var host = AppConfig.baseUrl;
     var endpoint = '/feel-earthquake?_format=json';
 
     final basicAuth =

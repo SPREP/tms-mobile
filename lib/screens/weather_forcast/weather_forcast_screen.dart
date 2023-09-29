@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:macres/config/app_config.dart';
 import 'package:macres/models/weather_model.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
@@ -195,9 +195,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   }
 
   getWeather() async {
-    var username = metapi[Credential.username];
-    var password = metapi[Credential.password];
-    String host = metapi[Credential.host].toString();
+    var username = AppConfig.userName;
+    var password = AppConfig.password;
+    var host = AppConfig.baseUrl;
     String endpoint = '/weather?_format=json';
 
     final basicAuth =

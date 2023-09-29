@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
 import '../../widgets/checkbox_widget.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
-import 'package:macres/media/get_image_url.dart';
-import 'package:macres/media/upload_file.dart';
+import 'package:macres/util/get_image_url.dart';
+import 'package:macres/util/upload_file.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:macres/widgets/image_input.dart';
@@ -118,9 +119,9 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
   }
 
   Future<http.Response> sendData(imageSourceUrls) async {
-    var username = metapi[Credential.username];
-    var password = metapi[Credential.password];
-    var host = metapi[Credential.host];
+    var username = AppConfig.userName;
+    var password = AppConfig.password;
+    var host = AppConfig.baseUrl;
     var endpoint = '/request-assistance?_format=json';
 
     final basicAuth =
@@ -272,99 +273,100 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
               },
             ),
             const SizedBox(height: 40),
-
-            const Align( alignment: Alignment.centerLeft, child: Text('Do you have water?')),
-                    Row(
-
-                      children: [
-                        ListTileTheme(
-                          horizontalTitleGap: 0,
-                          child: SizedBox(
-                            height: 70,
-                            width: 90,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(0),
-                              title: const Text('Yes'),
-                              leading: Radio(
-                                value: 1,
-                                groupValue: _haveWater,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _haveWater = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        ListTileTheme(
-                          horizontalTitleGap: 0,
-                          child: SizedBox(
-                            height: 70,
-                            width: 90,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(0),
-                              title: const Text('No'),
-                              leading: Radio(
-                                value: 0,
-                                groupValue: _haveWater,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _haveWater = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+            const Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Do you have water?')),
+            Row(
+              children: [
+                ListTileTheme(
+                  horizontalTitleGap: 0,
+                  child: SizedBox(
+                    height: 70,
+                    width: 90,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: const Text('Yes'),
+                      leading: Radio(
+                        value: 1,
+                        groupValue: _haveWater,
+                        onChanged: (value) {
+                          setState(() {
+                            _haveWater = value;
+                          });
+                        },
+                      ),
                     ),
-              const Align( alignment: Alignment.centerLeft, child: Text('Do you have food?')),
-                    Row(
-
-                      children: [
-                        ListTileTheme(
-                          horizontalTitleGap: 0,
-                          child: SizedBox(
-                            height: 70,
-                            width: 85,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(0),
-                              title: const Text('Yes'),
-                              leading: Radio(
-                                value: 1,
-                                groupValue: _haveFood,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _haveFood = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        ListTileTheme(
-                          horizontalTitleGap: 0,
-                          child: SizedBox(
-                            height: 70,
-                            width: 85,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(0),
-                              title: const Text('No'),
-                              leading: Radio(
-                                value: 0,
-                                groupValue: _haveFood,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _haveFood = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                  ),
+                ),
+                ListTileTheme(
+                  horizontalTitleGap: 0,
+                  child: SizedBox(
+                    height: 70,
+                    width: 90,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: const Text('No'),
+                      leading: Radio(
+                        value: 0,
+                        groupValue: _haveWater,
+                        onChanged: (value) {
+                          setState(() {
+                            _haveWater = value;
+                          });
+                        },
+                      ),
                     ),
+                  ),
+                ),
+              ],
+            ),
+            const Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Do you have food?')),
+            Row(
+              children: [
+                ListTileTheme(
+                  horizontalTitleGap: 0,
+                  child: SizedBox(
+                    height: 70,
+                    width: 85,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: const Text('Yes'),
+                      leading: Radio(
+                        value: 1,
+                        groupValue: _haveFood,
+                        onChanged: (value) {
+                          setState(() {
+                            _haveFood = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                ListTileTheme(
+                  horizontalTitleGap: 0,
+                  child: SizedBox(
+                    height: 70,
+                    width: 85,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: const Text('No'),
+                      leading: Radio(
+                        value: 0,
+                        groupValue: _haveFood,
+                        onChanged: (value) {
+                          setState(() {
+                            _haveFood = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             const Align(
               alignment: Alignment.centerLeft,
               child: Text('Do you have house/shelter?'),
@@ -691,7 +693,6 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
               },
             ),
             const SizedBox(height: 5),
-
             ListTileTheme(
               contentPadding: const EdgeInsets.only(left: 0),
               child: CheckboxListTile(

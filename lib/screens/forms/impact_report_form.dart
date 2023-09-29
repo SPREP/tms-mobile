@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
 import '../../widgets/checkbox_widget.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
-import 'package:macres/media/get_image_url.dart';
-import 'package:macres/media/upload_file.dart';
+import 'package:macres/util/get_image_url.dart';
+import 'package:macres/util/upload_file.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:macres/widgets/image_input.dart';
@@ -68,17 +69,17 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
   }
 
   Future<http.Response> sendData(imageSourceUrls) async {
-    var username = metapi[Credential.username];
-    var password = metapi[Credential.password];
-    var host = metapi[Credential.host];
+    var username = AppConfig.userName;
+    var password = AppConfig.password;
+    var host = AppConfig.baseUrl;
     var endpoint = '/impact-report?_format=json';
 
     final basicAuth =
         "Basic ${base64.encode(utf8.encode('$username:$password'))}";
-    dynamic res;
+    dynamic response;
 
     try {
-      res = await http.post(
+      response = await http.post(
         Uri.parse('$host$endpoint'),
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -123,7 +124,9 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
       log(e.toString());
     }
 
-    return res;
+    print(response.body);
+
+    return response;
   }
 
 /*

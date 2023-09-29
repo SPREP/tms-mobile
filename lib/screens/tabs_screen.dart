@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:macres/screens/event_report_screen.dart';
 import 'package:macres/screens/event_screen.dart';
 import 'package:macres/screens/notification_screen.dart';
 import 'package:macres/screens/report_screen.dart';
@@ -137,7 +134,7 @@ class _TabsScreenState extends State<TabsScreen> {
             ),
           ),
         ),
-        drawer: const MainDrawerWidget(),
+        drawer: MainDrawerWidget(),
         appBar: getAppBar(),
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(

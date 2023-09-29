@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:macres/models/user_model.dart';
+import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/screens/about_screen.dart';
 import 'package:macres/screens/help_screen.dart';
 import 'package:macres/screens/national_number_screen.dart';
 import 'package:macres/screens/settings_screen.dart';
 import 'package:macres/screens/tabs_screen.dart';
-import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
+import 'package:macres/screens/user/login_screen.dart';
+import 'package:macres/util/user_preferences.dart';
 
-class MainDrawerWidget extends StatelessWidget {
-  const MainDrawerWidget({super.key});
+class MainDrawerWidget extends StatefulWidget {
+  MainDrawerWidget({super.key});
 
   @override
+  State<MainDrawerWidget> createState() => _MainDrawerWidgetState();
+}
+
+class _MainDrawerWidgetState extends State<MainDrawerWidget> {
+  @override
   Widget build(BuildContext context) {
+    Future<UserModel> getUserData() => UserPreferences().getUser();
+
     return Drawer(
       child: Column(
         children: [
@@ -29,7 +39,7 @@ class MainDrawerWidget extends StatelessWidget {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
@@ -37,6 +47,32 @@ class MainDrawerWidget extends StatelessWidget {
                   backgroundImage: NetworkImage(
                       'https://img.freepik.com/premium-photo/portrait-pretty-cheerful-casual-african-girl-standing-isolated-white-wall_171337-97801.jpg'),
                 ),
+                SizedBox(
+                  width: 20,
+                ),
+                FutureBuilder(
+                    future: getUserData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.data?.token == null) {
+                        return TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()),
+                              );
+                            },
+                            child: Text('Login'));
+                      } else {
+                        return TextButton(
+                            onPressed: () {
+                              setState(() {
+                                AuthProvider().logout();
+                              });
+                            },
+                            child: Text('Logout'));
+                      }
+                    }),
               ],
             ),
           ),

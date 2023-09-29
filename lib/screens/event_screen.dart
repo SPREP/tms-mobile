@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macres/config/app_config.dart';
 import 'package:macres/models/event_model.dart';
 import 'package:macres/models/settings_model.dart';
 import 'package:macres/widgets/event_widget.dart';
@@ -26,9 +27,9 @@ class _EventScreen extends State<EventScreen> {
   }
 
   getEvents() async {
-    var username = metapi[Credential.username];
-    var password = metapi[Credential.password];
-    String host = metapi[Credential.host].toString();
+    var username = AppConfig.userName;
+    var password = AppConfig.password;
+    var host = AppConfig.baseUrl;
     String endpoint = '/event?_format=json';
 
     final basicAuth =
