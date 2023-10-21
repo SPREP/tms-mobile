@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:macres/models/settings_model.dart';
-
-void main() => runApp(const SettingsScreen());
+import 'package:macres/providers/locale_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -14,12 +14,45 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final GlobalKey<FormState> userLocationKey = GlobalKey<FormState>();
-  Location _selectedLocation = Location.tongatapu;
+  Location? _selectedLocation = Location.tongatapu;
   Language? _selectedLanguage = Language.en;
-  double _value = 50.0;
+
   bool light = true;
 
-  void _saveSettings() {}
+  void initState() {
+    getDefault();
+    super.initState();
+  }
+
+  void getDefault() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    var location = prefs.getString('user_location');
+    var language = prefs.getString('user_language');
+
+    if (location != false) {
+      _selectedLocation = LocationExtension.fromName(location);
+    }
+
+    if (language != false) {
+      _selectedLanguage = LanguageExtension.fromName(language);
+    }
+
+    setState(() {});
+  }
+
+  void _saveSettings() async {
+    //save values
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('user_location', _selectedLocation!.name.toString());
+    prefs.setString('user_language', _selectedLanguage!.name.toString());
+
+    //@TODO:
+    //Push notification subscribe user
+    //fcmInstance.subscribeToTopic(_selectedLanguage.toLowerCase());
+    //fcmInstance.subscribeToTopic(_selectedLocation.toLowerCase());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
         child: Column(
           children: [
-            Consumer(
+            Consumer<LocaleProvider>(
               builder: (context, localeProvider, child) => Row(
                 children: [
                   Text("${localizations.onBoardingLanguage}:"),
@@ -51,11 +84,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onChanged: (val) {
                       setState(() {
                         _selectedLanguage = val;
-
-                        if (val == null) return;
-                        int idx = val.toString().indexOf(".") + 1;
-                        //localeProvider
-                        //    .setLocale(val.toString().substring(idx).trim());
+                        localeProvider.setLocale(val!.name);
                       });
                     },
                   ),
@@ -71,11 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onChanged: (val) {
                       setState(() {
                         _selectedLanguage = val;
-
-                        if (val == null) return;
-                        int idx = val.toString().indexOf(".") + 1;
-                        //localeProvider
-                        //   .setLocale(val.toString().substring(idx).trim());
+                        localeProvider.setLocale(val!.name);
                       });
                     },
                   ),
@@ -105,17 +130,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _selectedLocation = val!;
                   });
                 },
-                validator: (val) {
-                  /*  if (val == Location.select) {
-                    String errMsg = "";
-                    setState(() {
-                      errMsg =
-                          AppLocalizations.of(context).onBoardingLocationError;
-                    });
-                    return errMsg;
-                  } */
-                  return null;
-                },
               ),
             ),
             const SizedBox(
@@ -135,8 +149,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               endIndent: 20,
               thickness: 0.5,
             ),
-            const SizedBox(height: 10),
-            const Text('Font Size:'),
             const SizedBox(height: 50),
             Row(
               children: [

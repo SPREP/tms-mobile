@@ -14,6 +14,12 @@ extension LocationExtension on Location {
   }
 }
 
+extension LanguageExtension on Language {
+  static Language? fromName(String? name) {
+    return Language.values.firstWhereOrNull((e) => e.name == name);
+  }
+}
+
 const locationLabel = {
   Location.tongatapu: "Tongatapu",
   Location.haapai: "Ha'apai",

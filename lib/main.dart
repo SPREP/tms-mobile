@@ -92,6 +92,7 @@ class _AppState extends State<App> {
               seedColor: const Color.fromARGB(255, 133, 131, 131),
             ),
           ),
+          darkTheme: ThemeData.dark(),
           home: widget.showOnboarding
               ? const OnboardingPage()
               : const TabsScreen(),
