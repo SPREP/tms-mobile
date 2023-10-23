@@ -76,16 +76,9 @@ class _TabsScreenState extends State<TabsScreen> {
         ),
       );
     } else {
-      return PreferredSize(
-        preferredSize: const Size.fromHeight(30.0),
-        child: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Text(activePageTitle),
-          actions: actionButtons,
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-          ),
-        ),
+      return AppBar(
+        title: Text(activePageTitle),
+        actions: actionButtons,
       );
     }
   }
@@ -144,8 +137,6 @@ class _TabsScreenState extends State<TabsScreen> {
                       color: Color.fromARGB(255, 233, 232, 232), width: 1.0))),
           child: BottomNavigationBar(
             onTap: _selectPage,
-            unselectedItemColor: const Color.fromARGB(133, 18, 17, 17),
-            selectedItemColor: const Color.fromARGB(255, 42, 35, 228),
             type: BottomNavigationBarType.fixed,
             items: const [
               BottomNavigationBarItem(

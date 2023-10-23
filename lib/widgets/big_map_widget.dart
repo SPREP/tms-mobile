@@ -56,10 +56,7 @@ class _BigMapWidgetState extends State<BigMapWidget> {
           bottom: 60,
           child: FloatingActionButton(
               tooltip: 'Close',
-              child: const Icon(
-                Icons.close,
-                color: Colors.red,
-              ),
+              child: const Icon(Icons.close),
               onPressed: () {
                 Navigator.pop(context);
               }),

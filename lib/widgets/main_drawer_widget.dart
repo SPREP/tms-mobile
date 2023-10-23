@@ -81,12 +81,10 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.home,
-                size: 26, color: Theme.of(context).colorScheme.onBackground),
+            leading: Icon(Icons.home, size: 26),
             title: Text(
               'Home',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
                     fontSize: 18,
                   ),
             ),
@@ -99,12 +97,10 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.phone,
-                size: 26, color: Theme.of(context).colorScheme.onBackground),
+            leading: Icon(Icons.phone, size: 26),
             title: Text(
               'National Numbers',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
                     fontSize: 18,
                   ),
             ),
@@ -122,12 +118,10 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.settings,
-                size: 26, color: Theme.of(context).colorScheme.onBackground),
+            leading: Icon(Icons.settings, size: 26),
             title: Text(
               'Settings',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
                     fontSize: 18,
                   ),
             ),
@@ -143,12 +137,10 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.help,
-                size: 26, color: Theme.of(context).colorScheme.onBackground),
+            leading: Icon(Icons.help, size: 26),
             title: Text(
               'Help',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
                     fontSize: 18,
                   ),
             ),
@@ -164,12 +156,10 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.info,
-                size: 26, color: Theme.of(context).colorScheme.onBackground),
+            leading: Icon(Icons.info, size: 26),
             title: Text(
               'About',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
                     fontSize: 18,
                   ),
             ),

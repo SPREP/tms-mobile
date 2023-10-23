@@ -115,7 +115,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                 tooltip: 'View large map',
                                 child: const Icon(
                                   Icons.center_focus_weak_sharp,
-                                  color: Color.fromARGB(255, 121, 119, 119),
                                 ),
                                 onPressed: () {
                                   _openMapOverlay();

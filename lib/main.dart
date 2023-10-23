@@ -3,12 +3,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:macres/providers/auth_provider.dart';
+import 'package:macres/providers/dark_theme_provider.dart';
 import 'package:macres/providers/locale_provider.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
 import 'package:macres/providers/user_provider.dart';
 import 'package:macres/screens/tabs_screen.dart';
+import 'package:macres/util/dark_theme_styles.dart';
 import 'package:macres/widgets/onboarding/onboarding_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,6 +59,19 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  DarkThemeProvider themeChangeProvider = new DarkThemeProvider();
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentAppTheme();
+  }
+
+  void getCurrentAppTheme() async {
+    themeChangeProvider.darkTheme =
+        await themeChangeProvider.darkThemePreference.getTheme();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -67,9 +82,11 @@ class _AppState extends State<App> {
         ChangeNotifierProvider(create: (context) => TwentyFourHoursProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => DarkThemeProvider()),
       ],
-      child: Consumer<LocaleProvider>(
-        builder: (context, localeProvider, child) => MaterialApp(
+      child: Consumer2<LocaleProvider, DarkThemeProvider>(
+        builder: (context, localeProvider, darkThemeProvider, child) =>
+            MaterialApp(
           localizationsDelegates: const [
             ToMaterialLocalizations.delegate,
             AppLocalizations.delegate,
@@ -80,18 +97,7 @@ class _AppState extends State<App> {
           supportedLocales: const [Locale('to'), Locale('en', 'US')],
           locale: localeProvider.selectedLocale,
           title: 'Tonga Weather App',
-          theme: ThemeData(
-            //fontFamily: GoogleFonts.openSans().fontFamily,
-            inputDecorationTheme: const InputDecorationTheme(
-              filled: true,
-              fillColor: Color.fromARGB(255, 238, 235, 246),
-            ),
-          ).copyWith(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color.fromARGB(255, 133, 131, 131),
-            ),
-          ),
+          theme: Styles.themeData(darkThemeProvider.darkTheme, context),
           darkTheme: ThemeData.dark(),
           home: widget.showOnboarding
               ? const OnboardingPage()

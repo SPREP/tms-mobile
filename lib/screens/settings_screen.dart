@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macres/providers/dark_theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:macres/models/settings_model.dart';
@@ -57,6 +58,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
+    final themeChange = Provider.of<DarkThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -137,12 +139,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const Text('Dark Theme:'),
             Switch(
-                value: light,
+                value: themeChange.darkTheme,
                 activeColor: Colors.green,
                 onChanged: (bool value) {
-                  setState(() {
-                    light = value;
-                  });
+                  themeChange.darkTheme = value;
                 }),
             const Divider(
               indent: 20,
