@@ -18,7 +18,7 @@ class _ReportScreenState extends State<ReportScreen> {
     return Material(
       child: SingleChildScrollView(
         child: Container(
-          color: const Color.fromARGB(255, 237, 235, 235),
+          color: Theme.of(context).primaryColor.withOpacity(0.1),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -80,7 +80,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   height: 100,
                   width: boxWidth,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                     border: Border.all(
                       color: const Color.fromARGB(255, 122, 121, 121),
                     ),
@@ -121,7 +121,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   height: 100,
                   width: boxWidth,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                     border: Border.all(
                       color: const Color.fromARGB(255, 122, 121, 121),
                     ),
@@ -167,7 +167,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   height: 100,
                   width: boxWidth,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                     border: Border.all(
                       color: const Color.fromARGB(255, 122, 121, 121),
                     ),
@@ -208,7 +208,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   height: 100,
                   width: boxWidth,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                     border: Border.all(
                       color: const Color.fromARGB(255, 122, 121, 121),
                     ),

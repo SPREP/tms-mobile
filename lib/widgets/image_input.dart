@@ -52,7 +52,7 @@ class _ImageInputState extends State<ImageInput> {
           height: 20,
         ),
         Container(
-          color: Color.fromARGB(255, 240, 240, 238),
+          color: Theme.of(context).primaryColor,
           height: 200,
           width: double.infinity,
           child: GridView.builder(

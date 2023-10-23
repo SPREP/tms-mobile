@@ -121,7 +121,6 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
       appBar: AppBar(
         title: const Text('Notification Details'),
         elevation: 0,
-        backgroundColor: Colors.transparent,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20.0),

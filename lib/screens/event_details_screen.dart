@@ -83,7 +83,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               child: ClipRRect(
                 borderRadius: const BorderRadius.only(),
                 child: widget.eventModel.lat == 0
-                    ? const Center(child: Text('Map is not available'))
+                    ? const Center(
+                        child: Text(
+                        'Map is not available',
+                        style:
+                            TextStyle(color: Color.fromARGB(255, 47, 47, 47)),
+                      ))
                     : FlutterMap(
                         mapController: MapController(),
                         options: MapOptions(
@@ -126,9 +131,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             ),
             Container(
               height: 650,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(40)),
-                color: Colors.white,
+                color: Theme.of(context).primaryColor,
               ),
               width: double.infinity,
               padding: const EdgeInsets.only(top: 20),
