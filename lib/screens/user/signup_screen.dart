@@ -1,26 +1,32 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:macres/models/user_model.dart';
 import 'package:macres/providers/auth_provider.dart';
-import 'package:macres/providers/user_provider.dart';
-import 'package:macres/screens/user/signup_screen.dart';
+import 'package:macres/screens/user/login_screen.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
+class SignUpScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final formKey = new GlobalKey<FormState>();
 
-  late String _username, _password;
+  late String _username, _password, _name;
 
   validateEmail() {}
 
   @override
   Widget build(BuildContext context) {
     AuthProvider auth = Provider.of<AuthProvider>(context);
+
+    final nameField = TextFormField(
+      autofocus: false,
+      validator: (value) => value!.isEmpty ? "Please enter your name" : null,
+      onSaved: (value) => _name = value!,
+      decoration: InputDecoration(
+          label: Text("Name"), icon: Icon(Icons.account_circle)),
+    );
 
     final usernameField = TextFormField(
       autofocus: false,
@@ -51,47 +57,37 @@ class _LoginScreenState extends State<LoginScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TextButton(
-          child: Text("Forgot password?",
+          child: Text("Already have an account? Login",
               style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
-//            Navigator.pushReplacementNamed(context, '/reset-password');
-          },
-        ),
-        TextButton(
-          child: Text("Sign up", style: TextStyle(fontWeight: FontWeight.w300)),
-          onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SignUpScreen()));
+                MaterialPageRoute(builder: (context) => LoginScreen()));
           },
         ),
       ],
     );
 
-    var doLogin = () {
+    var doSignUp = () {
       final form = formKey.currentState;
 
       if (form!.validate()) {
         form.save();
 
-        final Future<Map<String, dynamic>> successfulMessage =
-            auth.login(_username, _password);
+        final Future successfulMessage =
+            auth.register(_username, _password, _name);
 
         successfulMessage.then((response) {
-          if (response['status_code'] == 200) {
-            UserModel user = response['user'];
-            Provider.of<UserProvider>(context, listen: false).setUser(user);
+          if (response['status']) {
             Flushbar(
-              title: "Login Success",
-              message: "You have successfully logged in",
-              duration: Duration(seconds: 4),
-            ).show(context).then(
-                  (value) => Navigator.pop(context),
-                );
-          } else {
-            Flushbar(
-              title: "Failed Login",
+              title: "Sign up",
               message: response['message'],
               duration: Duration(seconds: 3),
+            ).show(context).then((value) => Navigator.pop(context));
+          } else {
+            Flushbar(
+              title: "Failed to Sign up",
+              message: response['message'] + " " + response['data']['message'],
+              duration: Duration(seconds: 5),
             ).show(context);
           }
         });
@@ -102,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text('Sign up'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -113,13 +109,15 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 20.0),
+                nameField,
+                SizedBox(height: 20.0),
                 usernameField,
                 SizedBox(height: 20.0),
                 passwordField,
                 SizedBox(height: 20.0),
                 auth.loggedInStatus == Status.Authenticating
                     ? loading
-                    : longButtons("Login", doLogin),
+                    : longButtons("Sign up", doSignUp, context),
                 SizedBox(height: 5.0),
                 forgotLabel
               ],
@@ -131,13 +129,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-Widget longButtons(String title, fun) {
+Widget longButtons(String title, fun, context) {
   return SizedBox(
     height: 45,
     width: 200,
     child: ElevatedButton(
       onPressed: fun,
-      child: Text('Login'),
+      child: Text('Sign up'),
     ),
   );
 }

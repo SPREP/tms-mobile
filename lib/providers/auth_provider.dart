@@ -105,20 +105,17 @@ class AuthProvider with ChangeNotifier {
     return result;
   }
 
-  Future<FutureOr> register(
-      String email, String password, String passwordConfirmation) async {
+  Future<FutureOr> register(String mail, String pass, String name) async {
     final Map<String, dynamic> registrationData = {
-      'user': {
-        'email': email,
-        'password': password,
-        'password_confirmation': passwordConfirmation
-      }
+      'name': name,
+      'mail': mail,
+      'pass': pass
     };
 
     _registeredInStatus = Status.Registering;
     notifyListeners();
 
-    return await post(toUri(AppConfig.registerEndpoint),
+    return await post(Uri.parse(AppConfig.registerEndpoint),
             body: json.encode(registrationData),
             headers: {'Content-Type': 'application/json'})
         .then(onValue)
@@ -130,16 +127,7 @@ class AuthProvider with ChangeNotifier {
     final Map<String, dynamic> responseData = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      var userData = responseData['data'];
-
-      UserModel authUser = UserModel.fromJson(userData);
-
-      UserPreferences().saveUser(authUser);
-      result = {
-        'status': true,
-        'message': 'Successfully registered',
-        'data': authUser
-      };
+      result = {'status': true, 'message': 'Successfully registered'};
     } else {
       result = {
         'status': false,

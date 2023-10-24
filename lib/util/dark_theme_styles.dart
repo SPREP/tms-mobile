@@ -32,7 +32,9 @@ class Styles {
       canvasColor: isDarkTheme ? Colors.black : Colors.grey[50],
       brightness: isDarkTheme ? Brightness.dark : Brightness.light,
       buttonTheme: Theme.of(context).buttonTheme.copyWith(
-          colorScheme: isDarkTheme ? ColorScheme.dark() : ColorScheme.light()),
+            colorScheme: isDarkTheme ? ColorScheme.dark() : ColorScheme.light(),
+            buttonColor: Color.fromARGB(66, 118, 187, 216),
+          ),
       appBarTheme: AppBarTheme(
         elevation: 0.0,
       ),
