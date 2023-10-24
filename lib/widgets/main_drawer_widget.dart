@@ -44,8 +44,10 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               children: [
                 CircleAvatar(
                   radius: 60,
-                  backgroundImage: NetworkImage(
-                      'https://img.freepik.com/premium-photo/portrait-pretty-cheerful-casual-african-girl-standing-isolated-white-wall_171337-97801.jpg'),
+                  child: Icon(
+                    Icons.account_circle,
+                    size: 100,
+                  ),
                 ),
                 SizedBox(
                   width: 20,
@@ -55,22 +57,24 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
                     builder: (context, snapshot) {
                       if (snapshot.data?.token == null) {
                         return TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginScreen()),
-                              );
-                            },
-                            child: Text('Login'));
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()),
+                            );
+                          },
+                          child: Text(''), //login
+                        );
                       } else {
                         return TextButton(
-                            onPressed: () {
-                              setState(() {
-                                AuthProvider().logout();
-                              });
-                            },
-                            child: Text('Logout'));
+                          onPressed: () {
+                            setState(() {
+                              AuthProvider().logout();
+                            });
+                          },
+                          child: Text(''), //logout
+                        );
                       }
                     }),
               ],
@@ -97,7 +101,7 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.phone, size: 26),
+            leading: Icon(Icons.phone_outlined, size: 26),
             title: Text(
               'National Numbers',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(

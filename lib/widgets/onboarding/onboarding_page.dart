@@ -1,6 +1,7 @@
 //import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:macres/models/settings_model.dart';
 import 'package:macres/screens/onboarding/onboarding_first_screen.dart';
 import 'package:macres/screens/onboarding/onboarding_second_screen.dart';
 import 'package:macres/screens/tabs_screen.dart';
@@ -21,7 +22,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
   final controller = PageController();
   bool isLastPage = false;
   String _selectedLocation = 'Select your location';
-  String _selectedLanguage = 'English';
+  Language? _selectedLanguage = Language.en;
+
   final _userLocationKey = GlobalKey<FormState>();
   //late FirebaseMessaging fcmInstance;
 
@@ -44,7 +46,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     _selectedLocation = value;
   }
 
-  void _selectedUserLanguage(String value) {
+  void _selectedUserLanguage(Language value) {
     _selectedLanguage = value;
   }
 
@@ -62,7 +64,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         final prefs = await SharedPreferences.getInstance();
 
         prefs.setString('user_location', _selectedLocation);
-        prefs.setString('user_language', _selectedLanguage);
+        prefs.setString('user_language', _selectedLanguage!.name.toString());
 
         //Push notification subscribe user
         //fcmInstance.subscribeToTopic(_selectedLanguage.toLowerCase());

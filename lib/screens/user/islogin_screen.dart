@@ -1,17 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:macres/models/user_model.dart';
-import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/screens/forms/impact_report_form.dart';
 import 'package:macres/screens/forms/request_assistance_form.dart';
 import 'package:macres/screens/user/login_screen.dart';
 import 'package:macres/util/user_preferences.dart';
 
 class IsLogin extends StatefulWidget {
-  IsLogin({super.key, required next});
+  final String next;
 
-  final next = 'assitance';
+  IsLogin({super.key, required this.next});
 
   @override
   State<IsLogin> createState() => _IsLoginState();
@@ -24,7 +21,6 @@ class _IsLoginState extends State<IsLogin> {
   @override
   Widget build(BuildContext context) {
     Future<UserModel> getUserData() => UserPreferences().getUser();
-
     if (widget.next == 'impact') {
       nextPage = ImpactReportForm(eventId: 0);
     } else {

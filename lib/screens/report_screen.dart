@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:macres/screens/event_report_screen.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
-import 'package:macres/screens/forms/impact_report_form.dart';
-import 'package:macres/screens/forms/request_assistance_form.dart';
 import 'package:macres/screens/user/islogin_screen.dart';
 
 class ReportScreen extends StatefulWidget {
@@ -158,7 +156,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => IsLogin(next: 'assitance'),
+                      builder: (context) => new IsLogin(next: 'assistance'),
                       //const RequestAssistanceForm(eventId: 0),
                     ),
                   );
@@ -199,7 +197,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => IsLogin(next: 'impact'),
+                      builder: (context) => new IsLogin(next: 'impact'),
                       //const ImpactReportForm(eventId: 0),
                     ),
                   );

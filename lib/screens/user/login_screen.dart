@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Flushbar(
               title: "Login Success",
               message: "You have successfully logged in",
-              duration: Duration(seconds: 4),
+              duration: Duration(seconds: 3),
             ).show(context).then(
                   (value) => Navigator.pop(context),
                 );

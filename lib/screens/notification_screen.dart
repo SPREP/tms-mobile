@@ -5,6 +5,7 @@ import 'package:macres/config/app_config.dart';
 import 'package:macres/models/notification_model.dart';
 import 'package:macres/widgets/notification_widget.dart';
 import 'package:macres/models/settings_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -30,7 +31,11 @@ class _NotificationScreen extends State<NotificationScreen> {
     var username = AppConfig.userName;
     var password = AppConfig.password;
     var host = AppConfig.baseUrl;
-    String endpoint = '/notification?_format=json';
+
+    var prefs = await SharedPreferences.getInstance();
+    var lng = prefs.getString('user_language');
+
+    String endpoint = '/notification/$lng?_format=json';
 
     final basicAuth =
         "Basic ${base64.encode(utf8.encode('$username:$password'))}";

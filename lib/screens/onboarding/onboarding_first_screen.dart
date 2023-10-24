@@ -12,7 +12,7 @@ class OnboardingFirstScreen extends StatefulWidget {
       required this.userLocationKey});
 
   final void Function(String) validateLocation;
-  final void Function(String) validateLanguage;
+  final void Function(Language) validateLanguage;
   final GlobalKey<FormState> userLocationKey;
 
   @override
@@ -76,7 +76,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                             value: Language.en,
                             groupValue: _selectedLanguage,
                             onChanged: (val) {
-                              widget.validateLanguage(val!.name.toString());
+                              widget.validateLanguage(val!);
                               setState(() {
                                 _selectedLanguage = val;
 
@@ -96,6 +96,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                             value: Language.to,
                             groupValue: _selectedLanguage,
                             onChanged: (val) {
+                              widget.validateLanguage(val!);
                               setState(() {
                                 _selectedLanguage = val;
 
