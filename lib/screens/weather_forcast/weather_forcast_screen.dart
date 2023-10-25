@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
+import 'package:macres/models/notification_model.dart';
 import 'package:macres/models/weather_model.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
@@ -8,6 +9,7 @@ import 'package:macres/providers/twentyfour_hours_provider.dart';
 import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
 import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide%20copy.dart';
+import 'package:macres/widgets/notification_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_icons/weather_icons.dart';
@@ -48,6 +50,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   List<ThreeHoursForecastModel> threeHoursData = [];
   List<TenDaysForecastModel> tenDaysData = [];
 
+  late NotificationModel notificationData;
+
   bool isLoading = false;
   late Timer timer;
 
@@ -58,10 +62,13 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     timer =
         Timer.periodic(const Duration(minutes: 2), (Timer t) => getWeather());
 
+    notificationData = NotificationModel();
+
     setLocation();
     setState(() {
       isLoading = true;
       getWeather();
+      getNotification();
     });
   }
 
@@ -194,6 +201,90 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     return Location.tongatapu;
   }
 
+  getNotification() async {
+    var username = AppConfig.userName;
+    var password = AppConfig.password;
+    var host = AppConfig.baseUrl;
+
+    var prefs = await SharedPreferences.getInstance();
+    var lng = prefs.getString('user_language');
+
+    String endpoint = '/notification/$lng?_format=json';
+
+    final basicAuth =
+        "Basic ${base64.encode(utf8.encode('$username:$password'))}";
+    dynamic response;
+    try {
+      response = await http.get(
+        Uri.parse('$host$endpoint'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': basicAuth
+        },
+      );
+
+      if (response.statusCode == 200) {
+        if (jsonDecode(response.body).isEmpty) {
+          setState(() {
+            isLoading = false;
+          });
+          return [];
+        }
+
+        final Map<String, dynamic> listData = jsonDecode(response.body);
+        NotificationModel loadedItem = NotificationModel();
+
+        for (final item in listData.entries) {
+          final notificationLevel = int.parse(item.value['level']);
+          // Only show warning notification
+          if (notificationLevel != 2 && notificationLevel != 3) continue;
+
+          //Only show warning for today
+          if (isToday(int.parse(item.value['timestamp']))) {
+            loadedItem = NotificationModel(
+                id: int.parse(item.value['id']),
+                date: item.value['date'],
+                time: item.value['time'],
+                body: item.value['body'] ?? '',
+                level: int.parse(item.value['level']),
+                location: item.value['target_location'],
+                title: item.value['title']);
+          }
+        }
+
+        setState(() {
+          notificationData = loadedItem;
+          //isLoading = false;
+        });
+
+        return loadedItem;
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      const snackBar = SnackBar(
+        content: Text(
+            'Error: Unable to load notification. Check your internet connection.'),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      print(e);
+    }
+  }
+
+  bool isToday(timestamp) {
+    final tdate = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    final tdateToday = DateTime(tdate.year, tdate.month, tdate.day);
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    if (tdateToday == today) {
+      return true;
+    }
+    return false;
+  }
+
   getWeather() async {
     var username = AppConfig.userName;
     var password = AppConfig.password;
@@ -312,6 +403,17 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                 color: Colors.white, fontWeight: FontWeight.bold),
             child: Column(
               children: [
+                //Warning section
+                Container(
+                  child: Column(
+                    children: [
+                      if (notificationData.body != null)
+                        NotificationWidget(notification: notificationData)
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // End Warning section
                 Container(
                   decoration: const BoxDecoration(
                     color: Color.fromARGB(210, 0, 37, 42),

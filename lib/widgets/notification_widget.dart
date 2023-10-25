@@ -10,6 +10,8 @@ class NotificationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double mWidth = MediaQuery.of(context).size.width * 0.8;
 
+    print(mWidth);
+
     return Column(
       children: [
         InkWell(
@@ -19,7 +21,7 @@ class NotificationWidget extends StatelessWidget {
               children: [
                 Container(
                   color: notification.getColor(),
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(5),
                   height: 150,
                   child: notification.getIcon(),
                 ),

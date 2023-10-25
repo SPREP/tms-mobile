@@ -2,7 +2,7 @@ class AppConfig {
   static const String liveBaseURL = "http://app.met.gov.to/api/v1";
   static const String localBaseURL = "http://met-api.lndo.site/api/v1";
 
-  static const String baseUrl = localBaseURL;
+  static const String baseUrl = liveBaseURL;
 
   //user endpoints
   static const String loginEndpoint = "$baseUrl/user/login?_format=json";
