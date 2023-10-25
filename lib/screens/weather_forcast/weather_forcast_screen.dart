@@ -331,17 +331,14 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           currentWeatherData.clear();
           for (final item in listData['current']) {
             var dataModel = CurrentWeatherModel(
-              location: item[0],
-              iconId: int.parse(item[1]),
-              currentTemp: item[2],
-              humidity: item[3],
-              pressure: item[4],
-              windDirection: item[5],
-              windSpeed: item[6],
-              visibility: item[7],
-              minTemp: item[8],
-              maxTemp: item[9],
-            );
+                location: item[0],
+                iconId: int.parse(item[1]),
+                currentTemp: item[2],
+                humidity: item[3],
+                pressure: item[4],
+                windDirection: item[5],
+                windSpeed: item[6],
+                visibility: item[7]);
 
             currentWeatherData.add(dataModel);
           }
@@ -487,12 +484,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           const Spacer(),
                           Column(
                             children: [
-                              Text(
-                                '${currentData.minTemp}\u00B0/${currentData.maxTemp}\u00B0',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
                               currentData.getIcon(50.0, Colors.white),
                             ],
                           ),
@@ -526,7 +517,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                 height: 10,
                               ),
                               const Text('Pressure'),
-                              Text('${currentData.pressure}hPa'),
+                              Text('${currentData.pressure}mb'),
                             ],
                           ),
                           const Spacer(),
