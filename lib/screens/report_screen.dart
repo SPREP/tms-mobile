@@ -156,7 +156,8 @@ class _ReportScreenState extends State<ReportScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => new IsLogin(next: 'assistance'),
+                      builder: (context) =>
+                          new IsLogin(next: 'assistance', eventId: 0),
                       //const RequestAssistanceForm(eventId: 0),
                     ),
                   );
@@ -197,7 +198,8 @@ class _ReportScreenState extends State<ReportScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => new IsLogin(next: 'impact'),
+                      builder: (context) =>
+                          new IsLogin(next: 'impact', eventId: 0),
                       //const ImpactReportForm(eventId: 0),
                     ),
                   );

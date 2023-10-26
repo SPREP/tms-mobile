@@ -7,8 +7,9 @@ import 'package:macres/util/user_preferences.dart';
 
 class IsLogin extends StatefulWidget {
   final String next;
+  final num eventId;
 
-  IsLogin({super.key, required this.next});
+  IsLogin({super.key, required this.next, required this.eventId});
 
   @override
   State<IsLogin> createState() => _IsLoginState();
@@ -22,9 +23,9 @@ class _IsLoginState extends State<IsLogin> {
   Widget build(BuildContext context) {
     Future<UserModel> getUserData() => UserPreferences().getUser();
     if (widget.next == 'impact') {
-      nextPage = ImpactReportForm(eventId: 0);
+      nextPage = ImpactReportForm(eventId: widget.eventId);
     } else {
-      nextPage = RequestAssistanceForm(eventId: 0);
+      nextPage = RequestAssistanceForm(eventId: widget.eventId);
     }
 
     return Scaffold(

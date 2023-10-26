@@ -7,6 +7,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
 import 'package:macres/screens/forms/impact_report_form.dart';
 import 'package:macres/screens/forms/request_assistance_form.dart';
+import 'package:macres/screens/user/islogin_screen.dart';
 import 'package:macres/widgets/big_map_widget.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
@@ -232,8 +233,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ImpactReportForm(
-                                      eventId: widget.eventModel.id)),
+                                builder: (context) => new IsLogin(
+                                    next: 'impact',
+                                    eventId: widget.eventModel.id!),
+                              ),
                             );
                           },
                           label: const Text('Create Impact Report'))),
@@ -246,8 +249,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => RequestAssistanceForm(
-                                      eventId: widget.eventModel.id)),
+                                builder: (context) => new IsLogin(
+                                    next: 'assistance',
+                                    eventId: widget.eventModel.id!),
+                              ),
                             );
                           },
                           label: const Text('Request Assistance'))),

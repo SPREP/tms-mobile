@@ -150,24 +150,24 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   void changeBgImage() {
     String filePath = '';
     switch (currentData.iconId) {
-      case 5:
-      case 6:
-      case 7:
+      case '5':
+      case '6':
+      case '7':
         filePath = currentData.dayOrNight == 'day'
             ? 'assets/images/day_rain.jpg'
             : 'assets/images/night_rain.jpg';
         break;
-      case 1:
+      case '1':
         filePath = currentData.dayOrNight == 'day'
             ? 'assets/images/sunny_day.jpg'
             : 'assets/images/clear_night.jpg';
         break;
-      case 2:
-      case 3:
-      case 4:
-      case 8:
-      case 9:
-      case 10:
+      case '2':
+      case '3':
+      case '4':
+      case '8':
+      case '9':
+      case '10':
         filePath = currentData.dayOrNight == 'day'
             ? 'assets/images/cloudy_day.jpg'
             : 'assets/images/cloudy_night.jpg';
@@ -317,7 +317,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           tenDaysData.clear();
           for (final item in listData['10days']) {
             var dataModel = TenDaysForecastModel(
-                iconId: int.parse(item[1]),
+                iconId: item[1],
                 day: item[2],
                 maxTemp: item[3],
                 minTemp: item[4],
@@ -332,14 +332,13 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           for (final item in listData['current']) {
             var dataModel = CurrentWeatherModel(
                 location: item[0],
-                iconId: int.parse(item[1]),
+                iconId: item[1],
                 currentTemp: item[2],
                 humidity: item[3],
                 pressure: item[4],
                 windDirection: item[5],
                 windSpeed: item[6],
                 visibility: item[7]);
-
             currentWeatherData.add(dataModel);
           }
         }
@@ -349,7 +348,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           for (final item in listData['3hrs']) {
             threeHoursData.add(ThreeHoursForecastModel(
               location: item[0],
-              iconId: int.parse(item[1]),
+              iconId: item[1],
               caption: item[2],
               currentTemp: item[3],
               windDirection: item[4],
@@ -364,7 +363,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           for (final item in listData['24hrs']) {
             twentyFourHoursData.add(TwentyFourHoursForecastModel(
               location: item[0],
-              iconId: int.parse(item[1]),
+              iconId: item[1],
               caption: item[2],
               maxTemp: item[3],
               minTemp: item[4],
@@ -381,6 +380,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         });
       }
     } catch (e) {
+      print(e.toString());
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
         content: Text(
