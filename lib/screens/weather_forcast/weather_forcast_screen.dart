@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/notification_model.dart';
+import 'package:macres/models/sun_model.dart';
 import 'package:macres/models/weather_model.dart';
+import 'package:macres/providers/sun_provider.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
+import 'package:macres/screens/weather_forcast/sun_slide.dart';
 import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
 import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide%20copy.dart';
@@ -34,7 +37,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   final PageController myController = PageController(
     keepPage: true,
   );
-  final _itemCount = 3;
+  final _itemCount = 4;
   dynamic activeSlide;
   String selectedTempretureUnit = 'c';
 
@@ -44,11 +47,13 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   ThreeHoursForecastModel currentThreeHoursData = ThreeHoursForecastModel();
   TwentyFourHoursForecastModel currentTwentyFourHoursData =
       TwentyFourHoursForecastModel();
+  SunModel currentSunData = SunModel();
 
   List<CurrentWeatherModel> currentWeatherData = [];
   List<TwentyFourHoursForecastModel> twentyFourHoursData = [];
   List<ThreeHoursForecastModel> threeHoursData = [];
   List<TenDaysForecastModel> tenDaysData = [];
+  List<SunModel> sunData = [];
 
   late NotificationModel notificationData;
 
@@ -129,6 +134,13 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
       }
     }
 
+    //Load data for sun
+    for (final item in sunData) {
+      if (convertToLocation(item.location.toString()) == selectedLocation) {
+        currentSunData = item;
+      }
+    }
+
     //Update the provider ten days
     TenDaysProvider tenDaysProvider =
         Provider.of<TenDaysProvider>(context, listen: false);
@@ -144,30 +156,34 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         Provider.of<TwentyFourHoursProvider>(context, listen: false);
     twentyFourHoursProvider.setData(currentTwentyFourHoursData);
 
+    //Sunrise Sunset
+    SunProvider sunProvider = Provider.of<SunProvider>(context, listen: false);
+    sunProvider.setData(currentSunData);
+
     changeBgImage();
   }
 
   void changeBgImage() {
     String filePath = '';
     switch (currentData.iconId) {
-      case '5':
-      case '6':
-      case '7':
+      case 5:
+      case 6:
+      case 7:
         filePath = currentData.dayOrNight == 'day'
             ? 'assets/images/day_rain.jpg'
             : 'assets/images/night_rain.jpg';
         break;
-      case '1':
+      case 1:
         filePath = currentData.dayOrNight == 'day'
             ? 'assets/images/sunny_day.jpg'
             : 'assets/images/clear_night.jpg';
         break;
-      case '2':
-      case '3':
-      case '4':
-      case '8':
-      case '9':
-      case '10':
+      case 2:
+      case 3:
+      case 4:
+      case 8:
+      case 9:
+      case 10:
         filePath = currentData.dayOrNight == 'day'
             ? 'assets/images/cloudy_day.jpg'
             : 'assets/images/cloudy_night.jpg';
@@ -317,7 +333,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           tenDaysData.clear();
           for (final item in listData['10days']) {
             var dataModel = TenDaysForecastModel(
-                iconId: item[1],
+                iconId: int.parse(item[1]),
                 day: item[2],
                 maxTemp: item[3],
                 minTemp: item[4],
@@ -332,7 +348,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           for (final item in listData['current']) {
             var dataModel = CurrentWeatherModel(
                 location: item[0],
-                iconId: item[1],
+                iconId: int.parse(item[1]),
                 currentTemp: item[2],
                 humidity: item[3],
                 pressure: item[4],
@@ -348,7 +364,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           for (final item in listData['3hrs']) {
             threeHoursData.add(ThreeHoursForecastModel(
               location: item[0],
-              iconId: item[1],
+              iconId: int.parse(item[1]),
               caption: item[2],
               currentTemp: item[3],
               windDirection: item[4],
@@ -363,7 +379,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           for (final item in listData['24hrs']) {
             twentyFourHoursData.add(TwentyFourHoursForecastModel(
               location: item[0],
-              iconId: item[1],
+              iconId: int.parse(item[1]),
               caption: item[2],
               maxTemp: item[3],
               minTemp: item[4],
@@ -373,7 +389,19 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
             ));
           }
         }
-
+/*
+        if (listData['sun'].length > 0) {
+          sunData.clear();
+          for (final item in listData['sun']) {
+            sunData.add(
+              SunModel(
+                  sunrise: item['sunrise'].toString(),
+                  sunset: item['sunset'].toString(),
+                  location: item['location']),
+            );
+          }
+        }
+*/
         setState(() {
           isLoading = false;
           changeCurrentData();
@@ -594,9 +622,10 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                               activeSlide = const TwentyFourHoursSlide();
                             }
 
-                            //if (index == 3) activeSlide = const RainfallSlide();
-
-                            //if (index == 4) activeSlide = const OceanSlide();
+                            if (index == 3) {
+                              print('got 3');
+                              activeSlide = const SunSlide();
+                            }
 
                             return activeSlide;
                           },

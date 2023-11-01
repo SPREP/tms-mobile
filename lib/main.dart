@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/providers/dark_theme_provider.dart';
 import 'package:macres/providers/locale_provider.dart';
+import 'package:macres/providers/sun_provider.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
@@ -83,6 +84,7 @@ class _AppState extends State<App> {
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => DarkThemeProvider()),
+        ChangeNotifierProvider(create: (context) => SunProvider()),
       ],
       child: Consumer2<LocaleProvider, DarkThemeProvider>(
         builder: (context, localeProvider, darkThemeProvider, child) =>

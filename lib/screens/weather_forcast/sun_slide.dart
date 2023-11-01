@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:macres/providers/twentyfour_hours_provider.dart';
+import 'package:intl/intl.dart';
+import 'package:macres/providers/sun_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_icons/weather_icons.dart';
 
-class TwentyFourHoursSlide extends StatefulWidget {
-  const TwentyFourHoursSlide({super.key});
+class SunSlide extends StatefulWidget {
+  const SunSlide({super.key});
 
   @override
-  State<TwentyFourHoursSlide> createState() => _TwentyFourHoursSlideState();
+  State<SunSlide> createState() => _SunSlideState();
 }
 
-class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
+class _SunSlideState extends State<SunSlide> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<TwentyFourHoursProvider>(
-      builder: (context, twentyFourHoursProvider, child) {
-        var data = twentyFourHoursProvider.currentTwentyFourHoursData;
-
+    return Consumer<SunProvider>(
+      builder: (context, SunProvider, child) {
+        var data = SunProvider.currentSunData;
         return Column(
           children: [
             const Row(
@@ -25,7 +25,7 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
                   width: 30,
                 ),
                 Spacer(),
-                Text('24-HOURS FORECAST'),
+                Text('SUN RISE / SUN SET'),
                 Spacer(),
                 Icon(
                   Icons.favorite,
@@ -41,7 +41,7 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
             ),
             Padding(
               padding: EdgeInsets.only(left: 30, right: 30),
-              child: Text(data.warning.toString()),
+              child: Text(data.sunset.toString()),
             ),
             const SizedBox(
               height: 20,
@@ -49,12 +49,11 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
             Column(
               children: [
                 Text(
-                  '${data.caption}',
+                  data.sunrise.toString(),
                   style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
-                data.getIcon(40.0, Colors.white),
               ],
             ),
             const SizedBox(
@@ -71,11 +70,11 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
                   height: 10,
                 ),
                 Text(
-                  "Max: ${data.maxTemp}\u00B0",
+                  "Max:",
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  "Min: ${data.minTemp}\u00B0",
+                  "Min",
                   style: const TextStyle(fontSize: 16),
                 ),
               ]),
@@ -91,8 +90,6 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(data.windDirection.toString()),
-                Text('${data.windSpeed.toString()} knts'),
               ]),
             ]),
             const SizedBox(

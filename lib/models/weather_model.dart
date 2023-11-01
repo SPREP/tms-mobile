@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class WeatherModel {
-  String? iconId;
+  num? iconId;
   String? humidity;
   String? pressure;
   String? windSpeed;
@@ -51,52 +51,52 @@ class WeatherModel {
     IconData icon;
 
     switch (iconId) {
-      case '1':
+      case 1:
         icon = dayOrNight == 'day'
             ? WeatherIcons.day_sunny
             : WeatherIcons.night_clear;
         break;
-      case '2':
+      case 2:
         icon = dayOrNight == 'day'
             ? WeatherIcons.day_sunny_overcast
             : WeatherIcons.night_partly_cloudy;
         break;
-      case '3':
+      case 3:
         icon = dayOrNight == 'day'
             ? WeatherIcons.day_cloudy
             : WeatherIcons.night_cloudy;
         break;
-      case '4':
+      case 4:
         icon = dayOrNight == 'day'
             ? WeatherIcons.day_showers
             : WeatherIcons.night_showers;
         break;
-      case '5':
+      case 5:
         icon = dayOrNight == 'day'
             ? WeatherIcons.day_rain_mix
             : WeatherIcons.night_rain_mix;
         break;
-      case '6':
+      case 6:
         icon = dayOrNight == 'day'
             ? WeatherIcons.day_sleet
             : WeatherIcons.night_sleet;
         break;
-      case '7':
+      case 7:
         icon = dayOrNight == 'day'
             ? WeatherIcons.day_rain
             : WeatherIcons.night_rain;
         break;
-      case '8':
+      case 8:
         icon = dayOrNight == 'day'
             ? WeatherIcons.day_thunderstorm
             : WeatherIcons.night_thunderstorm;
         break;
-      case '9':
+      case 9:
         icon = dayOrNight == 'day'
             ? WeatherIcons.day_lightning
             : WeatherIcons.night_lightning;
         break;
-      case '10':
+      case 10:
         icon = dayOrNight == 'day'
             ? WeatherIcons.day_showers
             : WeatherIcons.night_showers;
@@ -114,25 +114,25 @@ class WeatherModel {
 
   String getIconDefinition() {
     switch (iconId) {
-      case '1':
+      case 1:
         return 'Fine Weather';
-      case '2':
+      case 2:
         return 'Partly Cloudy';
-      case '3':
+      case 3:
         return 'Cloudy';
-      case '4':
+      case 4:
         return 'Cloudy periods with showers';
-      case '5':
+      case 5:
         return 'Light Rain';
-      case '6':
+      case 6:
         return 'Moderate Rain';
-      case '7':
+      case 7:
         return 'Heavy Rain';
-      case '8':
+      case 8:
         return 'Partly cloudy with thunderstorm';
-      case '9':
+      case 9:
         return 'Thunderstorm';
-      case '10':
+      case 10:
         return 'Squally Showers';
     }
     return '';
@@ -153,34 +153,34 @@ class TenDaysForecastModel extends WeatherModel {
     IconData icon;
 
     switch (iconId) {
-      case '1':
+      case 1:
         icon = WeatherIcons.day_sunny;
         break;
-      case '2':
+      case 2:
         icon = WeatherIcons.day_sunny_overcast;
         break;
-      case '3':
+      case 3:
         icon = WeatherIcons.day_cloudy;
         break;
-      case '4':
+      case 4:
         icon = WeatherIcons.day_showers;
         break;
-      case '5':
+      case 5:
         icon = WeatherIcons.day_rain_mix;
         break;
-      case '6':
+      case 6:
         icon = WeatherIcons.day_sleet;
         break;
-      case '7':
+      case 7:
         icon = WeatherIcons.day_rain;
         break;
-      case '8':
+      case 8:
         icon = WeatherIcons.day_thunderstorm;
         break;
-      case '9':
+      case 9:
         icon = WeatherIcons.day_lightning;
         break;
-      case '10':
+      case 10:
         icon = WeatherIcons.day_showers;
         break;
       default:
