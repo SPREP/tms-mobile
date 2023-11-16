@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/notification_model.dart';
+import 'package:macres/models/tide_model.dart';
 import 'package:macres/models/weather_model.dart';
+import 'package:macres/providers/tide_provider.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
+import 'package:macres/screens/weather_forcast/tide_slide.dart';
 import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
 import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide%20copy.dart';
@@ -34,7 +37,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   final PageController myController = PageController(
     keepPage: true,
   );
-  final _itemCount = 3;
+  final _itemCount = 4;
   dynamic activeSlide;
   String selectedTempretureUnit = 'c';
 
@@ -44,11 +47,13 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   ThreeHoursForecastModel currentThreeHoursData = ThreeHoursForecastModel();
   TwentyFourHoursForecastModel currentTwentyFourHoursData =
       TwentyFourHoursForecastModel();
+  TideModel currentTideData = TideModel(high: [], low: []);
 
   List<CurrentWeatherModel> currentWeatherData = [];
   List<TwentyFourHoursForecastModel> twentyFourHoursData = [];
   List<ThreeHoursForecastModel> threeHoursData = [];
   List<TenDaysForecastModel> tenDaysData = [];
+  List<TideModel> tideData = [];
 
   late NotificationModel notificationData;
 
@@ -129,6 +134,14 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
       }
     }
 
+    //Load data for tide
+    currentTideData = TideModel(high: [], low: []);
+    for (final item in tideData) {
+      if (convertToLocation(item.location.toString()) == selectedLocation) {
+        currentTideData = item;
+      }
+    }
+
     //Update the provider ten days
     TenDaysProvider tenDaysProvider =
         Provider.of<TenDaysProvider>(context, listen: false);
@@ -144,30 +157,35 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         Provider.of<TwentyFourHoursProvider>(context, listen: false);
     twentyFourHoursProvider.setData(currentTwentyFourHoursData);
 
+    //Tide high and low
+    TideProvider tideProvider =
+        Provider.of<TideProvider>(context, listen: false);
+    tideProvider.setData(currentTideData);
+
     changeBgImage();
   }
 
   void changeBgImage() {
     String filePath = '';
     switch (currentData.iconId) {
-      case '5':
-      case '6':
-      case '7':
+      case 5:
+      case 6:
+      case 7:
         filePath = currentData.dayOrNight == 'day'
             ? 'assets/images/day_rain.jpg'
             : 'assets/images/night_rain.jpg';
         break;
-      case '1':
+      case 1:
         filePath = currentData.dayOrNight == 'day'
             ? 'assets/images/sunny_day.jpg'
             : 'assets/images/clear_night.jpg';
         break;
-      case '2':
-      case '3':
-      case '4':
-      case '8':
-      case '9':
-      case '10':
+      case 2:
+      case 3:
+      case 4:
+      case 8:
+      case 9:
+      case 10:
         filePath = currentData.dayOrNight == 'day'
             ? 'assets/images/cloudy_day.jpg'
             : 'assets/images/cloudy_night.jpg';
@@ -313,65 +331,86 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
         final Map<String, dynamic> listData = jsonDecode(response.body);
 
-        if (listData['10days'].length > 0) {
+        // 10day
+        if (listData['10day'].length > 0) {
           tenDaysData.clear();
-          for (final item in listData['10days']) {
-            var dataModel = TenDaysForecastModel(
-                iconId: item[1],
-                day: item[2],
-                maxTemp: item[3],
-                minTemp: item[4],
-                location: item[0]);
+          listData['10day'].forEach((final String key, final value) {
+            for (var n in value) {
+              var dataModel = TenDaysForecastModel(
+                  iconId: int.parse(n['icon']),
+                  day: n['day'],
+                  maxTemp: n['max_temp'],
+                  minTemp: n['min_temp'],
+                  location: key);
 
-            tenDaysData.add(dataModel);
-          }
+              tenDaysData.add(dataModel);
+            }
+          });
         }
 
+        // Current forecast
         if (listData['current'].length > 0) {
           currentWeatherData.clear();
-          for (final item in listData['current']) {
+          listData['current'].forEach((final String key, final value) {
             var dataModel = CurrentWeatherModel(
-                location: item[0],
-                iconId: item[1],
-                currentTemp: item[2],
-                humidity: item[3],
-                pressure: item[4],
-                windDirection: item[5],
-                windSpeed: item[6],
-                visibility: item[7]);
+                location: key,
+                iconId: int.parse(value['icon']),
+                currentTemp: value['temperature'],
+                humidity: value['humidity'],
+                pressure: value['barometer'],
+                windDirection: value['wind_direction'],
+                windSpeed: value['wind_speed'],
+                visibility: value['visibility']);
             currentWeatherData.add(dataModel);
-          }
+          });
         }
 
+        // 3Hrs
         if (listData['3hrs'].length > 0) {
           threeHoursData.clear();
-          for (final item in listData['3hrs']) {
+          listData['3hrs'].forEach((final String key, final value) {
             threeHoursData.add(ThreeHoursForecastModel(
-              location: item[0],
-              iconId: item[1],
-              caption: item[2],
-              currentTemp: item[3],
-              windDirection: item[4],
-              windSpeed: item[5],
-              visibility: item[6],
+              location: key,
+              iconId: int.parse(value['icon']),
+              caption: value['condition'],
+              currentTemp: value['temp'],
+              windDirection: value['wind_direction'],
+              windSpeed: value['wind_speed'],
+              visibility: value['pressure'],
             ));
-          }
+          });
         }
 
+        // 24Hours
         if (listData['24hrs'].length > 0) {
           twentyFourHoursData.clear();
-          for (final item in listData['24hrs']) {
+          listData['24hrs'].forEach((final String key, final value) {
             twentyFourHoursData.add(TwentyFourHoursForecastModel(
-              location: item[0],
-              iconId: item[1],
-              caption: item[2],
-              maxTemp: item[3],
-              minTemp: item[4],
-              windDirection: item[5],
-              windSpeed: item[6],
-              warning: item[7],
+              location: key,
+              iconId: int.parse(value['icon']),
+              caption: value['condition'],
+              maxTemp: value['max_temp'],
+              minTemp: value['min_temp'],
+              windDirection: value['wind_direction'],
+              windSpeed: value['wind_speed'],
+              warning: value['warning'],
             ));
-          }
+          });
+        }
+
+        // Tide
+        if (listData['tide'].length > 0) {
+          tideData.clear();
+          listData['tide'].forEach((final String key, final value) {
+            TideModel tide = new TideModel(low: [], high: [], location: key);
+            for (var item in value) {
+              tide.high =
+                  item['event'] == 'high' ? item['time'].split(',') : tide.high;
+              tide.low =
+                  item['event'] == 'low' ? item['time'].split(',') : tide.low;
+            }
+            tideData.add(tide);
+          });
         }
 
         setState(() {
@@ -594,9 +633,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                               activeSlide = const TwentyFourHoursSlide();
                             }
 
-                            //if (index == 3) activeSlide = const RainfallSlide();
-
-                            //if (index == 4) activeSlide = const OceanSlide();
+                            if (index == 3) {
+                              activeSlide = const TideSlide();
+                            }
 
                             return activeSlide;
                           },

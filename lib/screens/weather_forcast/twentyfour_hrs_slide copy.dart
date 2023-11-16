@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:macres/models/weather_model.dart';
-import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_icons/weather_icons.dart';
 

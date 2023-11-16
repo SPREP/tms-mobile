@@ -22,7 +22,8 @@ class Styles {
           : Theme.of(context)
               .textTheme
               .apply(displayColor: Colors.black, bodyColor: Colors.black),
-      highlightColor: isDarkTheme ? Color(0xff372901) : Color(0xffFCE192),
+      highlightColor:
+          isDarkTheme ? Color(0xff372901) : Color.fromARGB(255, 184, 183, 181),
       hoverColor: isDarkTheme ? Color(0xff3A3A3B) : Color(0xff4285F4),
       focusColor: isDarkTheme
           ? Color.fromARGB(255, 10, 17, 38)
@@ -30,7 +31,14 @@ class Styles {
       disabledColor: Colors.grey,
       cardColor: isDarkTheme ? Color(0xFF151515) : Colors.white,
       canvasColor: isDarkTheme ? Colors.black : Colors.grey[50],
-      brightness: isDarkTheme ? Brightness.dark : Brightness.light,
+      //brightness: isDarkTheme ? Brightness.dark : Brightness.light,
+      colorScheme: ColorScheme.fromSwatch().copyWith(
+        primary: Colors.blueGrey,
+        brightness: isDarkTheme ? Brightness.dark : Brightness.light,
+        surface: Color.fromARGB(255, 36, 37, 38),
+        onSurface: Colors.white,
+      ),
+
       buttonTheme: Theme.of(context).buttonTheme.copyWith(
             colorScheme: isDarkTheme ? ColorScheme.dark() : ColorScheme.light(),
             buttonColor: Color.fromARGB(66, 118, 187, 216),
