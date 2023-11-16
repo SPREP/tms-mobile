@@ -2,13 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/notification_model.dart';
-import 'package:macres/models/sun_model.dart';
+import 'package:macres/models/tide_model.dart';
 import 'package:macres/models/weather_model.dart';
-import 'package:macres/providers/sun_provider.dart';
+import 'package:macres/providers/tide_provider.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
-import 'package:macres/screens/weather_forcast/sun_slide.dart';
+import 'package:macres/screens/weather_forcast/tide_slide.dart';
 import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
 import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide%20copy.dart';
@@ -47,13 +47,13 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   ThreeHoursForecastModel currentThreeHoursData = ThreeHoursForecastModel();
   TwentyFourHoursForecastModel currentTwentyFourHoursData =
       TwentyFourHoursForecastModel();
-  SunModel currentSunData = SunModel();
+  TideModel currentTideData = TideModel(high: [], low: []);
 
   List<CurrentWeatherModel> currentWeatherData = [];
   List<TwentyFourHoursForecastModel> twentyFourHoursData = [];
   List<ThreeHoursForecastModel> threeHoursData = [];
   List<TenDaysForecastModel> tenDaysData = [];
-  List<SunModel> sunData = [];
+  List<TideModel> tideData = [];
 
   late NotificationModel notificationData;
 
@@ -134,10 +134,11 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
       }
     }
 
-    //Load data for sun
-    for (final item in sunData) {
+    //Load data for tide
+    currentTideData = TideModel(high: [], low: []);
+    for (final item in tideData) {
       if (convertToLocation(item.location.toString()) == selectedLocation) {
-        currentSunData = item;
+        currentTideData = item;
       }
     }
 
@@ -156,9 +157,10 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         Provider.of<TwentyFourHoursProvider>(context, listen: false);
     twentyFourHoursProvider.setData(currentTwentyFourHoursData);
 
-    //Sunrise Sunset
-    SunProvider sunProvider = Provider.of<SunProvider>(context, listen: false);
-    sunProvider.setData(currentSunData);
+    //Tide high and low
+    TideProvider tideProvider =
+        Provider.of<TideProvider>(context, listen: false);
+    tideProvider.setData(currentTideData);
 
     changeBgImage();
   }
@@ -329,79 +331,88 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
         final Map<String, dynamic> listData = jsonDecode(response.body);
 
-        if (listData['10days'].length > 0) {
+        // 10day
+        if (listData['10day'].length > 0) {
           tenDaysData.clear();
-          for (final item in listData['10days']) {
-            var dataModel = TenDaysForecastModel(
-                iconId: int.parse(item[1]),
-                day: item[2],
-                maxTemp: item[3],
-                minTemp: item[4],
-                location: item[0]);
+          listData['10day'].forEach((final String key, final value) {
+            for (var n in value) {
+              var dataModel = TenDaysForecastModel(
+                  iconId: int.parse(n['icon']),
+                  day: n['day'],
+                  maxTemp: n['max_temp'],
+                  minTemp: n['min_temp'],
+                  location: key);
 
-            tenDaysData.add(dataModel);
-          }
+              tenDaysData.add(dataModel);
+            }
+          });
         }
 
+        // Current forecast
         if (listData['current'].length > 0) {
           currentWeatherData.clear();
-          for (final item in listData['current']) {
+          listData['current'].forEach((final String key, final value) {
             var dataModel = CurrentWeatherModel(
-                location: item[0],
-                iconId: int.parse(item[1]),
-                currentTemp: item[2],
-                humidity: item[3],
-                pressure: item[4],
-                windDirection: item[5],
-                windSpeed: item[6],
-                visibility: item[7]);
+                location: key,
+                iconId: int.parse(value['icon']),
+                currentTemp: value['temperature'],
+                humidity: value['humidity'],
+                pressure: value['barometer'],
+                windDirection: value['wind_direction'],
+                windSpeed: value['wind_speed'],
+                visibility: value['visibility']);
             currentWeatherData.add(dataModel);
-          }
+          });
         }
 
+        // 3Hrs
         if (listData['3hrs'].length > 0) {
           threeHoursData.clear();
-          for (final item in listData['3hrs']) {
+          listData['3hrs'].forEach((final String key, final value) {
             threeHoursData.add(ThreeHoursForecastModel(
-              location: item[0],
-              iconId: int.parse(item[1]),
-              caption: item[2],
-              currentTemp: item[3],
-              windDirection: item[4],
-              windSpeed: item[5],
-              visibility: item[6],
+              location: key,
+              iconId: int.parse(value['icon']),
+              caption: value['condition'],
+              currentTemp: value['temp'],
+              windDirection: value['wind_direction'],
+              windSpeed: value['wind_speed'],
+              visibility: value['pressure'],
             ));
-          }
+          });
         }
 
+        // 24Hours
         if (listData['24hrs'].length > 0) {
           twentyFourHoursData.clear();
-          for (final item in listData['24hrs']) {
+          listData['24hrs'].forEach((final String key, final value) {
             twentyFourHoursData.add(TwentyFourHoursForecastModel(
-              location: item[0],
-              iconId: int.parse(item[1]),
-              caption: item[2],
-              maxTemp: item[3],
-              minTemp: item[4],
-              windDirection: item[5],
-              windSpeed: item[6],
-              warning: item[7],
+              location: key,
+              iconId: int.parse(value['icon']),
+              caption: value['condition'],
+              maxTemp: value['max_temp'],
+              minTemp: value['min_temp'],
+              windDirection: value['wind_direction'],
+              windSpeed: value['wind_speed'],
+              warning: value['warning'],
             ));
-          }
+          });
         }
-/*
-        if (listData['sun'].length > 0) {
-          sunData.clear();
-          for (final item in listData['sun']) {
-            sunData.add(
-              SunModel(
-                  sunrise: item['sunrise'].toString(),
-                  sunset: item['sunset'].toString(),
-                  location: item['location']),
-            );
-          }
+
+        // Tide
+        if (listData['tide'].length > 0) {
+          tideData.clear();
+          listData['tide'].forEach((final String key, final value) {
+            TideModel tide = new TideModel(low: [], high: [], location: key);
+            for (var item in value) {
+              tide.high =
+                  item['event'] == 'high' ? item['time'].split(',') : tide.high;
+              tide.low =
+                  item['event'] == 'low' ? item['time'].split(',') : tide.low;
+            }
+            tideData.add(tide);
+          });
         }
-*/
+
         setState(() {
           isLoading = false;
           changeCurrentData();
@@ -623,8 +634,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                             }
 
                             if (index == 3) {
-                              print('got 3');
-                              activeSlide = const SunSlide();
+                              activeSlide = const TideSlide();
                             }
 
                             return activeSlide;

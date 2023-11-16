@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:macres/providers/tide_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class TideSlide extends StatefulWidget {
@@ -11,85 +14,80 @@ class TideSlide extends StatefulWidget {
 class _TideSlideState extends State<TideSlide> {
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        Row(
+    return Consumer<TideProvider>(
+      builder: (context, TideProvider, child) {
+        var data = TideProvider.currentTideData;
+        return Column(
           children: [
-            SizedBox(
-              width: 30,
+            Row(
+              children: [
+                SizedBox(
+                  width: 30,
+                ),
+                Spacer(),
+                Text('TIDE TIME FOR TODAY'),
+                Spacer(),
+                SizedBox(
+                  width: 30,
+                ),
+              ],
             ),
-            Spacer(),
-            Text('Tides'),
-            Spacer(),
-            Icon(
-              Icons.favorite,
-              color: Colors.white,
+            const SizedBox(
+              height: 40,
             ),
-            SizedBox(
-              width: 30,
+            Padding(
+              padding: EdgeInsets.only(left: 30, right: 30),
+              child: Row(
+                children: [],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.arrow_upward,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text('High Tide: ' + data.high.toString()),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.arrow_downward,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'Low Tide: ' + data.low.toString(),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            const SizedBox(
+              height: 30,
             ),
           ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        ListTile(
-          leading: BoxedIcon(
-            WeatherIcons.sunrise,
-            color: Colors.white,
-          ),
-          title: Text('Sunrise',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          trailing: Text(
-            '7:17am/E',
-            style: TextStyle(
-                color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-        ),
-        ListTile(
-          leading: BoxedIcon(
-            WeatherIcons.sunset,
-            color: Colors.white,
-          ),
-          title: Text('Sunset',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          trailing: Text(
-            '6:17pm/NW',
-            style: TextStyle(
-                color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-        ),
-        ListTile(
-          leading: BoxedIcon(
-            WeatherIcons.moon_first_quarter,
-            color: Colors.white,
-          ),
-          title: Text('Moonrise',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          trailing: Text(
-            '6:17pm/NW',
-            style: TextStyle(
-                color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-        ),
-        ListTile(
-          leading: BoxedIcon(
-            WeatherIcons.moon_third_quarter,
-            color: Colors.white,
-          ),
-          title: Text('Moonset',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          trailing: Text(
-            '7:10am/NW',
-            style: TextStyle(
-                color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
