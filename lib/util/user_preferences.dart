@@ -31,7 +31,6 @@ class UserPreferences {
     var isLogin;
     if (token != null) {
       isLogin = await AuthProvider().isLogin(user);
-      print('isLogin: $isLogin');
       if (isLogin == false) {
         user.token = null;
       }

@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/user_model.dart';
 import 'package:macres/util/user_preferences.dart';
-import 'package:path/path.dart';
 
 enum Status {
   NotLoggedIn,
@@ -26,31 +23,60 @@ class AuthProvider with ChangeNotifier {
   Status get loggedInStatus => _loggedInStatus;
   Status get registeredInStatus => _registeredInStatus;
 
+  Future<Map<String, dynamic>> forgot(String email) async {
+    var result;
+    final Map<String, dynamic> forgotData = {
+      'user': {'mail': email}
+    };
+
+    Response response = await post(
+      Uri.parse(AppConfig.forgotPasswordEndpoint),
+      body: json.encode(forgotData),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode < 500) {
+      result = {
+        'status_code': response.statusCode,
+        'message': json.decode(response.body)['message']
+      };
+    } else {
+      result = {
+        'status_code': response.statusCode,
+        'message': 'Please try again later',
+      };
+    }
+
+    return result;
+  }
+
   Future<bool> isLogin(UserModel user) async {
     Response response = await get(
       Uri.parse("${AppConfig.baseUrl}/user/${user.userId}?_format=json"),
       headers: {
         'Content-Type': 'application/json',
+        'Cookie': user.token.toString()
       },
     );
 
     if (response.statusCode == 200) {
       return true;
     } else {
+      UserPreferences userp = new UserPreferences();
+      userp.removeUser();
       return false;
     }
   }
 
   Future<bool> logout() async {
-    print('run logout');
+    UserPreferences userp = new UserPreferences();
+    userp.removeUser();
     Response response = await post(
       Uri.parse(AppConfig.logoutEndpoint),
       headers: {
         'Content-Type': 'application/json',
       },
     );
-
-    print(response.body);
 
     if (response.statusCode == 200) {
       return true;
@@ -82,8 +108,9 @@ class AuthProvider with ChangeNotifier {
       var header = response.headers;
       var userData = responseData;
       UserModel authUser = UserModel.fromJson(userData);
-      authUser.token = header['set-cookie'];
 
+      var cookiesJar = header['set-cookie']!.split(';');
+      authUser.token = cookiesJar[0];
       UserPreferences().saveUser(authUser);
 
       _loggedInStatus = Status.LoggedIn;
@@ -94,14 +121,22 @@ class AuthProvider with ChangeNotifier {
         'message': 'Successful',
         'user': authUser
       };
-    } else {
+    } else if (response.statusCode == 400) {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
       result = {
         'status_code': response.statusCode,
         'message': json.decode(response.body)['message']
       };
+    } else {
+      _loggedInStatus = Status.NotLoggedIn;
+      notifyListeners();
+      result = {
+        'status_code': response.statusCode,
+        'message': 'Please try again later',
+      };
     }
+
     return result;
   }
 

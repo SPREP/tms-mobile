@@ -64,7 +64,10 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
                                   builder: (context) => LoginScreen()),
                             );
                           },
-                          child: Text(''), //login
+                          child: Text(
+                            'Login',
+                            style: TextStyle(color: Colors.white),
+                          ), //login or Logou
                         );
                       } else {
                         return TextButton(
@@ -73,7 +76,10 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
                               AuthProvider().logout();
                             });
                           },
-                          child: Text(''), //logout
+                          child: Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.white),
+                          ), //logout
                         );
                       }
                     }),

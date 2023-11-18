@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:macres/models/user_model.dart';
 import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/providers/user_provider.dart';
+import 'package:macres/screens/user/forgot_screen.dart';
 import 'package:macres/screens/user/signup_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,8 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Text("Forgot password?",
               style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
-//            Navigator.pushReplacementNamed(context, '/reset-password');
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ForgotScreen()));
           },
         ),
         TextButton(
