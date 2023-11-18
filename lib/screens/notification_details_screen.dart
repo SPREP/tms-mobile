@@ -50,42 +50,36 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
 
     flutterTts.setStartHandler(() {
       setState(() {
-        print("Playing");
         ttsState = TtsState.playing;
       });
     });
 
     flutterTts.setCompletionHandler(() {
       setState(() {
-        print("Complete");
         ttsState = TtsState.stopped;
       });
     });
 
     flutterTts.setCancelHandler(() {
       setState(() {
-        print("Cancel");
         ttsState = TtsState.stopped;
       });
     });
 
     flutterTts.setPauseHandler(() {
       setState(() {
-        print("Paused");
         ttsState = TtsState.paused;
       });
     });
 
     flutterTts.setContinueHandler(() {
       setState(() {
-        print("Continued");
         ttsState = TtsState.continued;
       });
     });
 
     flutterTts.setErrorHandler((msg) {
       setState(() {
-        print("error: $msg");
         ttsState = TtsState.stopped;
       });
     });
