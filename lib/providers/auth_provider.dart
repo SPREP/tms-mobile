@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/user_model.dart';
+import 'package:macres/providers/user_provider.dart';
 import 'package:macres/util/user_preferences.dart';
 
 enum Status {
@@ -79,10 +80,84 @@ class AuthProvider with ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
+      _loggedInStatus = Status.LoggedOut;
+      notifyListeners();
       return true;
     } else {
       return false;
     }
+  }
+
+  Future getCsrfToken() async {
+    Future<UserModel> getUser() => UserPreferences().getUser();
+    final user = await getUser();
+
+    Response response = await get(
+      Uri.parse("${AppConfig.localUrl}/session/token"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': user.token.toString()
+      },
+    );
+
+    return response.body;
+  }
+
+  Future<Map<String, dynamic>> profileUpdate(List data) async {
+    var result;
+
+    Future<UserModel> getUser() => UserPreferences().getUser();
+    final user = await getUser();
+
+    //final Map<String, dynamic> updateData = {'user': data};
+
+    //Get CSRF token
+    final csrfToken = await getCsrfToken();
+
+    Response response = await patch(
+      Uri.parse("${AppConfig.baseUrl}/user/${user.userId}?_format=json"),
+      body: json.encode(data),
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': user.token.toString(),
+        'X-CSRF-Token': csrfToken,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      UserModel updatedUser = UserModel.fromJson(responseData);
+      updatedUser.token = user.token; //<-- put back the token
+      UserPreferences().saveUser(updatedUser);
+
+      //notify there's an update to user
+      UserProvider userProvider = new UserProvider();
+      userProvider.setUser(updatedUser);
+      userProvider.notifyListeners();
+
+      result = {
+        'status_code': response.statusCode,
+        'message': 'Successful',
+        'user': updatedUser
+      };
+    } else if (response.statusCode == 400) {
+      _loggedInStatus = Status.NotLoggedIn;
+      notifyListeners();
+      result = {
+        'status_code': response.statusCode,
+        'message': json.decode(response.body)['message']
+      };
+    } else {
+      _loggedInStatus = Status.NotLoggedIn;
+      notifyListeners();
+      result = {
+        'status_code': response.statusCode,
+        'message': 'Please try again later',
+      };
+    }
+
+    return result;
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
@@ -112,7 +187,6 @@ class AuthProvider with ChangeNotifier {
       var cookiesJar = header['set-cookie']!.split(';');
       authUser.token = cookiesJar[0];
       UserPreferences().saveUser(authUser);
-
       _loggedInStatus = Status.LoggedIn;
       notifyListeners();
 
