@@ -7,7 +7,10 @@ import 'package:macres/screens/national_number_screen.dart';
 import 'package:macres/screens/settings_screen.dart';
 import 'package:macres/screens/tabs_screen.dart';
 import 'package:macres/screens/user/login_screen.dart';
+import 'package:macres/screens/user/profile_screen.dart';
+import 'package:macres/screens/user/signup_screen.dart';
 import 'package:macres/util/user_preferences.dart';
+import 'package:provider/provider.dart';
 
 class MainDrawerWidget extends StatefulWidget {
   MainDrawerWidget({super.key});
@@ -42,21 +45,59 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 60,
-                  child: Icon(
-                    Icons.account_circle,
-                    size: 100,
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
                 FutureBuilder(
                     future: getUserData(),
                     builder: (context, snapshot) {
-                      if (snapshot.data?.token == null) {
-                        return TextButton(
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return CircleAvatar(
+                          radius: 60,
+                          child: ClipOval(
+                              child: Image.network(
+                            snapshot.data!.photo.toString(),
+                            height: 100,
+                            width: 100,
+                            fit: BoxFit.fill,
+                            alignment: Alignment.center,
+                          )),
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    }),
+                SizedBox(
+                  width: 20,
+                ),
+                Consumer<AuthProvider>(builder: (context, authProvider, child) {
+                  if (authProvider.loggedInStatus == Status.LoggedIn) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => ProfileScreen()),
+                              );
+                            },
+                            child: Text(
+                              'Edit',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                        TextButton(
+                            onPressed: () {
+                              authProvider.logout();
+                            },
+                            child: Text(
+                              'Logout',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                      ],
+                    );
+                  } else {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextButton(
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -68,21 +109,24 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
                             'Login',
                             style: TextStyle(color: Colors.white),
                           ), //login or Logou
-                        );
-                      } else {
-                        return TextButton(
+                        ),
+                        TextButton(
                           onPressed: () {
-                            setState(() {
-                              AuthProvider().logout();
-                            });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SignUpScreen()),
+                            );
                           },
                           child: Text(
-                            'Logout',
+                            'Sign Up',
                             style: TextStyle(color: Colors.white),
-                          ), //logout
-                        );
-                      }
-                    }),
+                          ), //login or Logou
+                        ),
+                      ],
+                    );
+                  }
+                }),
               ],
             ),
           ),

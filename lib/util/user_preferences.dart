@@ -1,5 +1,4 @@
 import 'package:macres/models/user_model.dart';
-import 'package:macres/providers/auth_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences {
@@ -10,6 +9,8 @@ class UserPreferences {
     prefs.setString("name", user.name!);
     prefs.setString("email", user.email!);
     prefs.setString("token", user.token!);
+    prefs.setString("photo", user.photo!);
+
     return true;
   }
 
@@ -20,22 +21,15 @@ class UserPreferences {
     String? name = prefs.getString("name");
     String? email = prefs.getString("email");
     String? token = prefs.getString("token");
+    String? photo = prefs.getString("photo");
 
     var user = UserModel(
       userId: userId,
       name: name,
       email: email,
       token: token,
+      photo: photo,
     );
-
-    var isLogin;
-    if (token != null) {
-      isLogin = await AuthProvider().isLogin(user);
-      if (isLogin == false) {
-        user.token = null;
-      }
-    }
-
     return user;
   }
 
@@ -46,5 +40,6 @@ class UserPreferences {
     prefs.remove("name");
     prefs.remove("email");
     prefs.remove("token");
+    prefs.remove("photo");
   }
 }

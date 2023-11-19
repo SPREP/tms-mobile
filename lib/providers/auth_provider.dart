@@ -79,10 +79,63 @@ class AuthProvider with ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
+      _loggedInStatus = Status.LoggedOut;
+      notifyListeners();
       return true;
     } else {
       return false;
     }
+  }
+
+  Future<Map<String, dynamic>> profileUpdate(UserModel user) async {
+    var result;
+
+    final Map<String, dynamic> loginData = {
+      'user': {'mail': user.email}
+    };
+
+    Response response = await post(
+      Uri.parse(AppConfig.loginEndpoint),
+      body: json.encode(loginData),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      //get session cookie
+      var header = response.headers;
+      var userData = responseData;
+      UserModel authUser = UserModel.fromJson(userData);
+
+      var cookiesJar = header['set-cookie']!.split(';');
+      authUser.token = cookiesJar[0];
+      UserPreferences().saveUser(authUser);
+      _loggedInStatus = Status.LoggedIn;
+      notifyListeners();
+
+      result = {
+        'status_code': response.statusCode,
+        'message': 'Successful',
+        'user': authUser
+      };
+    } else if (response.statusCode == 400) {
+      _loggedInStatus = Status.NotLoggedIn;
+      notifyListeners();
+      result = {
+        'status_code': response.statusCode,
+        'message': json.decode(response.body)['message']
+      };
+    } else {
+      _loggedInStatus = Status.NotLoggedIn;
+      notifyListeners();
+      result = {
+        'status_code': response.statusCode,
+        'message': 'Please try again later',
+      };
+    }
+
+    return result;
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
@@ -112,7 +165,6 @@ class AuthProvider with ChangeNotifier {
       var cookiesJar = header['set-cookie']!.split(';');
       authUser.token = cookiesJar[0];
       UserPreferences().saveUser(authUser);
-
       _loggedInStatus = Status.LoggedIn;
       notifyListeners();
 
