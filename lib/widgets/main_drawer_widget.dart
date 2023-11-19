@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:macres/models/user_model.dart';
 import 'package:macres/providers/auth_provider.dart';
+import 'package:macres/providers/user_provider.dart';
 import 'package:macres/screens/about_screen.dart';
 import 'package:macres/screens/help_screen.dart';
 import 'package:macres/screens/national_number_screen.dart';
@@ -22,8 +23,6 @@ class MainDrawerWidget extends StatefulWidget {
 class _MainDrawerWidgetState extends State<MainDrawerWidget> {
   @override
   Widget build(BuildContext context) {
-    Future<UserModel> getUserData() => UserPreferences().getUser();
-
     return Drawer(
       child: Column(
         children: [
@@ -45,25 +44,37 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FutureBuilder(
-                    future: getUserData(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return CircleAvatar(
-                          radius: 60,
-                          child: ClipOval(
-                              child: Image.network(
-                            snapshot.data!.photo.toString(),
+                Consumer2<UserProvider, AuthProvider>(
+                  builder: (context, userProvider, authProvider, child) {
+                    if (authProvider.loggedInStatus == Status.LoggedIn) {
+                      return CircleAvatar(
+                        radius: 60,
+                        child: ClipOval(
+                          child: Image.network(
+                            userProvider.user.photo.toString(),
                             height: 100,
                             width: 100,
                             fit: BoxFit.fill,
                             alignment: Alignment.center,
-                          )),
-                        );
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    }),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return CircleAvatar(
+                        radius: 60,
+                        child: ClipOval(
+                          child: Image.network(
+                            'https://macres-media-storage.s3.ap-southeast-2.amazonaws.com/user.png',
+                            height: 100,
+                            width: 100,
+                            fit: BoxFit.fill,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
                 SizedBox(
                   width: 20,
                 ),

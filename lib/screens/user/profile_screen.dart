@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:macres/models/user_model.dart';
 import 'package:macres/providers/auth_provider.dart';
+import 'package:macres/util/get_image_url.dart';
+import 'package:macres/util/upload_file.dart';
 import 'package:macres/util/user_preferences.dart';
-import 'package:macres/widgets/image_input.dart';
 import 'package:provider/provider.dart';
+import 'package:path/path.dart' as p;
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -17,7 +19,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final formKey = new GlobalKey<FormState>();
 
-  late String _username;
   File _selectedImage = new File('');
 
   validateEmail() {}
@@ -27,14 +28,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     AuthProvider auth = Provider.of<AuthProvider>(context);
     Future<UserModel> getUserData() => UserPreferences().getUser();
 
-    final usernameField = TextFormField(
-      autofocus: false,
-      validator: (value) => value!.isEmpty ? "Please enter email" : null,
-      onSaved: (value) => _username = value!,
-      decoration:
-          InputDecoration(label: Text("Email"), icon: Icon(Icons.email)),
-    );
-
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -43,37 +36,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
 
-    var doProfile = () {
+    var doProfile = () async {
       final form = formKey.currentState;
 
-      if (form!.validate()) {
-        form.save();
-        UserModel user = new UserModel();
-        final Future successfulMessage = auth.profileUpdate(user);
+      //if  _selectedImage is not empty then upload the file to get the url
+      if (_selectedImage != '') {
+        GetImageUrl imageUrl = GetImageUrl();
+        await imageUrl.call(p.extension(_selectedImage.path));
+        if (imageUrl.success) {
+          try {
+            UploadFile uploadFile = UploadFile();
+            await uploadFile.call(
+                imageUrl.uploadUrl, File(_selectedImage.path));
 
-        successfulMessage.then((response) {
-          if (response['status_code'] == 200) {
-            Flushbar(
-              title: "Profile Password Success",
-              message: response['message'],
-              duration: Duration(seconds: 3),
-            ).show(context).then((value) => Navigator.pop(context));
-          } else if (response['status_code'] < 500) {
-            Flushbar(
-              title: "Profile Password",
-              message: response['message'],
-              duration: Duration(seconds: 3),
-            ).show(context);
-          } else {
-            Flushbar(
-              title: "Error",
-              message: "Try again later",
-              duration: Duration(seconds: 5),
-            ).show(context);
+            if (uploadFile.isUploaded != false && uploadFile.isUploaded) {
+              var userUpdate = [
+                {'photo': imageUrl.downloadUrl}
+              ];
+              //Now its time to update the user
+              final Future successfulMessage = auth.profileUpdate(userUpdate);
+
+              successfulMessage.then((response) {
+                if (response['status_code'] < 500) {
+                  Flushbar(
+                    title: "User Profile",
+                    message: response['message'],
+                    duration: Duration(seconds: 3),
+                  ).show(context).then((value) => Navigator.pop(context));
+                } else {
+                  Flushbar(
+                    title: "Failed to Update",
+                    message: response['message'],
+                    duration: Duration(seconds: 5),
+                  ).show(context);
+                }
+              });
+
+              return true;
+            } else {
+              throw uploadFile.message;
+            }
+          } catch (e) {
+            throw ("Error ${e.toString()}");
           }
-        });
-      } else {
-        print("form is invalid");
+        }
       }
     };
 
@@ -126,7 +132,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: 20.0),
                         Text('Email: ' + snapshot.data!.email.toString()),
                         SizedBox(height: 20.0),
-                        longButtons("Update", doProfile, context),
+                        SizedBox(
+                          height: 45,
+                          width: 200,
+                          child: ElevatedButton(
+                            onPressed: doProfile,
+                            child: Text("Update"),
+                          ),
+                        ),
                         SizedBox(height: 5.0),
                       ],
                     ),
@@ -142,17 +155,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 body: CircularProgressIndicator());
           }
         });
-  }
-
-  Widget longButtons(String title, fun, context) {
-    return SizedBox(
-      height: 45,
-      width: 200,
-      child: ElevatedButton(
-        onPressed: fun,
-        child: Text(title),
-      ),
-    );
   }
 
   Future _getImage() async {
