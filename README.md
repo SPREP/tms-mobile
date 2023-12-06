@@ -55,6 +55,11 @@ flutter run
 
 If you'd like to contribute to this project, please follow our [Contributing Guidelines](CONTRIBUTING.md).
 
+## Todo
+
+Add instructions for setting up Firebase
+Add instructions for connection to local backend
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
