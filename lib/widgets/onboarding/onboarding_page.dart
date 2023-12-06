@@ -1,6 +1,5 @@
-//import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:macres/models/settings_model.dart';
 import 'package:macres/screens/onboarding/onboarding_first_screen.dart';
 import 'package:macres/screens/onboarding/onboarding_second_screen.dart';
@@ -25,21 +24,20 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Language? _selectedLanguage = Language.en;
 
   final _userLocationKey = GlobalKey<FormState>();
-  //late FirebaseMessaging fcmInstance;
+  late FirebaseMessaging fcmInstance;
 
   bool isError = false;
-/*
+
   void setupPushNotifications() async {
     final fcm = FirebaseMessaging.instance;
     fcm.requestPermission();
     fcmInstance = fcm;
   }
-  */
 
   @override
   void initState() {
     super.initState();
-    //setupPushNotifications();
+    setupPushNotifications();
   }
 
   void _selectedUserLocation(String value) {
@@ -67,8 +65,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
         prefs.setString('user_language', _selectedLanguage!.name.toString());
 
         //Push notification subscribe user
-        //fcmInstance.subscribeToTopic(_selectedLanguage.toLowerCase());
-        //fcmInstance.subscribeToTopic(_selectedLocation.toLowerCase());
+        fcmInstance.subscribeToTopic(_selectedLanguage!.name.toString());
+        fcmInstance.subscribeToTopic(_selectedLocation.toLowerCase());
       }
     }
   }

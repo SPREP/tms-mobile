@@ -102,7 +102,7 @@ class WeatherModel {
             : WeatherIcons.night_showers;
         break;
       default:
-        throw ('No icon found');
+        icon = Icons.question_mark;
     }
 
     return Icon(

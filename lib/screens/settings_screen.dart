@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:macres/providers/dark_theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -20,8 +21,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   bool light = true;
 
+  late FirebaseMessaging fcmInstance;
+
+  bool isError = false;
+
+  void setupPushNotifications() async {
+    final fcm = FirebaseMessaging.instance;
+    fcm.requestPermission();
+    fcmInstance = fcm;
+  }
+
   void initState() {
     getDefault();
+    setupPushNotifications();
     super.initState();
   }
 
@@ -50,9 +62,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     prefs.setString('user_language', _selectedLanguage!.name.toString());
 
     //@TODO:
+
     //Push notification subscribe user
-    //fcmInstance.subscribeToTopic(_selectedLanguage.toLowerCase());
-    //fcmInstance.subscribeToTopic(_selectedLocation.toLowerCase());
+    fcmInstance.subscribeToTopic(_selectedLanguage!.name.toString());
+    fcmInstance.subscribeToTopic(_selectedLocation!.name.toString());
   }
 
   @override

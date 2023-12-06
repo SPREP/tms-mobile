@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macres/config/app_config.dart';
 import 'package:macres/models/user_model.dart';
 import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/providers/user_provider.dart';
@@ -12,6 +13,7 @@ import 'package:macres/screens/user/profile_screen.dart';
 import 'package:macres/screens/user/signup_screen.dart';
 import 'package:macres/util/user_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainDrawerWidget extends StatefulWidget {
   MainDrawerWidget({super.key});
@@ -237,11 +239,22 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
           ),
           const Spacer(),
           const Text(
-            'Version 1.0',
+            'Version ' + AppConfig.version,
             style: TextStyle(fontSize: 13),
           ),
           const Text('Tonga Meteorological Service',
               style: TextStyle(fontSize: 13)),
+          InkWell(
+            onTap: () => launchUrl(
+                Uri.parse('http://app.met.gov.to/app/privacy-policy')),
+            child: Text(
+              'Privacy Policy',
+              style: TextStyle(
+                  fontSize: 13,
+                  decoration: TextDecoration.underline,
+                  color: Colors.blue),
+            ),
+          ),
           const SizedBox(
             height: 50,
           ),
