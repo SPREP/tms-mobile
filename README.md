@@ -22,8 +22,9 @@ Provide instructions on how to install your app. Include any dependencies or spe
 2. Change directory to the app folder with `cd your-flutter-app`
 3. Run `flutter pub get` to get the required dependencies.
 4. Copy google-services.json-default as google-services.json (in ./android/app/src/google-services.json-default)
-5. You may also need to run `flutter gen-l10n` to generate internationalisation files
-4. Connect your device/emulator and run `flutter run` to start the app.
+5. Copy app_config.dart-default as app_config.dart (in ./lib/config/app_config.dart)
+6. You may also need to run `flutter gen-l10n` to generate internationalisation files
+7. Connect your device/emulator and run `flutter run` to start the app.
 
 ## Usage
 
