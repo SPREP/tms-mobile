@@ -8,11 +8,9 @@ import 'package:macres/providers/tide_provider.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
-import 'package:macres/screens/weather_forcast/tide_slide.dart';
 import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
 import 'package:macres/screens/weather_forcast/twentyfour_hrs_and_tide_slide.dart';
-import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide%20copy.dart';
 import 'package:macres/widgets/notification_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -516,7 +514,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                         children: [
                           const Spacer(),
                           Text(
-                            "${currentData.currentTemp}\u00B0",
+                            "${currentData.currentTemp}\u00B0${selectedTempretureUnit.toUpperCase()}",
                             style: const TextStyle(fontSize: 50),
                           ),
                           const Spacer(),
