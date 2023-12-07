@@ -621,14 +621,14 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           itemCount: _itemCount,
                           itemBuilder: (_, index) {
                             if (index == 0) {
-                              activeSlide = const TenDaysSlide();
+                              activeSlide = const TwentyFourHoursSlide();
                             }
                             if (index == 1) {
                               activeSlide = const ThreeHoursSlide();
                             }
 
                             if (index == 2) {
-                              activeSlide = const TwentyFourHoursSlide();
+                              activeSlide = const TenDaysSlide();
                             }
 
                             if (index == 3) {
