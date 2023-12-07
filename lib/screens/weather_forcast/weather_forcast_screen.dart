@@ -11,6 +11,7 @@ import 'package:macres/providers/twentyfour_hours_provider.dart';
 import 'package:macres/screens/weather_forcast/tide_slide.dart';
 import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
+import 'package:macres/screens/weather_forcast/twentyfour_hrs_and_tide_slide.dart';
 import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide%20copy.dart';
 import 'package:macres/widgets/notification_widget.dart';
 import 'package:provider/provider.dart';
@@ -621,7 +622,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           itemCount: _itemCount,
                           itemBuilder: (_, index) {
                             if (index == 0) {
-                              activeSlide = const TwentyFourHoursSlide();
+                              // activeSlide = const TwentyFourHoursSlide();
+                              activeSlide = TwentyFourHoursAndTideSlide();
                             }
                             if (index == 1) {
                               activeSlide = const ThreeHoursSlide();
@@ -631,9 +633,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                               activeSlide = const TenDaysSlide();
                             }
 
-                            if (index == 3) {
-                              activeSlide = const TideSlide();
-                            }
+                            // if (index == 3) {
+                            //   activeSlide = const TideSlide();
+                            // }
 
                             return activeSlide;
                           },
