@@ -85,10 +85,10 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
   void setLocation() async {
     final prefs = await SharedPreferences.getInstance();
-    final setLocation = prefs.getString('weather_location');
+    final setLocation = prefs.getString('user_location');
 
     if (setLocation == null) {
-      prefs.setString('weather_location', selectedLocation.name.toString());
+      prefs.setString('user_location', selectedLocation.name.toString());
     } else {
       selectedLocation = LocationExtension.fromName(setLocation)!;
     }
@@ -195,8 +195,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   }
 
   void changeLocation(Location newLocation) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('weather_location', newLocation.name.toString());
     changeCurrentData();
   }
 
