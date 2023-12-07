@@ -38,7 +38,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   final PageController myController = PageController(
     keepPage: true,
   );
-  final _itemCount = 4;
+  final _itemCount = 3;
   dynamic activeSlide;
   String selectedTempretureUnit = 'c';
 
@@ -622,7 +622,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           itemCount: _itemCount,
                           itemBuilder: (_, index) {
                             if (index == 0) {
-                              // activeSlide = const TwentyFourHoursSlide();
                               activeSlide = TwentyFourHoursAndTideSlide();
                             }
                             if (index == 1) {
@@ -632,10 +631,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                             if (index == 2) {
                               activeSlide = const TenDaysSlide();
                             }
-
-                            // if (index == 3) {
-                            //   activeSlide = const TideSlide();
-                            // }
 
                             return activeSlide;
                           },
