@@ -573,6 +573,21 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           ),
                         ],
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Current conditions at 3pm (the time)',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
