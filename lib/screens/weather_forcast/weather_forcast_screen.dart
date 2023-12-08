@@ -357,7 +357,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                 pressure: value['barometer'],
                 windDirection: value['wind_direction'],
                 windSpeed: value['wind_speed'],
-                visibility: value['visibility']);
+                visibility: value['visibility'],
+                observedDate: value['observed_date'],
+            );
             currentWeatherData.add(dataModel);
           });
         }
@@ -576,13 +578,13 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                       Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              'Current conditions at 3pm (the time)',
+                              'Current conditions at ${currentData.getObservedTime()}',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.white,
+                                color: Colors.white70,
                               ),
                             ),
                           ],
