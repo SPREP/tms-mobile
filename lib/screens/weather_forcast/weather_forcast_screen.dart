@@ -484,26 +484,16 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                               });
                             },
                           ),
-                          const Spacer(),
-                          Icon(
-                            selectedTempretureUnit == 'c'
-                                ? WeatherIcons.celsius
-                                : WeatherIcons.fahrenheit,
-                            color: Colors.white,
-                            size: 30.0,
-                          ),
-                          /*
-                      const Spacer(),
-                      const Row(
-                        children: [
-                          Text('\u2103'),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text('\u2109'),
-                        ],
-                      ),
-                      */
+                          // @todo - remove if not needed in the future.
+                          // Degrees icon.
+                          // const Spacer(),
+                          // Icon(
+                          //   selectedTempretureUnit == 'c'
+                          //       ? WeatherIcons.celsius
+                          //       : WeatherIcons.fahrenheit,
+                          //   color: Colors.white,
+                          //   size: 30.0,
+                          // ),
                         ],
                       ),
                       const SizedBox(
