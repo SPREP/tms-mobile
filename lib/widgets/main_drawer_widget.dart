@@ -25,6 +25,38 @@ class MainDrawerWidget extends StatefulWidget {
 class _MainDrawerWidgetState extends State<MainDrawerWidget> {
   @override
   Widget build(BuildContext context) {
+    Future<UserModel> getUserData() => UserPreferences().getUser();
+
+    Consumer<AuthProvider> authConsumer = Consumer<AuthProvider>(builder: (context, authProvider, child) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => ProfileScreen()),
+                );
+              },
+              child: Text(
+                'Edit',
+                style: TextStyle(color: Colors.white),
+              )),
+          TextButton(
+              onPressed: () {
+                authProvider.logout();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const TabsScreen()),
+                );
+              },
+              child: Text(
+                'Logout',
+                style: TextStyle(color: Colors.white),
+              )),
+        ],
+      );
+    });
+
     return Drawer(
       child: Column(
         children: [
@@ -46,6 +78,7 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Avatar
                 Consumer2<UserProvider, AuthProvider>(
                   builder: (context, userProvider, authProvider, child) {
                     if (authProvider.loggedInStatus == Status.LoggedIn) {
@@ -80,66 +113,53 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
                 SizedBox(
                   width: 20,
                 ),
-                Consumer<AuthProvider>(builder: (context, authProvider, child) {
-                  if (authProvider.loggedInStatus == Status.LoggedIn) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextButton(
+                // Login/Logout buttons.
+                FutureBuilder(
+                  future: getUserData(), // Replace _yourFutureFunction with the actual function that returns a Future
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // Show a loading indicator while waiting for the future to complete
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      // Show an error message if the future throws an error
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.data?.token == null) {
+                      // Render the UI based on the data from the future
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextButton(
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => ProfileScreen()),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginScreen()),
                               );
                             },
                             child: Text(
-                              'Edit',
+                              'Login',
                               style: TextStyle(color: Colors.white),
-                            )),
-                        TextButton(
+                            ),
+                          ),
+                          TextButton(
                             onPressed: () {
-                              authProvider.logout();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => SignUpScreen()),
+                              );
                             },
                             child: Text(
-                              'Logout',
+                              'Sign Up',
                               style: TextStyle(color: Colors.white),
-                            )),
-                      ],
-                    );
-                  } else {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginScreen()),
-                            );
-                          },
-                          child: Text(
-                            'Login',
-                            style: TextStyle(color: Colors.white),
-                          ), //login or Logou
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SignUpScreen()),
-                            );
-                          },
-                          child: Text(
-                            'Sign Up',
-                            style: TextStyle(color: Colors.white),
-                          ), //login or Logou
-                        ),
-                      ],
-                    );
-                  }
-                }),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      // Render Edit and Logout buttons.
+                      return authConsumer;
+                    }
+                  },
+                ),
               ],
             ),
           ),
