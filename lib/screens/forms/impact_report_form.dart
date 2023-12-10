@@ -3,6 +3,7 @@ import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
 import 'package:macres/models/user_model.dart';
 import 'package:macres/util/user_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/checkbox_widget.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
@@ -54,6 +55,24 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
   bool? waterSupply = false;
   bool? phoneMobile = false;
   bool? internet = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Set default value to match Location settings.
+    _loadSelectedLocation();
+  }
+
+  Future<void> _loadSelectedLocation() async {
+    final prefs = await SharedPreferences.getInstance();
+    var location = prefs.getString('user_location');
+    if (location != false) {
+      setState(() {
+        _selectedLocation = LocationExtension.fromName(location);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

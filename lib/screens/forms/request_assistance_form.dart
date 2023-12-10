@@ -71,6 +71,7 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
 
   late Position userPosition;
 
+  @override
   void initState() {
     // var response = _getCurrentUserLocation();
     // if (!response.isNull) {
