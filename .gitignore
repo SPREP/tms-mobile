@@ -51,3 +51,6 @@ GoogleService-Info.plist
 app_config.dart
 
 key.properties
+
+# vscode related
+.vscode/
