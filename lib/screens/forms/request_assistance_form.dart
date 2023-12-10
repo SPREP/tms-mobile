@@ -3,6 +3,7 @@ import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
 import 'package:macres/models/user_model.dart';
 import 'package:macres/util/user_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/checkbox_widget.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
@@ -70,14 +71,26 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
 
   late Position userPosition;
 
-/*
   void initState() {
-    var response = _getCurrentUserLocation();
-    if (!response.isNull) {
-      userPosition = response;
+    // var response = _getCurrentUserLocation();
+    // if (!response.isNull) {
+    //   userPosition = response;
+    // }
+    super.initState();
+
+    // Set default value to match Location settings.
+    _loadSelectedLocation();
+  }
+
+  Future<void> _loadSelectedLocation() async {
+    final prefs = await SharedPreferences.getInstance();
+    var location = prefs.getString('user_location');
+    if (location != false) {
+      setState(() {
+        _selectedLocation = LocationExtension.fromName(location);
+      });
     }
   }
-  */
 
   _getCurrentUserLocation() async {
     // Check if location services are enabled.
