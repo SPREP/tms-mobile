@@ -89,7 +89,7 @@ class _ThreeHoursSlideState extends State<ThreeHoursSlide> {
                             size: 30,
                           ),
                           const Text('Visibility'),
-                          Text(data.visibility.toString()),
+                          Text('${data.visibility} m'),
                         ]),
                   ),
                   const SizedBox(
