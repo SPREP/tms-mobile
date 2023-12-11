@@ -171,7 +171,10 @@ class _TabsScreenState extends State<TabsScreen> {
         activePage = WeatherForcastScreen(
             onCurrentWeatherChange: _onCurrentWeatherChange);
         activePageTitle = DateFormat("EEE dd MMM yyyy").format(DateTime.now());
-        actionButtons = [actionFilter()];
+
+        // Remove Action items that include Celsius or Fahrenheit selection.
+        // @TODO if not needed then clean up the code.
+        // actionButtons = [actionFilter()];
       }
 
       if (_selectedPageIndex == 1) {
