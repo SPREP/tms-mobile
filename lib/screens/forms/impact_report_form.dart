@@ -460,7 +460,7 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
             const SizedBox(height: 50),
             const Align(
               alignment: Alignment.centerLeft,
-              child: Text('Has anyone missing?'),
+              child: Text('Is anyone missing?'),
             ),
             Row(
               children: [

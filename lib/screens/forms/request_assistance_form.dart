@@ -448,7 +448,7 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Select what you really needed now.',
+                'Select your immediate needs from the list.',
               ),
             ),
             const SizedBox(height: 20),
@@ -528,7 +528,7 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Select what you need an assistance with from the list below.',
+                'Select what you need assistance with.',
               ),
             ),
             const SizedBox(height: 20),
