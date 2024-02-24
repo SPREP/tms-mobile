@@ -51,7 +51,7 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
                         style: const TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold))),
                 trailing: Text(
-                  '${item.maxTemp}\u00B0/${item.minTemp}\u00B0',
+                  'Max ${item.maxTemp}\u00B0 | Min ${item.minTemp}\u00B0',
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 15,

@@ -45,5 +45,12 @@ app.*.map.json
 
 # Google keys
 google-services.json
+GoogleService-Info.plist
+
+# Ignore app config
+app_config.dart
 
 key.properties
+
+# vscode related
+.vscode/

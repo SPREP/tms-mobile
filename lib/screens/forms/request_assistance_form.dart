@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
+import 'package:macres/models/user_model.dart';
+import 'package:macres/util/user_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/checkbox_widget.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
@@ -68,14 +71,27 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
 
   late Position userPosition;
 
-/*
+  @override
   void initState() {
-    var response = _getCurrentUserLocation();
-    if (!response.isNull) {
-      userPosition = response;
+    // var response = _getCurrentUserLocation();
+    // if (!response.isNull) {
+    //   userPosition = response;
+    // }
+    super.initState();
+
+    // Set default value to match Location settings.
+    _loadSelectedLocation();
+  }
+
+  Future<void> _loadSelectedLocation() async {
+    final prefs = await SharedPreferences.getInstance();
+    var location = prefs.getString('user_location');
+    if (location != false) {
+      setState(() {
+        _selectedLocation = LocationExtension.fromName(location);
+      });
     }
   }
-  */
 
   _getCurrentUserLocation() async {
     // Check if location services are enabled.
@@ -105,16 +121,29 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Request Assistance'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: getForm(),
-        ),
-      ),
+    Future<UserModel> getUserData() => UserPreferences().getUser();
+
+    return FutureBuilder<UserModel>(
+      future: getUserData(),
+      builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Request Assistance'),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: getForm(snapshot),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -201,7 +230,7 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
     _selectedImages.clear();
   }
 
-  Widget getForm() {
+  Widget getForm(snapshot) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Form(
@@ -217,6 +246,7 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
                 labelText: 'Full Name',
                 border: OutlineInputBorder(),
               ),
+              initialValue: snapshot.data.name,
               // The validator receives the text that the user has entered.
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -418,7 +448,7 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Select what you really needed now.',
+                'Select your immediate needs from the list.',
               ),
             ),
             const SizedBox(height: 20),
@@ -498,7 +528,7 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Select what you need an assistance with from the list below.',
+                'Select what you need assistance with.',
               ),
             ),
             const SizedBox(height: 20),

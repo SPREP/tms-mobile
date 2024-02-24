@@ -39,10 +39,9 @@ Future main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  //FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   //set page orientation
-
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(App(showOnboarding: showOnboarding)));

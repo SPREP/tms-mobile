@@ -58,7 +58,7 @@ class _ReportScreenState extends State<ReportScreen> {
       child: Column(
         children: [
           const Text(
-              'You can send us a report by choose from the options below.'),
+              'Select a report you would like to submit to us.'),
           const SizedBox(
             height: 20,
           ),
@@ -136,7 +136,7 @@ class _ReportScreenState extends State<ReportScreen> {
                           size: 40,
                         ),
                         Text(
-                          'Feel Earthquake',
+                          'Earthquake Felt',
                           style: TextStyle(fontSize: fontSize),
                         ),
                       ]),

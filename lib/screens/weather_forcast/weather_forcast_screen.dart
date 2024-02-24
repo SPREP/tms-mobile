@@ -8,10 +8,9 @@ import 'package:macres/providers/tide_provider.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
-import 'package:macres/screens/weather_forcast/tide_slide.dart';
 import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
-import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide%20copy.dart';
+import 'package:macres/screens/weather_forcast/twentyfour_hrs_and_tide_slide.dart';
 import 'package:macres/widgets/notification_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +36,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   final PageController myController = PageController(
     keepPage: true,
   );
-  final _itemCount = 4;
+  final _itemCount = 3;
   dynamic activeSlide;
   String selectedTempretureUnit = 'c';
 
@@ -85,10 +84,10 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
   void setLocation() async {
     final prefs = await SharedPreferences.getInstance();
-    final setLocation = prefs.getString('weather_location');
+    final setLocation = prefs.getString('user_location');
 
     if (setLocation == null) {
-      prefs.setString('weather_location', selectedLocation.name.toString());
+      prefs.setString('user_location', selectedLocation.name.toString());
     } else {
       selectedLocation = LocationExtension.fromName(setLocation)!;
     }
@@ -195,8 +194,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   }
 
   void changeLocation(Location newLocation) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('weather_location', newLocation.name.toString());
     changeCurrentData();
   }
 
@@ -360,7 +357,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                 pressure: value['barometer'],
                 windDirection: value['wind_direction'],
                 windSpeed: value['wind_speed'],
-                visibility: value['visibility']);
+                visibility: value['visibility'],
+                observedDate: value['observed_date'],
+            );
             currentWeatherData.add(dataModel);
           });
         }
@@ -487,26 +486,16 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                               });
                             },
                           ),
-                          const Spacer(),
-                          Icon(
-                            selectedTempretureUnit == 'c'
-                                ? WeatherIcons.celsius
-                                : WeatherIcons.fahrenheit,
-                            color: Colors.white,
-                            size: 30.0,
-                          ),
-                          /*
-                      const Spacer(),
-                      const Row(
-                        children: [
-                          Text('\u2103'),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text('\u2109'),
-                        ],
-                      ),
-                      */
+                          // @todo - remove if not needed in the future.
+                          // Degrees icon.
+                          // const Spacer(),
+                          // Icon(
+                          //   selectedTempretureUnit == 'c'
+                          //       ? WeatherIcons.celsius
+                          //       : WeatherIcons.fahrenheit,
+                          //   color: Colors.white,
+                          //   size: 30.0,
+                          // ),
                         ],
                       ),
                       const SizedBox(
@@ -517,7 +506,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                         children: [
                           const Spacer(),
                           Text(
-                            "${currentData.currentTemp}\u00B0",
+                            "${currentData.currentTemp}\u00B0${selectedTempretureUnit.toUpperCase()}",
                             style: const TextStyle(fontSize: 50),
                           ),
                           const Spacer(),
@@ -556,7 +545,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                 height: 10,
                               ),
                               const Text('Pressure'),
-                              Text('${currentData.pressure}mb'),
+                              Text('${currentData.pressure} mb'),
                             ],
                           ),
                           const Spacer(),
@@ -581,10 +570,25 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                 size: 30,
                               ),
                               const Text('Visibility'),
-                              Text('${currentData.visibility}'),
+                              Text('${currentData.visibility} m'),
                             ],
                           ),
                         ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Current conditions at ${currentData.getObservedTime()}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -623,18 +627,14 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           itemCount: _itemCount,
                           itemBuilder: (_, index) {
                             if (index == 0) {
-                              activeSlide = const TenDaysSlide();
+                              activeSlide = TwentyFourHoursAndTideSlide();
                             }
                             if (index == 1) {
                               activeSlide = const ThreeHoursSlide();
                             }
 
                             if (index == 2) {
-                              activeSlide = const TwentyFourHoursSlide();
-                            }
-
-                            if (index == 3) {
-                              activeSlide = const TideSlide();
+                              activeSlide = const TenDaysSlide();
                             }
 
                             return activeSlide;

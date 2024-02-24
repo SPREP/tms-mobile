@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FeelEarthquakeForm extends StatefulWidget {
   const FeelEarthquakeForm({super.key, required this.eventId});
@@ -28,6 +29,24 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
         title: Text('Did you feel the earthquake?'),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Set default value to match Location settings.
+    _loadSelectedLocation();
+  }
+
+  Future<void> _loadSelectedLocation() async {
+    final prefs = await SharedPreferences.getInstance();
+    var location = prefs.getString('user_location');
+    if (location != false) {
+      setState(() {
+        _selectedLocation = LocationExtension.fromName(location);
+      });
+    }
   }
 
   Future<http.Response> sendData() async {

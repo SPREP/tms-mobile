@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class WeatherModel {
@@ -15,6 +16,7 @@ class WeatherModel {
   String? warning;
   String? location;
   String? day;
+  String? observedDate;
 
   String dayOrNight = 'day';
 
@@ -31,7 +33,8 @@ class WeatherModel {
       this.caption,
       this.warning,
       this.location,
-      this.day}) {
+      this.day,
+      this.observedDate}) {
     int hours = DateTime.now().hour;
     dayOrNight = (hours >= 7 && hours <= 20) ? 'day' : 'night';
   }
@@ -40,6 +43,18 @@ class WeatherModel {
     minTemp = toFahrenheight(minTemp);
     maxTemp = toFahrenheight(maxTemp);
     currentTemp = toFahrenheight(currentTemp);
+  }
+
+  String getObservedTime() {
+    if (observedDate == null) {
+      return '';
+    }
+
+    DateFormat format = DateFormat('E, dd MMM yyyy HH:mm:ss Z');
+    DateTime parsedDate = format.parse(observedDate!);
+
+    DateFormat displayFormat = DateFormat('h:mm a');
+    return displayFormat.format(parsedDate);
   }
 
   toFahrenheight(value) {
@@ -102,7 +117,7 @@ class WeatherModel {
             : WeatherIcons.night_showers;
         break;
       default:
-        throw ('No icon found');
+        icon = Icons.question_mark;
     }
 
     return Icon(
@@ -207,6 +222,7 @@ class CurrentWeatherModel extends WeatherModel {
     super.location,
     super.minTemp,
     super.maxTemp,
+    super.observedDate,
   });
 }
 

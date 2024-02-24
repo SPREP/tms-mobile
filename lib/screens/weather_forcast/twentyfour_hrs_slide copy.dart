@@ -96,7 +96,7 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
               ]),
             ]),
             const SizedBox(
-              height: 30,
+              height: 70,
             ),
           ],
         );

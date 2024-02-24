@@ -33,7 +33,11 @@ class _NotificationScreen extends State<NotificationScreen> {
     var host = AppConfig.baseUrl;
 
     var prefs = await SharedPreferences.getInstance();
-    var lng = prefs.getString('user_language');
+    // Set default in case its null or empty otherwise endpoint wont work.
+    var lng = prefs.getString('user_language') ?? 'en';
+    if (lng.isEmpty) {
+      lng = 'en';
+    }
 
     String endpoint = '/notification/$lng?_format=json';
 

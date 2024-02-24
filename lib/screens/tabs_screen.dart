@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:macres/screens/event_screen.dart';
 import 'package:macres/screens/notification_screen.dart';
 import 'package:macres/screens/report_screen.dart';
+import 'package:macres/screens/tk_screen.dart';
 import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:macres/widgets/main_drawer_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -155,6 +156,12 @@ class _TabsScreenState extends State<TabsScreen> {
                 icon: Icon(Icons.notifications),
                 label: 'Notification',
               ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(
+                  AssetImage('assets/images/bird_icon.png'),
+                ),
+                label: 'TK',
+              ),
             ],
             currentIndex: _selectedPageIndex,
           ),
@@ -171,7 +178,10 @@ class _TabsScreenState extends State<TabsScreen> {
         activePage = WeatherForcastScreen(
             onCurrentWeatherChange: _onCurrentWeatherChange);
         activePageTitle = DateFormat("EEE dd MMM yyyy").format(DateTime.now());
-        actionButtons = [actionFilter()];
+
+        // Remove Action items that include Celsius or Fahrenheit selection.
+        // @TODO if not needed then clean up the code.
+        // actionButtons = [actionFilter()];
       }
 
       if (_selectedPageIndex == 1) {
@@ -183,6 +193,12 @@ class _TabsScreenState extends State<TabsScreen> {
       if (_selectedPageIndex == 3) {
         activePage = const NotificationScreen();
         activePageTitle = 'Notifications';
+        actionButtons = [];
+      }
+
+      if (_selectedPageIndex == 4) {
+        activePage = const TkScreen();
+        activePageTitle = 'Traditional Knowledge';
         actionButtons = [];
       }
 
@@ -201,6 +217,25 @@ class _TabsScreenState extends State<TabsScreen> {
   saveTempUnit(String value) async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setString('tempreture_unit', value);
+  }
+
+  getTkAction() {
+    //Add indicator button
+    var indicator = IconButton(onPressed: () {}, icon: Icon(Icons.add));
+
+    //Map View
+    var mapView = IconButton(
+      icon: Icon(Icons.map),
+      onPressed: () {},
+    );
+
+    //List View
+    var listView = IconButton(
+      icon: Icon(Icons.list),
+      onPressed: () {},
+    );
+
+    return [indicator, mapView, listView];
   }
 
   actionFilter() {

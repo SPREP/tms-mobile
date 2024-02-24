@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
+import 'package:macres/models/user_model.dart';
+import 'package:macres/util/user_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/checkbox_widget.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
@@ -54,17 +57,48 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
   bool? internet = false;
 
   @override
+  void initState() {
+    super.initState();
+
+    // Set default value to match Location settings.
+    _loadSelectedLocation();
+  }
+
+  Future<void> _loadSelectedLocation() async {
+    final prefs = await SharedPreferences.getInstance();
+    var location = prefs.getString('user_location');
+    if (location != false) {
+      setState(() {
+        _selectedLocation = LocationExtension.fromName(location);
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Impact Report'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: getForm(),
-        ),
-      ),
+    Future<UserModel> getUserData() => UserPreferences().getUser();
+
+    return FutureBuilder<UserModel>(
+      future: getUserData(),
+      builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Impact Report'),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: getForm(snapshot),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -141,7 +175,7 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
     _selectedImages.clear();
   }
 
-  Widget getForm() {
+  Widget getForm(snapshot) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Form(
@@ -160,6 +194,7 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
                 labelText: 'Full Name',
                 border: OutlineInputBorder(),
               ),
+              initialValue: snapshot.data.name,
               // The validator receives the text that the user has entered.
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -425,7 +460,7 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
             const SizedBox(height: 50),
             const Align(
               alignment: Alignment.centerLeft,
-              child: Text('Has anyone missing?'),
+              child: Text('Is anyone missing?'),
             ),
             Row(
               children: [

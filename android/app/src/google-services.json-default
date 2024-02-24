@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "[CHANGE ME]",
+    "project_id": "[CHANGE ME]",
+    "storage_bucket": "[CHANGE ME]"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "[CHANGE ME]",
+        "android_client_info": {
+          "package_name": "[CHANGE ME]"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "[CHANGE ME]"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

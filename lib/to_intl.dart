@@ -789,4 +789,16 @@ class ToMaterialLocalizations extends GlobalMaterialLocalizations {
 
   @override
   get scanTextButtonLabel => throw UnimplementedError();
+
+  @override
+  get lookUpButtonLabel => throw UnimplementedError();
+
+  @override
+  get menuDismissLabel => throw UnimplementedError();
+
+  @override
+  get searchWebButtonLabel => throw UnimplementedError();
+
+  @override
+  get shareButtonLabel => throw UnimplementedError();
 }

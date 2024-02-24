@@ -93,7 +93,7 @@ class AuthProvider with ChangeNotifier {
     final user = await getUser();
 
     Response response = await get(
-      Uri.parse("${AppConfig.localUrl}/session/token"),
+      Uri.parse("${AppConfig.prodURL}/session/token"),
       headers: {
         'Content-Type': 'application/json',
         'Cookie': user.token.toString()
