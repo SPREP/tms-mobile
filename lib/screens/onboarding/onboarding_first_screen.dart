@@ -34,12 +34,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.asset(
-              'assets/images/onboarding1.png',
-              fit: BoxFit.cover,
-              height: size.height * 0.4,
-              width: size.width,
-            ),
+            Icon(Icons.abc, size: 18.0),
             Container(
               height: 400,
               padding: const EdgeInsets.only(left: 5, right: 5, top: 20),
