@@ -27,15 +27,15 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
   Widget build(BuildContext context) {
     Future<UserModel> getUserData() => UserPreferences().getUser();
 
-    Consumer<AuthProvider> authConsumer = Consumer<AuthProvider>(builder: (context, authProvider, child) {
+    Consumer<AuthProvider> authConsumer =
+        Consumer<AuthProvider>(builder: (context, authProvider, child) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextButton(
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => ProfileScreen()),
+                  MaterialPageRoute(builder: (context) => ProfileScreen()),
                 );
               },
               child: Text(
@@ -115,7 +115,8 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
                 ),
                 // Login/Logout buttons.
                 FutureBuilder(
-                  future: getUserData(), // Replace _yourFutureFunction with the actual function that returns a Future
+                  future:
+                      getUserData(), // Replace _yourFutureFunction with the actual function that returns a Future
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       // Show a loading indicator while waiting for the future to complete
@@ -132,7 +133,8 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => LoginScreen()),
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()),
                               );
                             },
                             child: Text(
@@ -144,7 +146,8 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => SignUpScreen()),
+                                MaterialPageRoute(
+                                    builder: (context) => SignUpScreen()),
                               );
                             },
                             child: Text(

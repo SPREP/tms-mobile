@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_supercluster/flutter_map_supercluster.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/event_model.dart';
 import 'package:macres/models/settings_model.dart';
@@ -138,8 +139,22 @@ class _TkScreen extends State<TkScreen> {
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'com.example.app',
               ),
-              MarkerLayer(
-                markers: [
+              SuperclusterLayer.immutable(
+                indexBuilder: IndexBuilders.rootIsolate,
+                builder: (context, position, markerCount, extraClusterData) =>
+                    Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: Colors.blue,
+                  ),
+                  child: Center(
+                    child: Text(
+                      markerCount.toString(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                initialMarkers: [
                   Marker(
                     anchorPos: AnchorPos.align(AnchorAlign.top),
                     point: LatLng(-21.178986, -175.198242),
@@ -158,7 +173,7 @@ class _TkScreen extends State<TkScreen> {
                   ),
                   Marker(
                     anchorPos: AnchorPos.align(AnchorAlign.top),
-                    point: LatLng(-21.067089, -175.330512),
+                    point: LatLng(-21.077545, -175.333798),
                     width: 50,
                     height: 50,
                     builder: (context) => getMarker(
