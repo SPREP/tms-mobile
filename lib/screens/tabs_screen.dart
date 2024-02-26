@@ -315,6 +315,8 @@ class _TabsScreenState extends State<TabsScreen> {
         ),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         builder: (context) => DraggableScrollableSheet(
-            expand: false, builder: (_, controller) => const ReportScreen()));
+            snap: true,
+            expand: false,
+            builder: (_, controller) => const ReportScreen()));
   }
 }
