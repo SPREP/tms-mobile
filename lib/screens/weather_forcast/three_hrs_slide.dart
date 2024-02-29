@@ -30,10 +30,6 @@ class _ThreeHoursSlideState extends State<ThreeHoursSlide> {
                 Spacer(),
                 Text('3-HOURS FORECAST'),
                 Spacer(),
-                Icon(
-                  Icons.favorite,
-                  color: Colors.white,
-                ),
                 SizedBox(
                   width: 30,
                 ),

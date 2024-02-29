@@ -10,12 +10,12 @@ import 'package:macres/providers/three_hours_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
 import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
-import 'package:macres/screens/weather_forcast/twentyfour_hrs_and_tide_slide.dart';
+import 'package:macres/screens/weather_forcast/tide_slide.dart';
+import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide.dart';
 import 'package:macres/widgets/notification_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_icons/weather_icons.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:macres/models/settings_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -36,8 +36,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   final PageController myController = PageController(
     keepPage: true,
   );
-  final _itemCount = 3;
-  dynamic activeSlide;
+
   String selectedTempretureUnit = 'c';
 
   Location selectedLocation = Location.tongatapu;
@@ -140,6 +139,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         currentTideData = item;
       }
     }
+
+    //Update the current location provider
 
     //Update the provider ten days
     TenDaysProvider tenDaysProvider =
@@ -328,88 +329,70 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
         final Map<String, dynamic> listData = jsonDecode(response.body);
 
-        // 10day
-        if (listData['10day'].length > 0) {
+        if (listData['10days'].length > 0) {
           tenDaysData.clear();
-          listData['10day'].forEach((final String key, final value) {
-            for (var n in value) {
-              var dataModel = TenDaysForecastModel(
-                  iconId: int.parse(n['icon']),
-                  day: n['day'],
-                  maxTemp: n['max_temp'],
-                  minTemp: n['min_temp'],
-                  location: key);
+          for (final item in listData['10days']) {
+            var dataModel = TenDaysForecastModel(
+                iconId: int.parse(item[1]),
+                day: item[2],
+                maxTemp: item[3],
+                minTemp: item[4],
+                location: item[0]);
 
-              tenDaysData.add(dataModel);
-            }
-          });
+            tenDaysData.add(dataModel);
+          }
         }
 
-        // Current forecast
         if (listData['current'].length > 0) {
           currentWeatherData.clear();
-          listData['current'].forEach((final String key, final value) {
+          for (final item in listData['current']) {
             var dataModel = CurrentWeatherModel(
-                location: key,
-                iconId: int.parse(value['icon']),
-                currentTemp: value['temperature'],
-                humidity: value['humidity'],
-                pressure: value['barometer'],
-                windDirection: value['wind_direction'],
-                windSpeed: value['wind_speed'],
-                visibility: value['visibility'],
-                observedDate: value['observed_date'],
-            );
+                location: item[0],
+                iconId: int.parse(item[1]),
+                currentTemp: item[2],
+                humidity: item[3],
+                pressure: item[4],
+                windDirection: item[5],
+                windSpeed: item[6],
+                visibility: item[7],
+                observedDate: item[8]);
+
             currentWeatherData.add(dataModel);
-          });
+            if (convertToLocation(item[0]) == selectedLocation) {
+              currentData = dataModel;
+            }
+          }
         }
 
-        // 3Hrs
         if (listData['3hrs'].length > 0) {
           threeHoursData.clear();
-          listData['3hrs'].forEach((final String key, final value) {
+          for (final item in listData['3hrs']) {
             threeHoursData.add(ThreeHoursForecastModel(
-              location: key,
-              iconId: int.parse(value['icon']),
-              caption: value['condition'],
-              currentTemp: value['temp'],
-              windDirection: value['wind_direction'],
-              windSpeed: value['wind_speed'],
-              visibility: value['pressure'],
+              location: item[0],
+              iconId: int.parse(item[1]),
+              caption: item[2],
+              currentTemp: item[3],
+              windDirection: item[4],
+              windSpeed: item[5],
+              visibility: item[6],
             ));
-          });
+          }
         }
 
-        // 24Hours
         if (listData['24hrs'].length > 0) {
           twentyFourHoursData.clear();
-          listData['24hrs'].forEach((final String key, final value) {
+          for (final item in listData['24hrs']) {
             twentyFourHoursData.add(TwentyFourHoursForecastModel(
-              location: key,
-              iconId: int.parse(value['icon']),
-              caption: value['condition'],
-              maxTemp: value['max_temp'],
-              minTemp: value['min_temp'],
-              windDirection: value['wind_direction'],
-              windSpeed: value['wind_speed'],
-              warning: value['warning'],
+              location: item[0],
+              iconId: int.parse(item[1]),
+              caption: item[2],
+              maxTemp: item[3],
+              minTemp: item[4],
+              windDirection: item[5],
+              windSpeed: item[6],
+              warning: item[7],
             ));
-          });
-        }
-
-        // Tide
-        if (listData['tide'].length > 0) {
-          tideData.clear();
-          listData['tide'].forEach((final String key, final value) {
-            TideModel tide = new TideModel(low: [], high: [], location: key);
-            for (var item in value) {
-              tide.high =
-                  item['event'] == 'high' ? item['time'].split(',') : tide.high;
-              tide.low =
-                  item['event'] == 'low' ? item['time'].split(',') : tide.low;
-            }
-            tideData.add(tide);
-          });
+          }
         }
 
         setState(() {
@@ -593,9 +576,10 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 10),
                 Container(
-                  height: 700,
+                  height: 400,
                   decoration: const BoxDecoration(
                     color: Color.fromARGB(210, 0, 37, 42),
                     borderRadius: BorderRadius.all(
@@ -605,45 +589,58 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                   padding: const EdgeInsets.only(top: 20),
                   child: Column(
                     children: [
-                      SmoothPageIndicator(
-                        controller: myController,
-                        count: _itemCount,
-                        effect: const WormEffect(
-                          paintStyle: PaintingStyle.stroke,
-                          dotColor: Colors.white,
-                          activeDotColor: Colors.white,
-                          dotHeight: 10,
-                          dotWidth: 10,
-                          type: WormType.thin,
-                          // strokeWidth: 5,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Expanded(
-                        child: PageView.builder(
-                          controller: myController,
-                          itemCount: _itemCount,
-                          itemBuilder: (_, index) {
-                            if (index == 0) {
-                              activeSlide = TwentyFourHoursAndTideSlide();
-                            }
-                            if (index == 1) {
-                              activeSlide = const ThreeHoursSlide();
-                            }
+                      TwentyFourHoursSlide(),
+                    ],
+                  ),
+                ),
 
-                            if (index == 2) {
-                              activeSlide = const TenDaysSlide();
-                            }
+                const SizedBox(height: 10),
+                Container(
+                  height: 300,
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(210, 0, 37, 42),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Column(
+                    children: [
+                      ThreeHoursSlide(),
+                    ],
+                  ),
+                ),
 
-                            return activeSlide;
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                const SizedBox(height: 10),
+                Container(
+                  height: 600,
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(210, 0, 37, 42),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Column(
+                    children: [
+                      TenDaysSlide(),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+                Container(
+                  height: 300,
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(210, 0, 37, 42),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Column(
+                    children: [
+                      TideSlide(),
                     ],
                   ),
                 ),

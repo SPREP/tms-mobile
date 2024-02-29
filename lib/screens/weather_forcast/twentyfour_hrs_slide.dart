@@ -27,10 +27,6 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
                 Spacer(),
                 Text('24-HOURS FORECAST'),
                 Spacer(),
-                Icon(
-                  Icons.favorite,
-                  color: Colors.white,
-                ),
                 SizedBox(
                   width: 30,
                 ),
