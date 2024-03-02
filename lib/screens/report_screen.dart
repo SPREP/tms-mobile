@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:macres/screens/event_report_screen.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
+import 'package:macres/screens/national_number_screen.dart';
 import 'package:macres/screens/user/islogin_screen.dart';
 
 class ReportScreen extends StatefulWidget {
@@ -46,24 +47,24 @@ class _ReportScreenState extends State<ReportScreen> {
 
   Widget options() {
     double width = MediaQuery.of(context).size.width;
-    double boxWidth = 151;
-    double fontSize = 15;
+    double boxWidth = 90;
+    double fontSize = 12;
+    double boxHeight = 80;
 
     if (width <= 300) {
       boxWidth = 100;
-      fontSize = 10;
     }
 
     return SizedBox(
       child: Column(
         children: [
-          const Text(
-              'Select a report you would like to submit to us.'),
+          const Text('Select a report you would like to submit to us.'),
           const SizedBox(
             height: 20,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
                 onTap: () {
@@ -75,36 +76,35 @@ class _ReportScreenState extends State<ReportScreen> {
                   );
                 },
                 child: Container(
-                  height: 100,
+                  height: boxHeight,
                   width: boxWidth,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 122, 121, 121),
+                  child: Column(children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                            color: Color.fromARGB(255, 209, 207, 207)),
+                      ),
+                      child: const Icon(
+                        Icons.trending_up_rounded,
+                        size: 20,
+                        color: Colors.blue,
+                      ),
                     ),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
+                    SizedBox(
+                      height: 5.0,
                     ),
-                  ),
-                  padding: const EdgeInsets.all(5.0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.trending_up_rounded,
-                          size: 40,
-                          color: Colors.blue,
-                        ),
-                        Text(
-                          'Event Report',
-                          style: TextStyle(fontSize: fontSize),
-                        ),
-                      ]),
+                    Text(
+                      'Event Report',
+                      style: TextStyle(fontSize: fontSize),
+                    ),
+                  ]),
                 ),
               ),
-              const SizedBox(
-                width: 20,
-              ),
+              Spacer(),
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -116,41 +116,35 @@ class _ReportScreenState extends State<ReportScreen> {
                   );
                 },
                 child: Container(
-                  height: 100,
+                  height: boxHeight,
                   width: boxWidth,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 122, 121, 121),
+                  child: Column(children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                            color: Color.fromARGB(255, 209, 207, 207)),
+                      ),
+                      child: const Icon(
+                        Icons.accessibility_new_outlined,
+                        size: 20,
+                        color: Color.fromARGB(255, 91, 91, 92),
+                      ),
                     ),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
+                    SizedBox(
+                      height: 5.0,
                     ),
-                  ),
-                  padding: const EdgeInsets.all(5.0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.accessibility_new_outlined,
-                          size: 40,
-                        ),
-                        Text(
-                          'Earthquake Felt',
-                          style: TextStyle(fontSize: fontSize),
-                        ),
-                      ]),
+                    Text(
+                      'Earthquake Felt',
+                      style: TextStyle(fontSize: fontSize),
+                    ),
+                  ]),
                 ),
               ),
-            ],
-          ),
-          const SizedBox(
-            height: 30.0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+              Spacer(),
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -163,36 +157,36 @@ class _ReportScreenState extends State<ReportScreen> {
                   );
                 },
                 child: Container(
-                  height: 100,
+                  height: boxHeight,
                   width: boxWidth,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 122, 121, 121),
+                  child: Column(children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                            color: Color.fromARGB(255, 209, 207, 207)),
+                      ),
+                      child: const Icon(
+                        Icons.donut_large_outlined,
+                        size: 20,
+                        color: Colors.orange,
+                      ),
                     ),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
+                    SizedBox(
+                      height: 5.0,
                     ),
-                  ),
-                  padding: const EdgeInsets.all(5.0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.donut_large_outlined,
-                          size: 40,
-                          color: Colors.orange,
-                        ),
-                        Text(
-                          'Assistance Request',
-                          style: TextStyle(fontSize: fontSize),
-                        ),
-                      ]),
+                    Text(
+                      'Assistance Request',
+                      style: TextStyle(fontSize: fontSize),
+                      textAlign: TextAlign.center,
+                    ),
+                  ]),
                 ),
               ),
-              const SizedBox(
-                width: 20,
-              ),
+              Spacer(),
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -205,35 +199,167 @@ class _ReportScreenState extends State<ReportScreen> {
                   );
                 },
                 child: Container(
-                  height: 100,
+                  height: boxHeight,
                   width: boxWidth,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 122, 121, 121),
+                  child: Column(children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                            color: Color.fromARGB(255, 209, 207, 207)),
+                      ),
+                      child: const Icon(
+                        Icons.arrow_circle_up_outlined,
+                        size: 20,
+                        color: Colors.green,
+                      ),
                     ),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
+                    SizedBox(
+                      height: 5.0,
                     ),
-                  ),
-                  padding: const EdgeInsets.all(5.0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.arrow_circle_up_outlined,
-                          size: 40,
-                          color: Colors.green,
-                        ),
-                        Text(
-                          'Impact Report',
-                          style: TextStyle(fontSize: fontSize),
-                        ),
-                      ]),
+                    Text(
+                      'Impact Report',
+                      style: TextStyle(fontSize: fontSize),
+                      textAlign: TextAlign.center,
+                    ),
+                  ]),
                 ),
               ),
             ],
-          )
+          ),
+          Divider(),
+          const SizedBox(
+            height: 20,
+          ),
+          const Text('Other places'),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NationalNumberScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: boxHeight,
+                  width: 100,
+                  child: Column(children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                            color: Color.fromARGB(255, 209, 207, 207)),
+                      ),
+                      child: const Icon(
+                        Icons.phone,
+                        size: 20,
+                        color: Color.fromARGB(255, 170, 89, 23),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Text(
+                      'National Number',
+                      style: TextStyle(fontSize: fontSize),
+                    ),
+                  ]),
+                ),
+              ),
+              Spacer(),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NationalNumberScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: boxHeight,
+                  width: 100,
+                  child: Column(children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                            color: Color.fromARGB(255, 209, 207, 207)),
+                      ),
+                      child: const Icon(
+                        Icons.directions,
+                        size: 20,
+                        color: Color.fromARGB(255, 26, 115, 32),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Text(
+                      'Evacuation Plan',
+                      style: TextStyle(fontSize: fontSize),
+                    ),
+                  ]),
+                ),
+              ),
+              Spacer(),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NationalNumberScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: boxHeight,
+                  width: 100,
+                  child: Column(children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                            color: Color.fromARGB(255, 209, 207, 207)),
+                      ),
+                      child: const Icon(
+                        Icons.map,
+                        size: 20,
+                        color: Color.fromARGB(255, 142, 142, 143),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Text(
+                      'Evacuation Map',
+                      style: TextStyle(fontSize: fontSize),
+                    ),
+                  ]),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

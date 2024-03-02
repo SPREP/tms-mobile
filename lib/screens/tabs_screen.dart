@@ -150,7 +150,7 @@ class _TabsScreenState extends State<TabsScreen> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.add_circle_outline),
-                label: 'Report',
+                label: 'More',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.notifications),
