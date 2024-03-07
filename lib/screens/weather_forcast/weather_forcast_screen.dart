@@ -343,9 +343,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           }
         }
 
-        if (listData['current'].length > 0) {
+        if (listData['live'].length > 0) {
           currentWeatherData.clear();
-          for (final item in listData['current']) {
+          for (final item in listData['live']) {
             var dataModel = CurrentWeatherModel(
                 location: item[0],
                 iconId: int.parse(item[1]),
