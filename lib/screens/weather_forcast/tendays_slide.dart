@@ -27,10 +27,6 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
                 Spacer(),
                 Text('10-DAYS FORECAST'),
                 Spacer(),
-                Icon(
-                  Icons.favorite,
-                  color: Colors.white,
-                ),
                 SizedBox(
                   width: 30,
                 ),
@@ -44,21 +40,22 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
                 contentPadding: const EdgeInsets.only(
                     top: 0, bottom: 0, left: 30.0, right: 30.0),
                 dense: true,
-                leading: item.getIcon(20, Colors.white),
-                title: Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: Text(item.day.toString(),
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold))),
+                title: new Center(child: item.getIcon(20, Colors.white)),
+                minLeadingWidth: 80,
+                leading: Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Text(
+                    item.day.toString(),
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
                 trailing: Text(
                   'Max ${item.maxTemp}\u00B0 | Min ${item.minTemp}\u00B0',
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
-                ),
-                shape: const Border(
-                  bottom: BorderSide(color: Colors.white70),
                 ),
               ),
           ],
