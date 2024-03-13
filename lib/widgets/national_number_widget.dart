@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:macres/models/settings_model.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:macres/models/national_number_model.dart';
 
 class NationalNumberWidget extends StatelessWidget {

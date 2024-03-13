@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macres/screens/evacuation_map_screen.dart';
 import 'package:macres/screens/event_report_screen.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
 import 'package:macres/screens/national_number_screen.dart';
@@ -325,7 +326,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const NationalNumberScreen(),
+                      builder: (context) => const EvacuationMapScreen(),
                     ),
                   );
                 },

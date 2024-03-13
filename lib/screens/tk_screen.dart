@@ -134,23 +134,11 @@ class _TkScreen extends State<TkScreen> {
                   icon: Icon(Icons.add),
                 ),
                 Spacer(),
-                TextButton.icon(
-                  onPressed: () {
-                    print('Map view');
-                  },
-                  label: const Text(
-                    "Map",
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: Text(
+                    '120 Reported',
                   ),
-                  icon: Icon(Icons.map),
-                ),
-                TextButton.icon(
-                  onPressed: () {
-                    print('List view');
-                  },
-                  label: const Text(
-                    "List",
-                  ),
-                  icon: Icon(Icons.list),
                 ),
               ],
             ),
@@ -192,67 +180,59 @@ class _TkScreen extends State<TkScreen> {
                         ),
                         initialMarkers: [
                           Marker(
-                            anchorPos: AnchorPos.align(AnchorAlign.top),
                             point: LatLng(-21.178986, -175.198242),
                             width: 50,
                             height: 50,
-                            builder: (context) => getMarker(
+                            child: getMarker(
                                 'https://source.unsplash.com/random/200x200?sig=1'),
                           ),
                           Marker(
-                            anchorPos: AnchorPos.align(AnchorAlign.top),
                             point: LatLng(-21.149379, -175.292833),
                             width: 50,
                             height: 50,
-                            builder: (context) => getMarker(
+                            child: getMarker(
                                 'https://source.unsplash.com/random/200x200?sig=2'),
                           ),
                           Marker(
-                            anchorPos: AnchorPos.align(AnchorAlign.top),
                             point: LatLng(-21.077545, -175.333798),
                             width: 50,
                             height: 50,
-                            builder: (context) => getMarker(
+                            child: getMarker(
                                 'https://source.unsplash.com/random/200x200?sig=3'),
                           ),
                           Marker(
-                            anchorPos: AnchorPos.align(AnchorAlign.top),
                             point: LatLng(-21.400836, -174.905030),
                             width: 50,
                             height: 50,
-                            builder: (context) => getMarker(
+                            child: getMarker(
                                 'https://source.unsplash.com/random/200x200?sig=4'),
                           ),
                           Marker(
-                            anchorPos: AnchorPos.align(AnchorAlign.top),
                             point: LatLng(-21.067089, -175.330512),
                             width: 50,
                             height: 50,
-                            builder: (context) => getMarker(
+                            child: getMarker(
                                 'https://source.unsplash.com/random/200x200?sig=5'),
                           ),
                           Marker(
-                            anchorPos: AnchorPos.align(AnchorAlign.top),
                             point: LatLng(-19.753643, -175.087173),
                             width: 50,
                             height: 50,
-                            builder: (context) => getMarker(
+                            child: getMarker(
                                 'https://source.unsplash.com/random/200x200?sig=6'),
                           ),
                           Marker(
-                            anchorPos: AnchorPos.align(AnchorAlign.top),
                             point: LatLng(-19.647035, -174.293453),
                             width: 50,
                             height: 50,
-                            builder: (context) => getMarker(
+                            child: getMarker(
                                 'https://source.unsplash.com/random/200x200?sig=7'),
                           ),
                           Marker(
-                            anchorPos: AnchorPos.align(AnchorAlign.top),
                             point: LatLng(-20.251629, -174.805178),
                             width: 50,
                             height: 50,
-                            builder: (context) => getMarker(
+                            child: getMarker(
                                 'https://source.unsplash.com/random/200x200?sig=8'),
                           ),
                         ],

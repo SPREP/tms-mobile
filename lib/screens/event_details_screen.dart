@@ -110,7 +110,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                     widget.eventModel.lon),
                                 width: 50,
                                 height: 50,
-                                builder: (context) => getCentre(),
+                                child: getCentre(),
                               ),
                             ],
                           ),
