@@ -278,8 +278,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
-        content: Text(
-            'Error: Unable to load notification. Check your internet connection.'),
+        content: Text('Error: Unable to load notification..'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -404,8 +403,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
       print(e.toString());
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
-        content: Text(
-            'Error: Unable to load weather data. Check your internet connection.'),
+        content: Text('Error: Unable to load weather data.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

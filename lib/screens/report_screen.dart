@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macres/screens/evacuation_map_screen.dart';
 import 'package:macres/screens/event_report_screen.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
 import 'package:macres/screens/national_number_screen.dart';
@@ -90,7 +91,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       ),
                       child: const Icon(
                         Icons.trending_up_rounded,
-                        size: 20,
+                        size: 30,
                         color: Colors.blue,
                       ),
                     ),
@@ -130,7 +131,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       ),
                       child: const Icon(
                         Icons.accessibility_new_outlined,
-                        size: 20,
+                        size: 30,
                         color: Color.fromARGB(255, 91, 91, 92),
                       ),
                     ),
@@ -171,7 +172,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       ),
                       child: const Icon(
                         Icons.donut_large_outlined,
-                        size: 20,
+                        size: 30,
                         color: Colors.orange,
                       ),
                     ),
@@ -213,7 +214,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       ),
                       child: const Icon(
                         Icons.arrow_circle_up_outlined,
-                        size: 20,
+                        size: 30,
                         color: Colors.green,
                       ),
                     ),
@@ -256,8 +257,8 @@ class _ReportScreenState extends State<ReportScreen> {
                   width: 100,
                   child: Column(children: [
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: 50,
+                      height: 50,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
@@ -266,7 +267,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       ),
                       child: const Icon(
                         Icons.phone,
-                        size: 20,
+                        size: 30,
                         color: Color.fromARGB(255, 170, 89, 23),
                       ),
                     ),
@@ -280,13 +281,15 @@ class _ReportScreenState extends State<ReportScreen> {
                   ]),
                 ),
               ),
-              Spacer(),
+              SizedBox(
+                width: 20,
+              ),
               InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const NationalNumberScreen(),
+                      builder: (context) => const EvacuationMapScreen(),
                     ),
                   );
                 },
@@ -295,8 +298,8 @@ class _ReportScreenState extends State<ReportScreen> {
                   width: 100,
                   child: Column(children: [
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: 50,
+                      height: 50,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
@@ -305,47 +308,8 @@ class _ReportScreenState extends State<ReportScreen> {
                       ),
                       child: const Icon(
                         Icons.directions,
-                        size: 20,
+                        size: 30,
                         color: Color.fromARGB(255, 26, 115, 32),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Text(
-                      'Evacuation Plan',
-                      style: TextStyle(fontSize: fontSize),
-                    ),
-                  ]),
-                ),
-              ),
-              Spacer(),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NationalNumberScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: boxHeight,
-                  width: 100,
-                  child: Column(children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        border: Border.all(
-                            color: Color.fromARGB(255, 209, 207, 207)),
-                      ),
-                      child: const Icon(
-                        Icons.map,
-                        size: 20,
-                        color: Color.fromARGB(255, 142, 142, 143),
                       ),
                     ),
                     SizedBox(

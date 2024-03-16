@@ -93,9 +93,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     : FlutterMap(
                         mapController: MapController(),
                         options: MapOptions(
-                          center: LatLng(
+                          initialCenter: LatLng(
                               widget.eventModel.lat, widget.eventModel.lon),
-                          zoom: 6,
+                          initialZoom: 6,
                         ),
                         children: [
                           TileLayer(
@@ -110,21 +110,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                     widget.eventModel.lon),
                                 width: 50,
                                 height: 50,
-                                builder: (context) => getCentre(),
+                                child: getCentre(),
                               ),
                             ],
-                          ),
-                          Positioned(
-                            right: 10,
-                            bottom: 60,
-                            child: FloatingActionButton(
-                                tooltip: 'View large map',
-                                child: const Icon(
-                                  Icons.center_focus_weak_sharp,
-                                ),
-                                onPressed: () {
-                                  _openMapOverlay();
-                                }),
                           ),
                         ],
                       ),

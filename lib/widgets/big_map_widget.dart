@@ -40,10 +40,10 @@ class _BigMapWidgetState extends State<BigMapWidget> {
     return FlutterMap(
       mapController: MapController(),
       options: MapOptions(
-        center: LatLng(widget.eventModel.lat, widget.eventModel.lon),
-        zoom: 6,
+        initialCenter: LatLng(widget.eventModel.lat, widget.eventModel.lon),
+        initialZoom: 6,
       ),
-      nonRotatedChildren: [
+      children: [
         RichAttributionWidget(
           animationConfig: const ScaleRAWA(),
           attributions: [
@@ -64,8 +64,6 @@ class _BigMapWidgetState extends State<BigMapWidget> {
                 Navigator.pop(context);
               }),
         ),
-      ],
-      children: [
         TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             userAgentPackageName: 'com.example.app'),
@@ -75,7 +73,7 @@ class _BigMapWidgetState extends State<BigMapWidget> {
               point: LatLng(widget.eventModel.lat, widget.eventModel.lon),
               width: 50,
               height: 50,
-              builder: (context) => getCentre(),
+              child: getCentre(),
             ),
           ],
         ),
