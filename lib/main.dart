@@ -98,7 +98,6 @@ class _AppState extends State<App> {
           supportedLocales: const [Locale('to'), Locale('en', 'US')],
           locale: localeProvider.selectedLocale,
           title: 'Tonga Weather App',
-          theme: Styles.themeData(darkThemeProvider.darkTheme, context),
           darkTheme: ThemeData.dark(),
           home: widget.showOnboarding
               ? const OnboardingPage()

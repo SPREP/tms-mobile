@@ -102,8 +102,7 @@ class _TkScreen extends State<TkScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
-        content: Text(
-            'Error: Unable to load events. Check your internet connection.'),
+        content: Text('Error: Unable to load events.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -129,7 +128,7 @@ class _TkScreen extends State<TkScreen> {
                     );
                   },
                   label: const Text(
-                    "Add Indicator",
+                    "Report Indicator",
                   ),
                   icon: Icon(Icons.add),
                 ),

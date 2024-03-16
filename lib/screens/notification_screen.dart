@@ -85,8 +85,7 @@ class _NotificationScreen extends State<NotificationScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
-        content: Text(
-            'Error: Unable to load notification. Check your internet connection.'),
+        content: Text('Error: Unable to load notification.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_core
   flutter_tts
   geolocator_windows
+  maps_launcher
   url_launcher_windows
 )
 

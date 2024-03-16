@@ -97,12 +97,20 @@ class _EventScreen extends State<EventScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
-        content: Text(
-            'Error: Unable to load events. Check your internet connection.'),
+        content: Text('Unable to load events.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(e);
+    }
+  }
+
+  Future<bool> hasInternet() async {
+    try {
+      final response = await http.head(Uri.parse('https://www.google.com'));
+      return response.statusCode == 200;
+    } catch (_) {
+      return false;
     }
   }
 
