@@ -10,6 +10,7 @@ import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
 import 'package:macres/providers/user_provider.dart';
+import 'package:macres/providers/weather_location.dart';
 import 'package:macres/screens/tabs_screen.dart';
 import 'package:macres/util/dark_theme_styles.dart';
 import 'package:macres/widgets/onboarding/onboarding_page.dart';
@@ -84,6 +85,7 @@ class _AppState extends State<App> {
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => DarkThemeProvider()),
         ChangeNotifierProvider(create: (context) => TideProvider()),
+        ChangeNotifierProvider(create: (context) => WeatherLocationProvider()),
       ],
       child: Consumer2<LocaleProvider, DarkThemeProvider>(
         builder: (context, localeProvider, darkThemeProvider, child) =>

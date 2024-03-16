@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class TenDaysSlide extends StatefulWidget {
-  const TenDaysSlide({super.key});
+  const TenDaysSlide({super.key, required this.currentData});
+
+  final currentData;
 
   @override
   State<TenDaysSlide> createState() => _TenDaysSlideState();
@@ -15,52 +17,68 @@ class TenDaysSlide extends StatefulWidget {
 class _TenDaysSlideState extends State<TenDaysSlide> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<TenDaysProvider>(
-      builder: (context, tenDaysProvider, child) => SingleChildScrollView(
-        child: Column(
+    return Column(
+      children: [
+        const Row(
           children: [
-            const Row(
+            SizedBox(
+              width: 30,
+            ),
+            Spacer(),
+            Text('10-DAYS FORECAST'),
+            Spacer(),
+            SizedBox(
+              width: 30,
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        for (final item in widget.currentData)
+          Container(
+            padding: const EdgeInsets.only(
+                left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Color.fromARGB(255, 173, 171, 171)),
+              ),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: 30,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.day.toString(),
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      item.getIconDefinition(),
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.normal),
+                    ),
+                  ],
                 ),
                 Spacer(),
-                Text('10-DAYS FORECAST'),
-                Spacer(),
+                new Center(child: item.getIcon(25.0, 25.0)),
                 SizedBox(
-                  width: 30,
+                  width: 30.0,
+                ),
+                Column(
+                  children: [
+                    Text('${item.maxTemp}\u00B0',
+                        style: TextStyle(fontSize: 14.0, color: Colors.white)),
+                    Text('${item.minTemp}\u00B0',
+                        style: TextStyle(fontSize: 14.0, color: Colors.white)),
+                  ],
                 ),
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            for (final item in tenDaysProvider.currentTenDaysData)
-              ListTile(
-                contentPadding: const EdgeInsets.only(
-                    top: 0, bottom: 0, left: 30.0, right: 30.0),
-                dense: true,
-                title: new Center(child: item.getIcon(20, Colors.white)),
-                minLeadingWidth: 80,
-                leading: Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Text(
-                    item.day.toString(),
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                trailing: Text(
-                  'Max ${item.maxTemp}\u00B0 | Min ${item.minTemp}\u00B0',
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-          ],
-        ),
-      ),
+          ),
+      ],
     );
   }
 }

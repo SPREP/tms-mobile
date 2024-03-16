@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:macres/models/settings_model.dart';
+import 'package:macres/providers/weather_location.dart';
 import 'package:macres/screens/event_screen.dart';
 import 'package:macres/screens/notification_screen.dart';
 import 'package:macres/screens/report_screen.dart';
 import 'package:macres/screens/tk_screen.dart';
 import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:macres/widgets/main_drawer_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -26,6 +29,7 @@ class _TabsScreenState extends State<TabsScreen> {
   List<Widget> actionButtons = [];
   String bgFilePath = '';
   String dayOrNightStatus = 'day';
+  Location selectedLocation = Location.tongatapu;
 
   String _onCurrentWeatherChange(String filepath, String dayOrNight) {
     setState(() {
@@ -38,7 +42,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   void initState() {
-    actionButtons = [actionFilter()];
+    actionButtons = [];
     activePageTitle = DateFormat("EEE dd MMM yyyy").format(DateTime.now());
 
     super.initState();
@@ -65,13 +69,12 @@ class _TabsScreenState extends State<TabsScreen> {
   }
 
   getAppBar() {
-    if (dayOrNightStatus == 'night' &&
-        (_selectedPageIndex == 0 || _selectedPageIndex == 2)) {
+    if ((_selectedPageIndex == 0 || _selectedPageIndex == 2)) {
       return PreferredSize(
-        preferredSize: const Size.fromHeight(30.0),
+        preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(activePageTitle),
+          flexibleSpace: getLocationDropdown(),
           actions: actionButtons,
           foregroundColor: Colors.white,
         ),
@@ -82,6 +85,44 @@ class _TabsScreenState extends State<TabsScreen> {
         actions: actionButtons,
       );
     }
+  }
+
+  Widget getLocationDropdown() {
+    return Center(
+        child: Column(
+      children: [
+        SizedBox(
+          height: 50,
+        ),
+        DropdownButton<Location>(
+          borderRadius: BorderRadius.circular(10),
+          value: selectedLocation,
+          dropdownColor: Color.fromARGB(255, 33, 123, 187),
+          icon: const Icon(
+            Icons.expand_more,
+            color: Colors.white,
+          ),
+          items: Location.values.map((Location value) {
+            return DropdownMenuItem<Location>(
+              value: value,
+              child: Text(
+                locationLabel[value].toString(),
+                style: const TextStyle(color: Colors.white),
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedLocation = value!;
+
+              WeatherLocationProvider weatherLocationProvider =
+                  Provider.of<WeatherLocationProvider>(context, listen: false);
+              weatherLocationProvider.setLocation(value);
+            });
+          },
+        ),
+      ],
+    ));
   }
 
   @override
@@ -101,9 +142,10 @@ class _TabsScreenState extends State<TabsScreen> {
       width: width,
       decoration: _selectedPageIndex == 0 || _selectedPageIndex == 2
           ? BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(bgFilePath),
-                fit: BoxFit.cover,
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[Color.fromARGB(255, 3, 55, 97), Colors.blue],
               ),
             )
           : null,
@@ -176,7 +218,8 @@ class _TabsScreenState extends State<TabsScreen> {
 
       if (_selectedPageIndex == 0 || _selectedPageIndex == 2) {
         activePage = WeatherForcastScreen(
-            onCurrentWeatherChange: _onCurrentWeatherChange);
+          onCurrentWeatherChange: _onCurrentWeatherChange,
+        );
         activePageTitle = DateFormat("EEE dd MMM yyyy").format(DateTime.now());
 
         // Remove Action items that include Celsius or Fahrenheit selection.

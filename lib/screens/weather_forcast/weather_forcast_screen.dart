@@ -8,6 +8,7 @@ import 'package:macres/providers/tide_provider.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
+import 'package:macres/providers/weather_location.dart';
 import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
 import 'package:macres/screens/weather_forcast/tide_slide.dart';
@@ -139,30 +140,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         currentTideData = item;
       }
     }
-
-    //Update the current location provider
-
-    //Update the provider ten days
-    TenDaysProvider tenDaysProvider =
-        Provider.of<TenDaysProvider>(context, listen: false);
-    tenDaysProvider.setData(currentTenDaysData);
-
-    //Three hours
-    ThreeHoursProvider threeHoursProvider =
-        Provider.of<ThreeHoursProvider>(context, listen: false);
-    threeHoursProvider.setData(currentThreeHoursData);
-
-    //Twenty Four Hours
-    TwentyFourHoursProvider twentyFourHoursProvider =
-        Provider.of<TwentyFourHoursProvider>(context, listen: false);
-    twentyFourHoursProvider.setData(currentTwentyFourHoursData);
-
-    //Tide high and low
-    TideProvider tideProvider =
-        Provider.of<TideProvider>(context, listen: false);
-    tideProvider.setData(currentTideData);
-
-    changeBgImage();
   }
 
   void changeBgImage() {
@@ -414,236 +391,277 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   Widget build(BuildContext context) {
     return isLoading
         ? const Center(child: CircularProgressIndicator())
-        : DefaultTextStyle.merge(
-            style: const TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold),
-            child: Column(
-              children: [
-                //Warning section
-                Container(
-                  child: Column(
-                    children: [
-                      if (notificationData.body != null)
-                        NotificationWidget(notification: notificationData)
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                // End Warning section
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(210, 0, 37, 42),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+        : Consumer<WeatherLocationProvider>(
+            builder: (context, weatherLocationProvider, child) {
+            selectedLocation = weatherLocationProvider.selectedLocation;
+            changeCurrentData();
+
+            return DefaultTextStyle.merge(
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
+              child: Column(
+                children: [
+                  //Warning section
+                  Container(
+                    child: Column(
+                      children: [
+                        if (notificationData.body != null)
+                          NotificationWidget(notification: notificationData)
+                      ],
                     ),
                   ),
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          DropdownButton<Location>(
-                            borderRadius: BorderRadius.circular(10),
-                            value: selectedLocation,
-                            dropdownColor:
-                                const Color.fromARGB(255, 17, 48, 51),
-                            icon: const Icon(
-                              Icons.expand_more,
-                              color: Colors.white,
-                            ),
-                            items: Location.values.map((Location value) {
-                              return DropdownMenuItem<Location>(
-                                value: value,
-                                child: Text(
-                                  locationLabel[value].toString(),
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedLocation = value!;
-                                changeLocation(value);
-                              });
-                            },
-                          ),
-                          // @todo - remove if not needed in the future.
-                          // Degrees icon.
-                          // const Spacer(),
-                          // Icon(
-                          //   selectedTempretureUnit == 'c'
-                          //       ? WeatherIcons.celsius
-                          //       : WeatherIcons.fahrenheit,
-                          //   color: Colors.white,
-                          //   size: 30.0,
-                          // ),
+                  const SizedBox(height: 10),
+                  // End Warning section
+
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          Color.fromARGB(255, 33, 104, 161),
+                          Colors.blue
                         ],
                       ),
-                      const SizedBox(
-                        height: 20,
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
                       ),
-                      Text(currentData.getIconDefinition().toString()),
-                      Row(
-                        children: [
-                          const Spacer(),
-                          Text(
-                            "${currentData.currentTemp}\u00B0${selectedTempretureUnit.toUpperCase()}",
-                            style: const TextStyle(fontSize: 50),
-                          ),
-                          const Spacer(),
-                          Column(
-                            children: [
-                              currentData.getIcon(50.0, Colors.white),
-                            ],
-                          ),
-                          const Spacer(),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Column(
-                            children: [
-                              const Icon(
-                                WeatherIcons.humidity,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                              const SizedBox(height: 10),
-                              const Text('Humidity'),
-                              Text('${currentData.humidity}%'),
-                            ],
-                          ),
-                          const Spacer(),
-                          Column(
-                            children: [
-                              const Icon(
-                                WeatherIcons.barometer,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const Text('Pressure'),
-                              Text('${currentData.pressure} mb'),
-                            ],
-                          ),
-                          const Spacer(),
-                          Column(
-                            children: [
-                              const Icon(
-                                Icons.explore_outlined,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                              const SizedBox(height: 5),
-                              Text('${currentData.windDirection}'),
-                              Text('${currentData.windSpeed} knts'),
-                            ],
-                          ),
-                          const Spacer(),
-                          Column(
-                            children: [
-                              const Icon(
-                                Icons.visibility_outlined,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                              const Text('Visibility'),
-                              Text('${currentData.visibility} m'),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                    ),
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        Text('TODAY'),
+                        Row(
+                          children: [
+                            const Spacer(),
+                            Text(currentData.getIconDefinition().toString()),
+                            // @todo - remove if not needed in the future.
+                            // Degrees icon.
+                            // const Spacer(),
+                            // Icon(
+                            //   selectedTempretureUnit == 'c'
+                            //       ? WeatherIcons.celsius
+                            //       : WeatherIcons.fahrenheit,
+                            //   color: Colors.white,
+                            //   size: 30.0,
+                            // ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
                           children: [
                             Text(
-                              'Current conditions at ${currentData.getObservedTime()}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white70,
+                              "${currentData.currentTemp}",
+                              style: const TextStyle(
+                                  fontSize: 60, fontWeight: FontWeight.normal),
+                              textAlign: TextAlign.left,
+                            ),
+                            Align(
+                              heightFactor: 1.5,
+                              alignment: Alignment.topRight,
+                              child: Text(
+                                "\u00B0${selectedTempretureUnit.toUpperCase()}",
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.normal),
                               ),
+                            ),
+                            const Spacer(),
+                            Column(
+                              children: [
+                                currentData.getIcon(50.0, 50.0),
+                              ],
+                            ),
+                            const Spacer(),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Column(
+                              children: [
+                                const Icon(
+                                  WeatherIcons.humidity,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                                const SizedBox(height: 10),
+                                const Text('Humidity'),
+                                Text('${currentData.humidity}%'),
+                              ],
+                            ),
+                            const Spacer(),
+                            Column(
+                              children: [
+                                const Icon(
+                                  WeatherIcons.barometer,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Text('Pressure'),
+                                Text('${currentData.pressure} mb'),
+                              ],
+                            ),
+                            const Spacer(),
+                            Column(
+                              children: [
+                                const Icon(
+                                  Icons.explore_outlined,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                                const SizedBox(height: 5),
+                                Text('${currentData.windDirection}'),
+                                Text('${currentData.windSpeed} knts'),
+                              ],
+                            ),
+                            const Spacer(),
+                            Column(
+                              children: [
+                                const Icon(
+                                  Icons.visibility_outlined,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                                const Text('Visibility'),
+                                Text('${currentData.visibility} m'),
+                              ],
                             ),
                           ],
                         ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                'Current conditions at ${currentData.getObservedTime()}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+                  Container(
+                    height: 410,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          Color.fromARGB(255, 33, 104, 161),
+                          Colors.blue
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-                Container(
-                  height: 400,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(210, 0, 37, 42),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Column(
+                      children: [
+                        TwentyFourHoursSlide(
+                          currentData: currentTwentyFourHoursData,
+                        ),
+                      ],
                     ),
                   ),
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Column(
-                    children: [
-                      TwentyFourHoursSlide(),
-                    ],
-                  ),
-                ),
 
-                const SizedBox(height: 10),
-                Container(
-                  height: 300,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(210, 0, 37, 42),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+                  const SizedBox(height: 10),
+                  Container(
+                    height: 300,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          Color.fromARGB(255, 33, 104, 161),
+                          Colors.blue
+                        ],
+                      ),
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Column(
+                      children: [
+                        ThreeHoursSlide(
+                          currentData: currentThreeHoursData,
+                        ),
+                      ],
                     ),
                   ),
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Column(
-                    children: [
-                      ThreeHoursSlide(),
-                    ],
-                  ),
-                ),
 
-                const SizedBox(height: 10),
-                Container(
-                  height: 600,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(210, 0, 37, 42),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+                  const SizedBox(height: 10),
+                  Container(
+                    height: 600,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          Color.fromARGB(255, 33, 104, 161),
+                          Colors.blue
+                        ],
+                      ),
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Column(
+                      children: [
+                        TenDaysSlide(
+                          currentData: currentTenDaysData,
+                        ),
+                      ],
                     ),
                   ),
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Column(
-                    children: [
-                      TenDaysSlide(),
-                    ],
-                  ),
-                ),
 
-                const SizedBox(height: 10),
-                Container(
-                  height: 300,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(210, 0, 37, 42),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+                  const SizedBox(height: 10),
+                  Container(
+                    height: 300,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          Color.fromARGB(255, 33, 104, 161),
+                          Colors.blue
+                        ],
+                      ),
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Column(
+                      children: [
+                        TideSlide(),
+                      ],
                     ),
                   ),
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Column(
-                    children: [
-                      TideSlide(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
+                ],
+              ),
+            );
+          });
   }
 }
