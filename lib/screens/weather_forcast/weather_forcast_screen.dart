@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/notification_model.dart';
+import 'package:macres/models/sea_model.dart';
 import 'package:macres/models/tide_model.dart';
 import 'package:macres/models/weather_model.dart';
-import 'package:macres/providers/tide_provider.dart';
-import 'package:macres/providers/ten_days_provider.dart';
-import 'package:macres/providers/three_hours_provider.dart';
-import 'package:macres/providers/twentyfour_hours_provider.dart';
 import 'package:macres/providers/weather_location.dart';
 import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
@@ -46,13 +44,25 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   ThreeHoursForecastModel currentThreeHoursData = ThreeHoursForecastModel();
   TwentyFourHoursForecastModel currentTwentyFourHoursData =
       TwentyFourHoursForecastModel();
-  TideModel currentTideData = TideModel(high: [], low: []);
+  List<TideModel> currentTideData = [];
+  SeaModel currentSeaData = SeaModel();
 
   List<CurrentWeatherModel> currentWeatherData = [];
   List<TwentyFourHoursForecastModel> twentyFourHoursData = [];
   List<ThreeHoursForecastModel> threeHoursData = [];
   List<TenDaysForecastModel> tenDaysData = [];
   List<TideModel> tideData = [];
+  List<SeaModel> seaData = [];
+
+  List<Color> widgetBackgroundDayColors = <Color>[
+    Color.fromARGB(255, 22, 83, 133),
+    const Color.fromARGB(255, 21, 123, 207)
+  ];
+
+  List<Color> widgetBackgroundNightColors = <Color>[
+    Color.fromARGB(255, 40, 43, 46),
+    Color.fromARGB(255, 20, 24, 27)
+  ];
 
   late NotificationModel notificationData;
 
@@ -134,10 +144,18 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     }
 
     //Load data for tide
-    currentTideData = TideModel(high: [], low: []);
+    currentTideData.clear();
     for (final item in tideData) {
       if (convertToLocation(item.location.toString()) == selectedLocation) {
-        currentTideData = item;
+        currentTideData.add(item);
+      }
+    }
+
+    //Load data for sea
+    currentSeaData = SeaModel();
+    for (final item in seaData) {
+      if (convertToLocation(item.location.toString()) == selectedLocation) {
+        currentSeaData = item;
       }
     }
   }
@@ -305,6 +323,35 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
         final Map<String, dynamic> listData = jsonDecode(response.body);
 
+        if (listData['tide'].length > 0) {
+          tideData.clear();
+          for (final item in listData['tide']) {
+            var tideModel = TideModel(
+              id: item[1],
+              status: item[3],
+              time: item[4],
+              level: item[5],
+              date: item[6],
+              location: item[0],
+            );
+
+            tideData.add(tideModel);
+          }
+        }
+
+        if (listData['sea'].length > 0) {
+          seaData.clear();
+          for (final item in listData['sea']) {
+            var seaModel = SeaModel(
+                level: item[1],
+                temp: item[2],
+                location: item[0],
+                observedDate: item[3]);
+
+            seaData.add(seaModel);
+          }
+        }
+
         if (listData['10days'].length > 0) {
           tenDaysData.clear();
           for (final item in listData['10days']) {
@@ -319,9 +366,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
           }
         }
 
-        if (listData['live'].length > 0) {
+        if (listData['weather'].length > 0) {
           currentWeatherData.clear();
-          for (final item in listData['live']) {
+          for (final item in listData['weather']) {
             var dataModel = CurrentWeatherModel(
                 location: item[0],
                 iconId: int.parse(item[1]),
@@ -418,10 +465,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Color.fromARGB(255, 33, 104, 161),
-                          Colors.blue
-                        ],
+                        colors: currentData.dayOrNight == 'day'
+                            ? widgetBackgroundDayColors
+                            : widgetBackgroundNightColors,
                       ),
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.all(
@@ -432,8 +478,13 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     child: Column(
                       children: [
                         Text('TODAY'),
+                        SizedBox(
+                          height: 20.0,
+                        ),
                         Row(
                           children: [
+                            Text(DateFormat("EEE dd MMM, hh:mm a")
+                                .format(DateTime.now())),
                             const Spacer(),
                             Text(currentData.getIconDefinition().toString()),
                             // @todo - remove if not needed in the future.
@@ -561,10 +612,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Color.fromARGB(255, 33, 104, 161),
-                          Colors.blue
-                        ],
+                        colors: currentData.dayOrNight == 'day'
+                            ? widgetBackgroundDayColors
+                            : widgetBackgroundNightColors,
                       ),
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.all(
@@ -588,10 +638,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Color.fromARGB(255, 33, 104, 161),
-                          Colors.blue
-                        ],
+                        colors: currentData.dayOrNight == 'day'
+                            ? widgetBackgroundDayColors
+                            : widgetBackgroundNightColors,
                       ),
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.all(
@@ -615,10 +664,9 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Color.fromARGB(255, 33, 104, 161),
-                          Colors.blue
-                        ],
+                        colors: currentData.dayOrNight == 'day'
+                            ? widgetBackgroundDayColors
+                            : widgetBackgroundNightColors,
                       ),
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.all(
@@ -637,16 +685,14 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
                   const SizedBox(height: 10),
                   Container(
-                    height: 300,
+                    height: 400,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Color.fromARGB(255, 33, 104, 161),
-                          Colors.blue
-                        ],
-                      ),
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: currentData.dayOrNight == 'day'
+                              ? widgetBackgroundDayColors
+                              : widgetBackgroundNightColors),
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.all(
                         Radius.circular(20),
@@ -655,7 +701,10 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     padding: const EdgeInsets.only(top: 20),
                     child: Column(
                       children: [
-                        TideSlide(),
+                        TideSlide(
+                          seaData: currentSeaData,
+                          tideData: currentTideData,
+                        ),
                       ],
                     ),
                   ),

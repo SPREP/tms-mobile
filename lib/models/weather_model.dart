@@ -84,6 +84,8 @@ class WeatherModel {
             dayOrNight == 'day' ? 'day_sleet.png' : 'night_full_moon_sleet.png';
         break;
       case 7:
+        icon = 'rain.png';
+        break;
       case 5:
         icon =
             dayOrNight == 'day' ? 'day_rain.png' : 'night_full_moon_rain.png';
@@ -140,7 +142,9 @@ class TenDaysForecastModel extends WeatherModel {
     super.maxTemp,
     super.minTemp,
     super.location,
-  });
+  }) {
+    dayOrNight = 'day';
+  }
 }
 
 class CurrentWeatherModel extends WeatherModel {
