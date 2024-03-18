@@ -1,7 +1,16 @@
 class TideModel {
-  List<String?> low = [];
-  List<String?> high = [];
+  String? id;
+  String? status;
+  String? time;
+  String? level;
   String? location;
+  String? date;
 
-  TideModel({required this.low, required this.high, this.location}) {}
+  TideModel(
+      {this.level,
+      this.id,
+      this.location,
+      this.date,
+      this.status,
+      this.time}) {}
 }

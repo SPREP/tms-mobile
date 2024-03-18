@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:macres/models/settings_model.dart';
 import 'package:macres/providers/weather_location.dart';
@@ -145,7 +144,12 @@ class _TabsScreenState extends State<TabsScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: <Color>[Color.fromARGB(255, 3, 55, 97), Colors.blue],
+                colors: dayOrNightStatus == 'day'
+                    ? <Color>[Color.fromARGB(255, 3, 55, 97), Colors.blue]
+                    : <Color>[
+                        Color.fromARGB(255, 64, 65, 67),
+                        Color.fromARGB(255, 20, 24, 27)
+                      ],
               ),
             )
           : null,

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:macres/models/evacuation_model.dart';
 import 'package:maps_launcher/maps_launcher.dart';
@@ -19,34 +20,41 @@ class _EvacuationDetailsScreenState extends State<EvacuationDetailsScreen> {
         title: const Text('Evacuation Details'),
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          Text(
-            widget.model.title!,
-            style: TextStyle(fontSize: 15),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          InteractiveViewer(
-            boundaryMargin: const EdgeInsets.all(20.0),
-            maxScale: 5.1,
-            child: Image.network(widget.model.image_large!),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Text(
+              widget.model.title!,
+              style: TextStyle(fontSize: 15),
             ),
-            onPressed: () {
-              MapsLauncher.launchCoordinates(
-                  widget.model.lat!, widget.model.lon!);
-            },
-            child: Text('Get Direction'),
-          )
-        ],
+            SizedBox(
+              height: 20,
+            ),
+            InteractiveViewer(
+              boundaryMargin: const EdgeInsets.all(20.0),
+              maxScale: 5.1,
+              child: CachedNetworkImage(
+                imageUrl: widget.model.image_large!,
+                placeholder: (context, url) => new CircularProgressIndicator(),
+                errorWidget: (context, url, error) => new Icon(Icons.error),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            TextButton(
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+              ),
+              onPressed: () {
+                MapsLauncher.launchCoordinates(
+                    widget.model.lat!, widget.model.lon!);
+              },
+              child: Text('Get Direction'),
+            )
+          ],
+        ),
       ),
     );
   }

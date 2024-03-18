@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:macres/providers/twentyfour_hours_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class TwentyFourHoursSlide extends StatefulWidget {
