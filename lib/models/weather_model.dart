@@ -61,7 +61,7 @@ class WeatherModel {
     return ((int.parse(value) * 9 / 5) + 32).toStringAsFixed(0);
   }
 
-  Image getIcon(double width, double height) {
+  getIcon(double width, double height) {
     String icon;
 
     switch (iconId) {
@@ -97,10 +97,11 @@ class WeatherModel {
             : 'night_full_moon_rain_thunder.png';
         break;
       default:
-        icon =
-            dayOrNight == 'day' ? 'day_clear.png' : 'night_full_moon_clear.png';
+        icon = '';
+        break;
     }
 
+    if (icon == '') return Text(icon);
     return Image.asset(
       'assets/images/${icon}',
       width: width,
