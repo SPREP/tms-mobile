@@ -77,10 +77,10 @@ class EventModel {
       case EventType.cyclone:
       case EventType.fire:
       case EventType.bushfile:
-        return const Color.fromARGB(255, 216, 193, 113);
+        return Color.fromARGB(255, 197, 106, 182);
       case EventType.tsunami:
       case EventType.tornado:
-        return const Color.fromARGB(255, 255, 126, 126);
+        return Color.fromARGB(255, 179, 157, 90);
     }
     return const Color.fromARGB(255, 131, 149, 234);
   }

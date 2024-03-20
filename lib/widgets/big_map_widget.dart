@@ -44,26 +44,6 @@ class _BigMapWidgetState extends State<BigMapWidget> {
         initialZoom: 6,
       ),
       children: [
-        RichAttributionWidget(
-          animationConfig: const ScaleRAWA(),
-          attributions: [
-            TextSourceAttribution(
-              'OpenStreetMap contributors',
-              onTap: () =>
-                  launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
-            ),
-          ],
-        ),
-        Positioned(
-          right: 10,
-          bottom: 60,
-          child: FloatingActionButton(
-              tooltip: 'Close',
-              child: const Icon(Icons.close),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-        ),
         TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             userAgentPackageName: 'com.example.app'),
@@ -74,6 +54,32 @@ class _BigMapWidgetState extends State<BigMapWidget> {
               width: 50,
               height: 50,
               child: getCentre(),
+            ),
+          ],
+        ),
+        Stack(
+          children: [
+            Positioned(
+              right: 10,
+              bottom: 60,
+              child: FloatingActionButton(
+                  tooltip: 'Close',
+                  child: const Icon(
+                    Icons.close,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+            ),
+          ],
+        ),
+        RichAttributionWidget(
+          animationConfig: const ScaleRAWA(),
+          attributions: [
+            TextSourceAttribution(
+              'OpenStreetMap contributors',
+              onTap: () =>
+                  launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
             ),
           ],
         ),

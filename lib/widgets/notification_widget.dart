@@ -9,98 +9,92 @@ class NotificationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double mWidth = MediaQuery.of(context).size.width * 0.8;
-
-    print(mWidth);
-
-    return Column(
-      children: [
-        InkWell(
-          child: Card(
-            clipBehavior: Clip.antiAlias,
-            child: Row(
-              children: [
-                Container(
-                  color: notification.getColor(),
-                  padding: const EdgeInsets.all(5),
-                  height: 150,
-                  child: notification.getIcon(),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: mWidth,
-                  child: Column(
+    String levelLabel = '';
+    switch (notification.level) {
+      case 1:
+        levelLabel = 'LOW';
+        break;
+      case 2:
+        levelLabel = 'MEDIUM';
+        break;
+      case 3:
+        levelLabel = 'HIGH';
+        break;
+      default:
+    }
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Color.fromARGB(255, 222, 223, 223)),
+      ),
+      margin: EdgeInsets.all(3.0),
+      child: InkWell(
+        child: Row(
+          children: [
+            Container(
+              color: notification.getColor(),
+              height: 150.0,
+              child: notification.getIcon(),
+              padding: EdgeInsets.only(left: 3.0, right: 3.0),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              width: mWidth,
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      notification.title.toString(),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          notification.title.toString(),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                      Transform(
+                        transform: new Matrix4.identity()..scale(0.8),
+                        child: Chip(
+                          avatar: Icon(Icons.lock_clock),
+                          backgroundColor: Color.fromARGB(255, 234, 233, 233),
+                          label: Text(
+                            notification.date.toString(),
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                            "${notification.body!.characters.take(100).toString()} ..."),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Chip(
-                              avatar: const CircleAvatar(
-                                child: Icon(
-                                  Icons.timelapse,
-                                  size: 17,
-                                ),
-                              ),
-                              label: Text(notification.date.toString()),
-                            ),
+                      Transform(
+                        transform: new Matrix4.identity()..scale(0.8),
+                        child: new Chip(
+                          avatar: Icon(Icons.calendar_today),
+                          padding: EdgeInsets.all(2.0),
+                          backgroundColor: Color.fromARGB(255, 234, 233, 233),
+                          label: Text(
+                            notification.time.toString(),
+                            style: TextStyle(color: Colors.black),
                           ),
-                          const SizedBox(width: 10.0),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Chip(
-                              avatar: const CircleAvatar(
-                                child: Icon(
-                                  Icons.calendar_today,
-                                  size: 15,
-                                ),
-                              ),
-                              label: Text(notification.time.toString()),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 15,
-                ),
-              ],
-            ),
-          ),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => NotificationDetailsScreen(
-                  notificationModel: notification,
-                ),
+                ],
               ),
-            );
-          },
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 15,
+            ),
+          ],
         ),
-        const SizedBox(
-          height: 5.0,
-        ),
-      ],
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => NotificationDetailsScreen(
+                notificationModel: notification,
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

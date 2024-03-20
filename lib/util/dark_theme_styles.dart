@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 class Styles {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
     return ThemeData(
+      scaffoldBackgroundColor: Colors.white,
       primarySwatch: Colors.blueGrey,
       primaryColor: isDarkTheme ? Colors.black : Colors.white,
+      colorScheme: ColorScheme.fromSwatch().copyWith(
+        primary: Colors.blueGrey,
+        brightness: isDarkTheme ? Brightness.dark : Brightness.light,
+        surface: isDarkTheme ? Color.fromARGB(255, 36, 37, 38) : Colors.white,
+        onSurface: isDarkTheme ? Colors.white : Colors.black,
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: isDarkTheme
@@ -31,20 +38,13 @@ class Styles {
       disabledColor: Colors.grey,
       cardColor: isDarkTheme ? Color(0xFF151515) : Colors.white,
       canvasColor: isDarkTheme ? Colors.black : Colors.grey[50],
-      //brightness: isDarkTheme ? Brightness.dark : Brightness.light,
-      colorScheme: ColorScheme.fromSwatch().copyWith(
-        primary: Colors.blueGrey,
-        brightness: isDarkTheme ? Brightness.dark : Brightness.light,
-        surface: Color.fromARGB(255, 36, 37, 38),
-        onSurface: Colors.white,
-      ),
-
-      buttonTheme: Theme.of(context).buttonTheme.copyWith(
-            colorScheme: isDarkTheme ? ColorScheme.dark() : ColorScheme.light(),
-            buttonColor: Color.fromARGB(66, 118, 187, 216),
-          ),
+      brightness: isDarkTheme ? Brightness.dark : Brightness.light,
       appBarTheme: AppBarTheme(
         elevation: 0.0,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blueGrey, foregroundColor: Colors.white),
       ),
     );
   }

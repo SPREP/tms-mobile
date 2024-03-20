@@ -87,9 +87,6 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
             Text('${widget.currentData.windSpeed.toString()} knts'),
           ]),
         ]),
-        const SizedBox(
-          height: 70,
-        ),
       ],
     );
   }

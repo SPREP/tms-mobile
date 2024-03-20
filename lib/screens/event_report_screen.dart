@@ -78,6 +78,8 @@ class _EventReportScreenState extends State<EventReportScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Event Report'),
+          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+          foregroundColor: Colors.white,
         ),
         body: Form(
           key: _formKey,

@@ -19,6 +19,8 @@ class _EvacuationDetailsScreenState extends State<EvacuationDetailsScreen> {
       appBar: AppBar(
         title: const Text('Evacuation Details'),
         elevation: 0,
+        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: EdgeInsets.all(20),
@@ -43,16 +45,13 @@ class _EvacuationDetailsScreenState extends State<EvacuationDetailsScreen> {
             SizedBox(
               height: 20,
             ),
-            TextButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-              ),
-              onPressed: () {
-                MapsLauncher.launchCoordinates(
-                    widget.model.lat!, widget.model.lon!);
-              },
-              child: Text('Get Direction'),
-            )
+            ElevatedButton.icon(
+                icon: const Icon(Icons.directions),
+                onPressed: () {
+                  MapsLauncher.launchCoordinates(
+                      widget.model.lat!, widget.model.lon!);
+                },
+                label: const Text('Get Direction')),
           ],
         ),
       ),

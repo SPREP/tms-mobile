@@ -21,12 +21,13 @@ class NotificationModel {
 
   Icon getIcon() {
     switch (level) {
-      case 1:
+      case 0:
         return const Icon(
           Icons.info,
           color: Colors.white,
           size: 30,
         );
+      case 1:
       case 2:
       case 3:
         return const Icon(
@@ -40,13 +41,15 @@ class NotificationModel {
 
   Color getColor() {
     switch (level) {
+      case 0:
+        return const Color.fromRGBO(153, 204, 51, 0.4);
       case 1:
-        return const Color.fromARGB(255, 131, 149, 234);
+        return const Color.fromRGBO(250, 212, 62, 1.0); //255, 204, 0
       case 2:
-        return const Color.fromARGB(255, 216, 193, 113);
+        return const Color.fromRGBO(252, 168, 126, 1.0); // 255, 153, 102,
       case 3:
-        return const Color.fromARGB(255, 255, 126, 126);
+        return const Color.fromRGBO(207, 92, 54, 1.0); // 204, 51, 0
     }
-    return const Color.fromARGB(255, 131, 149, 234);
+    return const Color.fromRGBO(255, 204, 0, 1.0);
   }
 }

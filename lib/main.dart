@@ -12,6 +12,7 @@ import 'package:macres/providers/twentyfour_hours_provider.dart';
 import 'package:macres/providers/user_provider.dart';
 import 'package:macres/providers/weather_location.dart';
 import 'package:macres/screens/tabs_screen.dart';
+import 'package:macres/util/dark_theme_preference.dart';
 import 'package:macres/util/dark_theme_styles.dart';
 import 'package:macres/widgets/onboarding/onboarding_page.dart';
 import 'package:provider/provider.dart';
@@ -100,6 +101,7 @@ class _AppState extends State<App> {
           supportedLocales: const [Locale('to'), Locale('en', 'US')],
           locale: localeProvider.selectedLocale,
           title: 'Tonga Weather App',
+          theme: Styles.themeData(darkThemeProvider.darkTheme, context),
           darkTheme: ThemeData.dark(),
           home: widget.showOnboarding
               ? const OnboardingPage()
