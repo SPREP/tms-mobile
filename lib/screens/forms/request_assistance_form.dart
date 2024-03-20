@@ -134,6 +134,8 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Request Assistance'),
+              backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+              foregroundColor: Colors.white,
             ),
             body: SingleChildScrollView(
               child: Padding(

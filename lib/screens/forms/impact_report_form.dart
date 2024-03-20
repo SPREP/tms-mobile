@@ -89,6 +89,8 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Impact Report'),
+              backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+              foregroundColor: Colors.white,
             ),
             body: SingleChildScrollView(
               child: Padding(

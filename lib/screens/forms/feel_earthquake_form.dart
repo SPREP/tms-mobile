@@ -26,6 +26,8 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
     return Scaffold(
       body: Padding(padding: EdgeInsets.all(20), child: getForm()),
       appBar: AppBar(
+        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+        foregroundColor: Colors.white,
         title: Text('Did you feel the earthquake?'),
       ),
     );

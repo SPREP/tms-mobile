@@ -605,9 +605,10 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     ),
                   ),
 
+                  // 24 Hours widget
                   const SizedBox(height: 10),
                   Container(
-                    height: 410,
+                    height: 350,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
@@ -631,6 +632,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     ),
                   ),
 
+                  // 3 Hours widget
                   const SizedBox(height: 10),
                   Container(
                     height: 300,
@@ -657,6 +659,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     ),
                   ),
 
+                  // 10 Days widget
                   const SizedBox(height: 10),
                   Container(
                     height: 600,
@@ -683,9 +686,10 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     ),
                   ),
 
+                  // Tide widget
                   const SizedBox(height: 10),
                   Container(
-                    height: 700,
+                    height: 600,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,

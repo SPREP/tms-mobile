@@ -60,7 +60,11 @@ class NationalNumberScreen extends StatelessWidget {
     };
 
     return Scaffold(
-      appBar: AppBar(title: const Text('National number')),
+      appBar: AppBar(
+        title: const Text('National number'),
+        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+        foregroundColor: Colors.white,
+      ),
       body: const SingleChildScrollView(
         child: Column(
           children: [

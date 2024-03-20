@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
@@ -134,6 +132,8 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
             return Scaffold(
               appBar: AppBar(
                 title: const Text('Evacuation Map'),
+                backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+                foregroundColor: Colors.white,
               ),
               body: Center(
                 child: CircularProgressIndicator(),
@@ -153,6 +153,8 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
             return Scaffold(
               appBar: AppBar(
                 title: const Text('Evacuation Map'),
+                backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+                foregroundColor: Colors.white,
               ),
               body: SingleChildScrollView(
                 child: Padding(

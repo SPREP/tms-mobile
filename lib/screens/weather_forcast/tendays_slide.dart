@@ -36,7 +36,7 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
                 left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Color.fromARGB(255, 173, 171, 171)),
+                bottom: BorderSide(color: Color.fromARGB(255, 220, 218, 218)),
               ),
             ),
             child: Row(

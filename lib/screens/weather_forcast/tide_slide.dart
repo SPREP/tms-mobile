@@ -52,23 +52,23 @@ class _TideSlideState extends State<TideSlide> {
 
     switch (value.toInt()) {
       case 0:
-        text = Text('00:00', style: style);
+        text = Text('12am', style: style);
 
         break;
       case 5:
-        text = Text('5:00', style: style);
+        text = Text('5am', style: style);
 
         break;
       case 10:
-        text = Text('10:00', style: style);
+        text = Text('10am', style: style);
 
         break;
       case 15:
-        text = Text('15:00', style: style);
+        text = Text('3pm', style: style);
 
         break;
       case 20:
-        text = Text('20:00', style: style);
+        text = Text('8pm', style: style);
 
         break;
       default:
@@ -166,6 +166,19 @@ class _TideSlideState extends State<TideSlide> {
           ),
           child: LineChart(
             LineChartData(
+              lineTouchData: LineTouchData(touchTooltipData:
+                  LineTouchTooltipData(getTooltipItems: (value) {
+                return value
+                    .map(
+                      (e) => LineTooltipItem(
+                        DateFormat("hh:mma").format(
+                                DateFormat("HH.mm").parse(e.x.toString())) +
+                            ' (${e.y}m)',
+                        TextStyle(fontSize: 14.0),
+                      ),
+                    )
+                    .toList();
+              })),
               minX: 0,
               maxX: 24,
               minY: 0,

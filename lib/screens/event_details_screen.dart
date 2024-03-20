@@ -114,6 +114,20 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                               ),
                             ],
                           ),
+                          Stack(children: [
+                            Positioned(
+                              right: 10,
+                              bottom: 60,
+                              child: FloatingActionButton(
+                                  tooltip: 'View large map',
+                                  child: const Icon(
+                                    Icons.center_focus_weak_sharp,
+                                  ),
+                                  onPressed: () {
+                                    _openMapOverlay();
+                                  }),
+                            ),
+                          ]),
                         ],
                       ),
               ),

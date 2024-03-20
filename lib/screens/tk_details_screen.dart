@@ -12,6 +12,8 @@ class _TkDetailsScreenState extends State<TkDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+        foregroundColor: Colors.white,
         title: const Text('TK Indicator Details'),
         elevation: 0,
       ),

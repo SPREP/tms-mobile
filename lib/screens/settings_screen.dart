@@ -75,6 +75,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+        foregroundColor: Colors.white,
         centerTitle: true,
         title: const Row(children: [
           Icon(Icons.settings),

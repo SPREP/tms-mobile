@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/event_model.dart';
-import 'package:macres/models/settings_model.dart';
 import 'package:macres/widgets/event_widget.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -118,7 +117,7 @@ class _EventScreen extends State<EventScreen> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.all(5.0),
         child: isLoading
             ? const Center(
                 child: CircularProgressIndicator(),

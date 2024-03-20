@@ -82,6 +82,8 @@ class _TabsScreenState extends State<TabsScreen> {
       return AppBar(
         title: Text(activePageTitle),
         actions: actionButtons,
+        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+        foregroundColor: Colors.white,
       );
     }
   }
@@ -201,8 +203,8 @@ class _TabsScreenState extends State<TabsScreen> {
                 label: 'More',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
-                label: 'Notification',
+                icon: Icon(Icons.warning),
+                label: 'Warnings',
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(
@@ -242,7 +244,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
       if (_selectedPageIndex == 3) {
         activePage = const NotificationScreen();
-        activePageTitle = 'Notifications';
+        activePageTitle = 'Warnings';
         actionButtons = [];
       }
 
