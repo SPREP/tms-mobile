@@ -31,7 +31,13 @@ class _EvacuationDetailsScreenState extends State<EvacuationDetailsScreen> {
               style: TextStyle(fontSize: 15),
             ),
             SizedBox(
-              height: 20,
+              height: 10,
+            ),
+            if (widget.model.nearestKm != null)
+              Text(
+                  'This is your nearest evacuation point, ${widget.model.nearestKm}km away from your current location.'),
+            SizedBox(
+              height: 10,
             ),
             InteractiveViewer(
               boundaryMargin: const EdgeInsets.all(20.0),

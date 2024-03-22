@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Styles {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
     return ThemeData(
-      scaffoldBackgroundColor: Colors.white,
+      scaffoldBackgroundColor: isDarkTheme ? Colors.black : Colors.white,
       primarySwatch: Colors.blueGrey,
       primaryColor: isDarkTheme ? Colors.black : Colors.white,
       colorScheme: ColorScheme.fromSwatch().copyWith(
@@ -26,9 +26,9 @@ class Styles {
           ? Theme.of(context)
               .textTheme
               .apply(displayColor: Colors.white, bodyColor: Colors.white)
-          : Theme.of(context)
-              .textTheme
-              .apply(displayColor: Colors.black, bodyColor: Colors.black),
+          : Theme.of(context).textTheme.apply(
+              displayColor: Color.fromARGB(255, 29, 28, 28),
+              bodyColor: const Color.fromARGB(255, 48, 48, 48)),
       highlightColor:
           isDarkTheme ? Color(0xff372901) : Color.fromARGB(255, 184, 183, 181),
       hoverColor: isDarkTheme ? Color(0xff3A3A3B) : Color(0xff4285F4),
@@ -46,6 +46,12 @@ class Styles {
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blueGrey, foregroundColor: Colors.white),
       ),
+      switchTheme: SwitchThemeData(
+          thumbColor: MaterialStateProperty.all(Theme.of(context).primaryColor),
+          trackColor: MaterialStateProperty.resolveWith((states) =>
+              states.contains(MaterialState.selected)
+                  ? Theme.of(context).primaryColor
+                  : null)),
     );
   }
 }

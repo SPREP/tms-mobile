@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
@@ -8,7 +10,9 @@ import 'package:macres/models/evacuation_model.dart';
 import 'dart:convert';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
+import 'package:macres/models/event_model.dart';
 import 'package:macres/screens/evacuation_details_screen.dart';
+import 'package:provider/provider.dart';
 
 class EvacuationMapScreen extends StatefulWidget {
   const EvacuationMapScreen({super.key});
@@ -20,14 +24,15 @@ class EvacuationMapScreen extends StatefulWidget {
 class _EvacuationMapScreen extends State<EvacuationMapScreen> {
   bool isLoading = false;
   Position? _currentPosition;
+  final mapController = MapController();
 
   @override
   void initState() {
     super.initState();
+    _getCurrentPosition();
     initEvacuation();
     setState(() {
       isLoading = true;
-      //getEvacuation();
     });
   }
 
@@ -124,6 +129,14 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double lat = -21.178986;
+    double lon = -175.198242;
+
+    if (_currentPosition != null) {
+      lat = _currentPosition!.latitude;
+      lon = _currentPosition!.longitude;
+    }
+
     return FutureBuilder<List<EvacuationModel>>(
         future: getEvacuation(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -169,10 +182,9 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                             child: ClipRRect(
                               borderRadius: const BorderRadius.only(),
                               child: FlutterMap(
-                                mapController: MapController(),
+                                mapController: mapController,
                                 options: MapOptions(
-                                  initialCenter:
-                                      LatLng(-21.178986, -175.198242),
+                                  initialCenter: LatLng(lat, lon),
                                   initialZoom: 12,
                                 ),
                                 children: [
@@ -203,6 +215,29 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                     ),
                                     initialMarkers: getMarkers(snapshot.data),
                                   ),
+                                  Stack(children: [
+                                    Positioned(
+                                      right: 10,
+                                      top: 10,
+                                      child: FloatingActionButton(
+                                          tooltip: 'Nearest',
+                                          child: const Icon(
+                                            Icons.near_me,
+                                          ),
+                                          onPressed: () {
+                                            EvacuationModel evm =
+                                                getNearest(snapshot.data);
+
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EvacuationDetailsScreen(
+                                                        model: evm),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                  ]),
                                 ],
                               ),
                             ),
@@ -232,6 +267,44 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
       );
     }
     return markers;
+  }
+
+  void displose() {
+    mapController.dispose();
+    super.dispose();
+  }
+
+  getNearest(data) {
+    EvacuationModel evacuationPoint = EvacuationModel();
+    final Distance distance = Distance();
+    double km = 0;
+    double currentKm = 0;
+    double totalKm = 0;
+
+    if (_currentPosition != null) {
+      for (var item in data) {
+        km = distance.as(
+          LengthUnit.Kilometer,
+          new LatLng(item.lat, item.lon),
+          new LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+        );
+
+        totalKm += km;
+
+        if (currentKm == 0) {
+          currentKm = km;
+        }
+
+        if (km < currentKm) {
+          currentKm = km;
+          evacuationPoint = item;
+        }
+      }
+    }
+
+    evacuationPoint.nearestKm = totalKm;
+
+    return evacuationPoint;
   }
 
   getMarker(String image, EvacuationModel model) {

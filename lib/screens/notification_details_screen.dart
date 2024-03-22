@@ -113,7 +113,7 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notification Details'),
+        title: const Text('Warning Details'),
         backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
         foregroundColor: Colors.white,
         elevation: 0,

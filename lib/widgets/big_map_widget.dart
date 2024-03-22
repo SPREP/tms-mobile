@@ -16,6 +16,7 @@ class BigMapWidget extends StatefulWidget {
 
 class _BigMapWidgetState extends State<BigMapWidget> {
   DarkThemePreference darkTheme = new DarkThemePreference();
+  final mapController = MapController();
 
   Widget getCentre() {
     return const RippleAnimation(
@@ -38,7 +39,7 @@ class _BigMapWidgetState extends State<BigMapWidget> {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
-      mapController: MapController(),
+      mapController: mapController,
       options: MapOptions(
         initialCenter: LatLng(widget.eventModel.lat, widget.eventModel.lon),
         initialZoom: 6,

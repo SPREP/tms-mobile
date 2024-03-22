@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
-class HelpScreen extends StatelessWidget {
-  const HelpScreen({super.key});
+class ContactScreen extends StatelessWidget {
+  const ContactScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Get Help'),
+        title: const Text('Contact Info'),
+        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+        foregroundColor: Colors.white,
       ),
       body: const Padding(
         padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),

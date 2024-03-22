@@ -19,6 +19,8 @@ class TkScreen extends StatefulWidget {
 }
 
 class _TkScreen extends State<TkScreen> {
+  final mapController = new MapController();
+
   List<EventModel> apiData = [];
   bool isLoading = false;
 
@@ -150,10 +152,10 @@ class _TkScreen extends State<TkScreen> {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(),
                   child: FlutterMap(
-                    mapController: MapController(),
+                    mapController: mapController,
                     options: MapOptions(
-                      center: LatLng(-21.178986, -175.198242),
-                      zoom: 10,
+                      initialCenter: LatLng(-21.178986, -175.198242),
+                      initialZoom: 10,
                     ),
                     children: [
                       TileLayer(
@@ -245,6 +247,11 @@ class _TkScreen extends State<TkScreen> {
         ],
       ),
     );
+  }
+
+  void dispose() {
+    mapController.dispose();
+    super.dispose();
   }
 
   getMarker(String image) {

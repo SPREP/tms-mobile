@@ -69,14 +69,11 @@ class _TabsScreenState extends State<TabsScreen> {
 
   getAppBar() {
     if ((_selectedPageIndex == 0 || _selectedPageIndex == 2)) {
-      return PreferredSize(
-        preferredSize: const Size.fromHeight(40.0),
-        child: AppBar(
-          backgroundColor: Colors.transparent,
-          flexibleSpace: getLocationDropdown(),
-          actions: actionButtons,
-          foregroundColor: Colors.white,
-        ),
+      return AppBar(
+        backgroundColor: Colors.transparent,
+        flexibleSpace: getLocationDropdown(),
+        actions: actionButtons,
+        foregroundColor: Colors.white,
       );
     } else {
       return AppBar(
@@ -93,7 +90,7 @@ class _TabsScreenState extends State<TabsScreen> {
         child: Column(
       children: [
         SizedBox(
-          height: 50,
+          height: 55,
         ),
         DropdownButton<Location>(
           borderRadius: BorderRadius.circular(10),

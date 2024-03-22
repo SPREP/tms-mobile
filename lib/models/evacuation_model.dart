@@ -9,9 +9,11 @@ class EvacuationModel {
   double? lon;
   num? id;
 
+  double? nearestKm;
+
   EvacuationModel(
       {this.body,
-      required this.title,
+      this.title,
       this.lat = 0,
       this.lon = 0,
       this.id,

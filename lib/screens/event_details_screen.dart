@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:humanitarian_icons/humanitarian_icons.dart';
 import 'package:macres/models/event_model.dart';
 import 'package:macres/models/settings_model.dart';
@@ -21,6 +22,8 @@ class EventDetailsScreen extends StatefulWidget {
 }
 
 class _EventDetailsScreenState extends State<EventDetailsScreen> {
+  final mapController = MapController();
+
   Widget getCentre() {
     return const RippleAnimation(
       color: Colors.red,
@@ -46,6 +49,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       context: context,
       builder: (ctx) => BigMapWidget(eventModel: widget.eventModel),
     );
+  }
+
+  void displose() {
+    mapController.dispose();
+    super.dispose();
   }
 
   @override
@@ -91,7 +99,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             TextStyle(color: Color.fromARGB(255, 47, 47, 47)),
                       ))
                     : FlutterMap(
-                        mapController: MapController(),
+                        mapController: mapController,
                         options: MapOptions(
                           initialCenter: LatLng(
                               widget.eventModel.lat, widget.eventModel.lon),
@@ -139,14 +147,24 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 color: Theme.of(context).primaryColor,
               ),
               width: double.infinity,
-              padding: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.all(20.0),
               margin: const EdgeInsets.only(top: 250),
               child: Column(
                 children: [
-                  Text(
-                    "${eventTypeLabel[widget.eventModel.type]} ${widget.eventModel.name}",
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      widget.eventModel
+                          .getIcon(50, const Color.fromARGB(255, 84, 83, 84)),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Text(
+                        "${eventTypeLabel[widget.eventModel.type]} ${widget.eventModel.name}",
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -186,8 +204,18 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         ),
                     ],
                   ),
+                  if (widget.eventModel.body != '' &&
+                      widget.eventModel.body != null)
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                  Flexible(
+                    child: Text(
+                      widget.eventModel.body.toString(),
+                    ),
+                  ),
                   const SizedBox(
-                    height: 50,
+                    height: 20,
                   ),
                   if (widget.eventModel.tsunami != null &&
                       widget.eventModel.tsunami != '')

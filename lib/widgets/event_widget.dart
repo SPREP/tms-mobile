@@ -9,7 +9,7 @@ class EventWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double mWidth = MediaQuery.of(context).size.width * 0.8;
+    double mWidth = MediaQuery.of(context).size.width * 0.7;
 
     return Container(
       decoration: BoxDecoration(
@@ -20,10 +20,10 @@ class EventWidget extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              width: 20.0,
+              width: 50.0,
               height: 120.0,
-              child: Text(''),
-              color: event.getColor(),
+              child: event.getIcon(40.0, const Color.fromARGB(255, 86, 85, 85)),
+              color: Color.fromARGB(255, 238, 239, 239),
             ),
             Container(
               padding: const EdgeInsets.all(10),
@@ -45,7 +45,7 @@ class EventWidget extends StatelessWidget {
                     Text("Magnitude: ${event.magnitude.toString()}"),
                   if (event.category != null && event.category != 0)
                     Text("Category: ${event.category.toString()}"),
-                  if (event.location != null)
+                  if (event.location != '')
                     Text("Location: ${event.location.toString()}"),
                   if (event.evacuate != null)
                     Text("Evacuation: ${event.evacuate}"),

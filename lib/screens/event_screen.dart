@@ -83,6 +83,8 @@ class _EventScreen extends State<EventScreen> {
             category: int.parse(item.value['field_category'] ?? '0'),
             name: item.value['field_name'] ?? '',
             feel: item.value['feel'] ?? [],
+            location: item.value['field_region'] ?? '',
+            body: item.value['body'] ?? '',
           ));
         }
 
