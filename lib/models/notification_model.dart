@@ -39,6 +39,23 @@ class NotificationModel {
     return const Icon(Icons.abc);
   }
 
+  getLevelText() {
+    String levelLabel = '';
+    switch (level) {
+      case 1:
+        levelLabel = 'LOW';
+        break;
+      case 2:
+        levelLabel = 'MEDIUM';
+        break;
+      case 3:
+        levelLabel = 'HIGH';
+        break;
+      default:
+    }
+    return levelLabel;
+  }
+
   Color getColor() {
     switch (level) {
       case 0:

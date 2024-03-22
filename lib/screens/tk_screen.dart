@@ -114,137 +114,144 @@ class _TkScreen extends State<TkScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            color: Color.fromARGB(255, 242, 240, 240),
-            child: Row(
-              children: [
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => TkIndicatorForm(),
-                      ),
-                    );
-                  },
-                  label: const Text(
-                    "Report Indicator",
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Traditional Knowledge'),
+        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              color: Color.fromARGB(255, 242, 240, 240),
+              child: Row(
+                children: [
+                  TextButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => TkIndicatorForm(),
+                        ),
+                      );
+                    },
+                    label: const Text(
+                      "Report Indicator",
+                    ),
+                    icon: Icon(Icons.add),
                   ),
-                  icon: Icon(Icons.add),
-                ),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
-                  child: Text(
-                    '120 Reported',
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: Text(
+                      '120 Reported',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(),
+                    child: FlutterMap(
+                      mapController: mapController,
+                      options: MapOptions(
+                        initialCenter: LatLng(-21.178986, -175.198242),
+                        initialZoom: 10,
+                      ),
+                      children: [
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          userAgentPackageName: 'com.example.app',
+                        ),
+                        SuperclusterLayer.immutable(
+                          indexBuilder: IndexBuilders.rootIsolate,
+                          builder: (context, position, markerCount,
+                                  extraClusterData) =>
+                              Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Colors.blue,
+                            ),
+                            child: Center(
+                              child: Text(
+                                markerCount.toString(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          initialMarkers: [
+                            Marker(
+                              point: LatLng(-21.178986, -175.198242),
+                              width: 50,
+                              height: 50,
+                              child: getMarker(
+                                  'https://source.unsplash.com/random/200x200?sig=1'),
+                            ),
+                            Marker(
+                              point: LatLng(-21.149379, -175.292833),
+                              width: 50,
+                              height: 50,
+                              child: getMarker(
+                                  'https://source.unsplash.com/random/200x200?sig=2'),
+                            ),
+                            Marker(
+                              point: LatLng(-21.077545, -175.333798),
+                              width: 50,
+                              height: 50,
+                              child: getMarker(
+                                  'https://source.unsplash.com/random/200x200?sig=3'),
+                            ),
+                            Marker(
+                              point: LatLng(-21.400836, -174.905030),
+                              width: 50,
+                              height: 50,
+                              child: getMarker(
+                                  'https://source.unsplash.com/random/200x200?sig=4'),
+                            ),
+                            Marker(
+                              point: LatLng(-21.067089, -175.330512),
+                              width: 50,
+                              height: 50,
+                              child: getMarker(
+                                  'https://source.unsplash.com/random/200x200?sig=5'),
+                            ),
+                            Marker(
+                              point: LatLng(-19.753643, -175.087173),
+                              width: 50,
+                              height: 50,
+                              child: getMarker(
+                                  'https://source.unsplash.com/random/200x200?sig=6'),
+                            ),
+                            Marker(
+                              point: LatLng(-19.647035, -174.293453),
+                              width: 50,
+                              height: 50,
+                              child: getMarker(
+                                  'https://source.unsplash.com/random/200x200?sig=7'),
+                            ),
+                            Marker(
+                              point: LatLng(-20.251629, -174.805178),
+                              width: 50,
+                              height: 50,
+                              child: getMarker(
+                                  'https://source.unsplash.com/random/200x200?sig=8'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
-          ),
-          Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(),
-                  child: FlutterMap(
-                    mapController: mapController,
-                    options: MapOptions(
-                      initialCenter: LatLng(-21.178986, -175.198242),
-                      initialZoom: 10,
-                    ),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName: 'com.example.app',
-                      ),
-                      SuperclusterLayer.immutable(
-                        indexBuilder: IndexBuilders.rootIsolate,
-                        builder: (context, position, markerCount,
-                                extraClusterData) =>
-                            Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            color: Colors.blue,
-                          ),
-                          child: Center(
-                            child: Text(
-                              markerCount.toString(),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        initialMarkers: [
-                          Marker(
-                            point: LatLng(-21.178986, -175.198242),
-                            width: 50,
-                            height: 50,
-                            child: getMarker(
-                                'https://source.unsplash.com/random/200x200?sig=1'),
-                          ),
-                          Marker(
-                            point: LatLng(-21.149379, -175.292833),
-                            width: 50,
-                            height: 50,
-                            child: getMarker(
-                                'https://source.unsplash.com/random/200x200?sig=2'),
-                          ),
-                          Marker(
-                            point: LatLng(-21.077545, -175.333798),
-                            width: 50,
-                            height: 50,
-                            child: getMarker(
-                                'https://source.unsplash.com/random/200x200?sig=3'),
-                          ),
-                          Marker(
-                            point: LatLng(-21.400836, -174.905030),
-                            width: 50,
-                            height: 50,
-                            child: getMarker(
-                                'https://source.unsplash.com/random/200x200?sig=4'),
-                          ),
-                          Marker(
-                            point: LatLng(-21.067089, -175.330512),
-                            width: 50,
-                            height: 50,
-                            child: getMarker(
-                                'https://source.unsplash.com/random/200x200?sig=5'),
-                          ),
-                          Marker(
-                            point: LatLng(-19.753643, -175.087173),
-                            width: 50,
-                            height: 50,
-                            child: getMarker(
-                                'https://source.unsplash.com/random/200x200?sig=6'),
-                          ),
-                          Marker(
-                            point: LatLng(-19.647035, -174.293453),
-                            width: 50,
-                            height: 50,
-                            child: getMarker(
-                                'https://source.unsplash.com/random/200x200?sig=7'),
-                          ),
-                          Marker(
-                            point: LatLng(-20.251629, -174.805178),
-                            width: 50,
-                            height: 50,
-                            child: getMarker(
-                                'https://source.unsplash.com/random/200x200?sig=8'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

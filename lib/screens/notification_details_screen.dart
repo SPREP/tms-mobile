@@ -146,8 +146,55 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
           child: Center(
             child: Column(
               children: [
-                Text(widget.notificationModel.title.toString(),
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(right: 10.0),
+                      child: Icon(
+                        Icons.warning,
+                        color: widget.notificationModel.getColor(),
+                        size: 40.0,
+                      ),
+                    ),
+                    Flexible(
+                        child: Text(widget.notificationModel.title.toString(),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold))),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Row(
+                  children: [
+                    Chip(
+                      padding: EdgeInsets.all(2.0),
+                      backgroundColor: widget.notificationModel.getColor(),
+                      label: Text(
+                        widget.notificationModel.getLevelText(),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Chip(
+                      avatar: Icon(Icons.calendar_today),
+                      padding: EdgeInsets.all(2.0),
+                      backgroundColor: Color.fromARGB(255, 234, 233, 233),
+                      label: Text(
+                        widget.notificationModel.time.toString(),
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    Chip(
+                      avatar: Icon(Icons.lock_clock),
+                      padding: EdgeInsets.all(2.0),
+                      backgroundColor: Color.fromARGB(255, 234, 233, 233),
+                      label: Text(
+                        widget.notificationModel.date.toString(),
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 30),
                 Text(widget.notificationModel.body.toString()),
               ],
