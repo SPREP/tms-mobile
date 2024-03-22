@@ -88,6 +88,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
   @override
   void dispose() {
+    myController.dispose();
     timer.cancel(); //cancel the timer here
     super.dispose();
   }

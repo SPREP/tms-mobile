@@ -4,7 +4,7 @@ import 'package:macres/models/user_model.dart';
 import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/providers/user_provider.dart';
 import 'package:macres/screens/about_screen.dart';
-import 'package:macres/screens/help_screen.dart';
+import 'package:macres/screens/contact_screen.dart';
 import 'package:macres/screens/national_number_screen.dart';
 import 'package:macres/screens/settings_screen.dart';
 import 'package:macres/screens/tabs_screen.dart';
@@ -63,17 +63,7 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
           DrawerHeader(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).colorScheme.primaryContainer,
-                  Theme.of(context)
-                      .colorScheme
-                      .primaryContainer
-                      .withOpacity(0.8),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: Color.fromRGBO(92, 125, 138, 1.0),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -171,11 +161,12 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.home, size: 26),
+            leading: Icon(Icons.home,
+                size: 26, color: Color.fromARGB(255, 98, 97, 97)),
             title: Text(
               'Home',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 18,
+                    fontSize: 17,
                   ),
             ),
             onTap: () => Navigator.of(context).pushReplacement(
@@ -183,15 +174,14 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
             ),
           ),
           ListTile(
-            trailing: const Icon(
-              Icons.arrow_forward_ios,
-              size: 15,
-            ),
-            leading: Icon(Icons.phone_outlined, size: 26),
+            trailing: const Icon(Icons.arrow_forward_ios,
+                size: 15, color: Color.fromARGB(255, 98, 97, 97)),
+            leading: Icon(Icons.phone_outlined,
+                size: 26, color: Color.fromARGB(255, 98, 97, 97)),
             title: Text(
               'National Numbers',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 18,
+                    fontSize: 17,
                   ),
             ),
             onTap: () {
@@ -204,15 +194,14 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
           ),
           const Divider(),
           ListTile(
-            trailing: const Icon(
-              Icons.arrow_forward_ios,
-              size: 15,
-            ),
-            leading: Icon(Icons.settings, size: 26),
+            trailing: const Icon(Icons.arrow_forward_ios,
+                size: 15, color: Color.fromARGB(255, 98, 97, 97)),
+            leading: Icon(Icons.settings,
+                size: 26, color: Color.fromARGB(255, 98, 97, 97)),
             title: Text(
               'Settings',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 18,
+                    fontSize: 17,
                   ),
             ),
             onTap: () {
@@ -223,34 +212,32 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
             },
           ),
           ListTile(
-            trailing: const Icon(
-              Icons.arrow_forward_ios,
-              size: 15,
-            ),
-            leading: Icon(Icons.help, size: 26),
+            trailing: const Icon(Icons.arrow_forward_ios,
+                size: 15, color: Color.fromARGB(255, 98, 97, 97)),
+            leading: Icon(Icons.help,
+                size: 26, color: Color.fromARGB(255, 98, 97, 97)),
             title: Text(
-              'Help',
+              'Contact',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 18,
+                    fontSize: 17,
                   ),
             ),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const HelpScreen()),
+                MaterialPageRoute(builder: (context) => const ContactScreen()),
               );
             },
           ),
           ListTile(
-            trailing: const Icon(
-              Icons.arrow_forward_ios,
-              size: 15,
-            ),
-            leading: Icon(Icons.info, size: 26),
+            trailing: const Icon(Icons.arrow_forward_ios,
+                size: 15, color: Color.fromARGB(255, 98, 97, 97)),
+            leading: Icon(Icons.info,
+                size: 26, color: Color.fromARGB(255, 98, 97, 97)),
             title: Text(
               'About',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 18,
+                    fontSize: 17,
                   ),
             ),
             onTap: () {

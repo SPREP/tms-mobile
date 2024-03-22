@@ -121,31 +121,18 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
 
   @override
   Widget build(BuildContext context) {
-    Future<UserModel> getUserData() => UserPreferences().getUser();
-
-    return FutureBuilder<UserModel>(
-      future: getUserData(),
-      builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Request Assistance'),
-              backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-              foregroundColor: Colors.white,
-            ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: getForm(snapshot),
-              ),
-            ),
-          );
-        }
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Request Assistance'),
+        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: getForm(),
+        ),
+      ),
     );
   }
 
@@ -232,568 +219,565 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
     _selectedImages.clear();
   }
 
-  Widget getForm(snapshot) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            const Text(
-              'Fill in the following fields to request assistance.',
+  Widget getForm() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          const Text(
+            'Fill in the following fields to request assistance.',
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            decoration: const InputDecoration(
+              labelText: 'Full Name',
+              border: OutlineInputBorder(),
             ),
-            const SizedBox(height: 10),
-            TextFormField(
+
+            // The validator receives the text that the user has entered.
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your full name';
+              }
+              return null;
+            },
+            onSaved: (newValue) {
+              fullName = newValue;
+            },
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            decoration: const InputDecoration(
+              labelText: 'Phone Number',
+              border: OutlineInputBorder(),
+            ),
+            // The validator receives the text that the user has entered.
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your phone number';
+              }
+              return null;
+            },
+            onSaved: (newValue) {
+              phoneNumber = newValue;
+            },
+          ),
+          const SizedBox(height: 20),
+          DropdownButtonFormField(
+            decoration: const InputDecoration(
+              labelText: 'Location',
+              border: OutlineInputBorder(),
+            ),
+            hint: const Text('Choose your location'),
+            value: _selectedLocation,
+            items: Location.values.map((value) {
+              return DropdownMenuItem(
+                value: value,
+                child: Text(locationLabel[value].toString()),
+              );
+            }).toList(),
+            onChanged: (val) {
+              setState(() {
+                _selectedLocation = val!;
+              });
+            },
+            validator: (val) {
+              if (val == null) {
+                String errMsg = "Please choose your location.";
+                return errMsg;
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 40),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Do you have water?')),
+          Row(
+            children: [
+              ListTileTheme(
+                horizontalTitleGap: 0,
+                child: SizedBox(
+                  height: 70,
+                  width: 90,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(0),
+                    title: const Text('Yes'),
+                    leading: Radio(
+                      value: 1,
+                      groupValue: _haveWater,
+                      onChanged: (value) {
+                        setState(() {
+                          _haveWater = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              ListTileTheme(
+                horizontalTitleGap: 0,
+                child: SizedBox(
+                  height: 70,
+                  width: 90,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(0),
+                    title: const Text('No'),
+                    leading: Radio(
+                      value: 0,
+                      groupValue: _haveWater,
+                      onChanged: (value) {
+                        setState(() {
+                          _haveWater = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Do you have food?')),
+          Row(
+            children: [
+              ListTileTheme(
+                horizontalTitleGap: 0,
+                child: SizedBox(
+                  height: 70,
+                  width: 85,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(0),
+                    title: const Text('Yes'),
+                    leading: Radio(
+                      value: 1,
+                      groupValue: _haveFood,
+                      onChanged: (value) {
+                        setState(() {
+                          _haveFood = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              ListTileTheme(
+                horizontalTitleGap: 0,
+                child: SizedBox(
+                  height: 70,
+                  width: 85,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(0),
+                    title: const Text('No'),
+                    leading: Radio(
+                      value: 0,
+                      groupValue: _haveFood,
+                      onChanged: (value) {
+                        setState(() {
+                          _haveFood = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text('Do you have house/shelter?'),
+          ),
+          Row(
+            children: [
+              ListTileTheme(
+                horizontalTitleGap: 0,
+                child: SizedBox(
+                  height: 70,
+                  width: 85,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(0),
+                    title: const Text('Yes'),
+                    leading: Radio(
+                      value: 1,
+                      groupValue: _haveHouse,
+                      onChanged: (value) {
+                        setState(() {
+                          _haveHouse = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              ListTileTheme(
+                horizontalTitleGap: 0,
+                child: SizedBox(
+                  height: 70,
+                  width: 85,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(0),
+                    title: const Text('No'),
+                    leading: Radio(
+                      value: 0,
+                      groupValue: _haveHouse,
+                      onChanged: (value) {
+                        setState(() {
+                          _haveHouse = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Select your immediate needs from the list.',
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              CustomCheckBox(
+                label: 'Water',
+                value: needWater,
+                onChanged: (value) {
+                  setState(() => needWater = value!);
+                },
+              ),
+              CustomCheckBox(
+                label: 'Food',
+                value: needFood,
+                onChanged: (value) {
+                  setState(() => needFood = value!);
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              CustomCheckBox(
+                label: 'House / Shelter',
+                value: needHouse,
+                onChanged: (value) {
+                  setState(() => needHouse = value!);
+                },
+              ),
+              CustomCheckBox(
+                label: 'See Doctor',
+                value: needDoctor,
+                onChanged: (value) {
+                  setState(() => needDoctor = value!);
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              CustomCheckBox(
+                label: 'Warm Clothes',
+                value: needClothes,
+                onChanged: (value) {
+                  setState(() => needClothes = value!);
+                },
+              ),
+              CustomCheckBox(
+                label: 'Blankets',
+                value: needBlankets,
+                onChanged: (value) {
+                  setState(() => needBlankets = value!);
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              CustomCheckBox(
+                label: 'Help',
+                value: needHelp,
+                onChanged: (value) {
+                  setState(() => needHelp = value!);
+                },
+              ),
+              CustomCheckBox(
+                label: 'Other',
+                value: needOther,
+                onChanged: (value) {
+                  setState(() => needOther = value!);
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 40),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Select what you need assistance with.',
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              CustomCheckBox(
+                label: 'Water tank',
+                value: waterTank,
+                onChanged: (value) {
+                  setState(() => waterTank = value!);
+                },
+              ),
+              CustomCheckBox(
+                label: 'No House',
+                value: noHouse,
+                onChanged: (value) {
+                  setState(() => noHouse = value!);
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              CustomCheckBox(
+                label: 'Boat',
+                value: boat,
+                onChanged: (value) {
+                  setState(() => boat = value!);
+                },
+              ),
+              CustomCheckBox(
+                label: 'Windows',
+                value: windows,
+                onChanged: (value) {
+                  setState(() => windows = value!);
+                },
+              ),
+            ],
+          ),
+          Row(children: [
+            CustomCheckBox(
+              label: 'Electiricity',
+              value: electricity,
+              onChanged: (value) {
+                setState(() => electricity = value!);
+              },
+            ),
+            CustomCheckBox(
+              label: 'Gas',
+              value: gas,
+              onChanged: (value) {
+                setState(() => gas = value!);
+              },
+            ),
+          ]),
+          Row(children: [
+            CustomCheckBox(
+              label: 'Roof top',
+              value: roofTop,
+              onChanged: (value) {
+                setState(() => roofTop = value!);
+              },
+            ),
+            CustomCheckBox(
+              label: 'Walls',
+              value: walls,
+              onChanged: (value) {
+                setState(() => walls = value!);
+              },
+            ),
+          ]),
+          Row(
+            children: [
+              CustomCheckBox(
+                label: 'Toilet',
+                value: toilet,
+                onChanged: (value) {
+                  setState(() => toilet = value!);
+                },
+              ),
+              CustomCheckBox(
+                label: 'Animals',
+                value: animals,
+                onChanged: (value) {
+                  setState(() => animals = value!);
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              CustomCheckBox(
+                label: 'Telephone line',
+                value: telephoneLine,
+                onChanged: (value) {
+                  setState(() => telephoneLine = value!);
+                },
+              ),
+              CustomCheckBox(
+                label: 'Fuel/Oil',
+                value: fuelOil,
+                onChanged: (value) {
+                  setState(() => fuelOil = value!);
+                },
+              ),
+            ],
+          ),
+          Row(children: [
+            CustomCheckBox(
+              label: 'Machinery',
+              value: machinery,
+              onChanged: (value) {
+                setState(() => machinery = value!);
+              },
+            ),
+            CustomCheckBox(
+              label: 'Vehicles',
+              value: vehicles,
+              onChanged: (value) {
+                setState(() => vehicles = value!);
+              },
+            ),
+          ]),
+          Row(children: [
+            CustomCheckBox(
+              label: 'Plane',
+              value: plane,
+              onChanged: (value) {
+                setState(() => plane = value!);
+              },
+            ),
+            CustomCheckBox(
+              label: 'Water supply',
+              value: waterSupply,
+              onChanged: (value) {
+                setState(() => waterSupply = value!);
+              },
+            ),
+          ]),
+          Row(
+            children: [
+              CustomCheckBox(
+                label: 'Phone mobile',
+                value: phoneMobile,
+                onChanged: (value) {
+                  setState(() => phoneMobile = value!);
+                },
+              ),
+              CustomCheckBox(
+                label: 'Internet',
+                value: internet,
+                onChanged: (value) {
+                  setState(() => internet = value!);
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              CustomCheckBox(
+                label: 'Plantation',
+                value: plantation,
+                onChanged: (value) {
+                  setState(() => plantation = value!);
+                },
+              ),
+              CustomCheckBox(
+                label: 'Road',
+                value: road,
+                onChanged: (value) {
+                  setState(() => road = value!);
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 50),
+          TextFormField(
               decoration: const InputDecoration(
-                labelText: 'Full Name',
+                labelText: 'Enter Message',
                 border: OutlineInputBorder(),
               ),
-              initialValue: snapshot.data.name,
-              // The validator receives the text that the user has entered.
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your full name';
-                }
-                return null;
-              },
               onSaved: (newValue) {
-                fullName = newValue;
+                message = newValue;
               },
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Phone Number',
-                border: OutlineInputBorder(),
-              ),
-              // The validator receives the text that the user has entered.
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your phone number';
-                }
-                return null;
-              },
-              onSaved: (newValue) {
-                phoneNumber = newValue;
-              },
-            ),
-            const SizedBox(height: 20),
-            DropdownButtonFormField(
-              decoration: const InputDecoration(
-                labelText: 'Location',
-                border: OutlineInputBorder(),
-              ),
-              hint: const Text('Choose your location'),
-              value: _selectedLocation,
-              items: Location.values.map((value) {
-                return DropdownMenuItem(
-                  value: value,
-                  child: Text(locationLabel[value].toString()),
-                );
-              }).toList(),
-              onChanged: (val) {
+              keyboardType: TextInputType.multiline,
+              maxLines: 5),
+          const SizedBox(height: 20),
+          const SizedBox(height: 20),
+          ImageInput(
+            onPickImage: (selectedImages) {
+              _selectedImages = selectedImages;
+            },
+          ),
+          const SizedBox(height: 5),
+          ListTileTheme(
+            contentPadding: const EdgeInsets.only(left: 0),
+            child: CheckboxListTile(
+              value: true,
+              controlAffinity: ListTileControlAffinity.leading,
+              onChanged: (bool? value) {
                 setState(() {
-                  _selectedLocation = val!;
+                  //key = value;
                 });
               },
-              validator: (val) {
-                if (val == null) {
-                  String errMsg = "Please choose your location.";
-                  return errMsg;
-                }
-                return null;
-              },
+              title: const Text(
+                  'I declare that all information given above is true and complete.'),
             ),
-            const SizedBox(height: 40),
-            const Align(
-                alignment: Alignment.centerLeft,
-                child: Text('Do you have water?')),
+          ),
+          const SizedBox(height: 30),
+          if (_isInProgress) const CircularProgressIndicator(),
+          if (!_isInProgress)
             Row(
               children: [
-                ListTileTheme(
-                  horizontalTitleGap: 0,
-                  child: SizedBox(
-                    height: 70,
-                    width: 90,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(0),
-                      title: const Text('Yes'),
-                      leading: Radio(
-                        value: 1,
-                        groupValue: _haveWater,
-                        onChanged: (value) {
-                          setState(() {
-                            _haveWater = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
                 ),
-                ListTileTheme(
-                  horizontalTitleGap: 0,
-                  child: SizedBox(
-                    height: 70,
-                    width: 90,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(0),
-                      title: const Text('No'),
-                      leading: Radio(
-                        value: 0,
-                        groupValue: _haveWater,
-                        onChanged: (value) {
-                          setState(() {
-                            _haveWater = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Align(
-                alignment: Alignment.centerLeft,
-                child: Text('Do you have food?')),
-            Row(
-              children: [
-                ListTileTheme(
-                  horizontalTitleGap: 0,
-                  child: SizedBox(
-                    height: 70,
-                    width: 85,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(0),
-                      title: const Text('Yes'),
-                      leading: Radio(
-                        value: 1,
-                        groupValue: _haveFood,
-                        onChanged: (value) {
-                          setState(() {
-                            _haveFood = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                ListTileTheme(
-                  horizontalTitleGap: 0,
-                  child: SizedBox(
-                    height: 70,
-                    width: 85,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(0),
-                      title: const Text('No'),
-                      leading: Radio(
-                        value: 0,
-                        groupValue: _haveFood,
-                        onChanged: (value) {
-                          setState(() {
-                            _haveFood = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text('Do you have house/shelter?'),
-            ),
-            Row(
-              children: [
-                ListTileTheme(
-                  horizontalTitleGap: 0,
-                  child: SizedBox(
-                    height: 70,
-                    width: 85,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(0),
-                      title: const Text('Yes'),
-                      leading: Radio(
-                        value: 1,
-                        groupValue: _haveHouse,
-                        onChanged: (value) {
-                          setState(() {
-                            _haveHouse = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                ListTileTheme(
-                  horizontalTitleGap: 0,
-                  child: SizedBox(
-                    height: 70,
-                    width: 85,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(0),
-                      title: const Text('No'),
-                      leading: Radio(
-                        value: 0,
-                        groupValue: _haveHouse,
-                        onChanged: (value) {
-                          setState(() {
-                            _haveHouse = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Select your immediate needs from the list.',
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                CustomCheckBox(
-                  label: 'Water',
-                  value: needWater,
-                  onChanged: (value) {
-                    setState(() => needWater = value!);
-                  },
-                ),
-                CustomCheckBox(
-                  label: 'Food',
-                  value: needFood,
-                  onChanged: (value) {
-                    setState(() => needFood = value!);
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                CustomCheckBox(
-                  label: 'House / Shelter',
-                  value: needHouse,
-                  onChanged: (value) {
-                    setState(() => needHouse = value!);
-                  },
-                ),
-                CustomCheckBox(
-                  label: 'See Doctor',
-                  value: needDoctor,
-                  onChanged: (value) {
-                    setState(() => needDoctor = value!);
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                CustomCheckBox(
-                  label: 'Warm Clothes',
-                  value: needClothes,
-                  onChanged: (value) {
-                    setState(() => needClothes = value!);
-                  },
-                ),
-                CustomCheckBox(
-                  label: 'Blankets',
-                  value: needBlankets,
-                  onChanged: (value) {
-                    setState(() => needBlankets = value!);
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                CustomCheckBox(
-                  label: 'Help',
-                  value: needHelp,
-                  onChanged: (value) {
-                    setState(() => needHelp = value!);
-                  },
-                ),
-                CustomCheckBox(
-                  label: 'Other',
-                  value: needOther,
-                  onChanged: (value) {
-                    setState(() => needOther = value!);
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 40),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Select what you need assistance with.',
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                CustomCheckBox(
-                  label: 'Water tank',
-                  value: waterTank,
-                  onChanged: (value) {
-                    setState(() => waterTank = value!);
-                  },
-                ),
-                CustomCheckBox(
-                  label: 'No House',
-                  value: noHouse,
-                  onChanged: (value) {
-                    setState(() => noHouse = value!);
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                CustomCheckBox(
-                  label: 'Boat',
-                  value: boat,
-                  onChanged: (value) {
-                    setState(() => boat = value!);
-                  },
-                ),
-                CustomCheckBox(
-                  label: 'Windows',
-                  value: windows,
-                  onChanged: (value) {
-                    setState(() => windows = value!);
-                  },
-                ),
-              ],
-            ),
-            Row(children: [
-              CustomCheckBox(
-                label: 'Electiricity',
-                value: electricity,
-                onChanged: (value) {
-                  setState(() => electricity = value!);
-                },
-              ),
-              CustomCheckBox(
-                label: 'Gas',
-                value: gas,
-                onChanged: (value) {
-                  setState(() => gas = value!);
-                },
-              ),
-            ]),
-            Row(children: [
-              CustomCheckBox(
-                label: 'Roof top',
-                value: roofTop,
-                onChanged: (value) {
-                  setState(() => roofTop = value!);
-                },
-              ),
-              CustomCheckBox(
-                label: 'Walls',
-                value: walls,
-                onChanged: (value) {
-                  setState(() => walls = value!);
-                },
-              ),
-            ]),
-            Row(
-              children: [
-                CustomCheckBox(
-                  label: 'Toilet',
-                  value: toilet,
-                  onChanged: (value) {
-                    setState(() => toilet = value!);
-                  },
-                ),
-                CustomCheckBox(
-                  label: 'Animals',
-                  value: animals,
-                  onChanged: (value) {
-                    setState(() => animals = value!);
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                CustomCheckBox(
-                  label: 'Telephone line',
-                  value: telephoneLine,
-                  onChanged: (value) {
-                    setState(() => telephoneLine = value!);
-                  },
-                ),
-                CustomCheckBox(
-                  label: 'Fuel/Oil',
-                  value: fuelOil,
-                  onChanged: (value) {
-                    setState(() => fuelOil = value!);
-                  },
-                ),
-              ],
-            ),
-            Row(children: [
-              CustomCheckBox(
-                label: 'Machinery',
-                value: machinery,
-                onChanged: (value) {
-                  setState(() => machinery = value!);
-                },
-              ),
-              CustomCheckBox(
-                label: 'Vehicles',
-                value: vehicles,
-                onChanged: (value) {
-                  setState(() => vehicles = value!);
-                },
-              ),
-            ]),
-            Row(children: [
-              CustomCheckBox(
-                label: 'Plane',
-                value: plane,
-                onChanged: (value) {
-                  setState(() => plane = value!);
-                },
-              ),
-              CustomCheckBox(
-                label: 'Water supply',
-                value: waterSupply,
-                onChanged: (value) {
-                  setState(() => waterSupply = value!);
-                },
-              ),
-            ]),
-            Row(
-              children: [
-                CustomCheckBox(
-                  label: 'Phone mobile',
-                  value: phoneMobile,
-                  onChanged: (value) {
-                    setState(() => phoneMobile = value!);
-                  },
-                ),
-                CustomCheckBox(
-                  label: 'Internet',
-                  value: internet,
-                  onChanged: (value) {
-                    setState(() => internet = value!);
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                CustomCheckBox(
-                  label: 'Plantation',
-                  value: plantation,
-                  onChanged: (value) {
-                    setState(() => plantation = value!);
-                  },
-                ),
-                CustomCheckBox(
-                  label: 'Road',
-                  value: road,
-                  onChanged: (value) {
-                    setState(() => road = value!);
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 50),
-            TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Enter Message',
-                  border: OutlineInputBorder(),
-                ),
-                onSaved: (newValue) {
-                  message = newValue;
-                },
-                keyboardType: TextInputType.multiline,
-                maxLines: 5),
-            const SizedBox(height: 20),
-            const SizedBox(height: 20),
-            ImageInput(
-              onPickImage: (selectedImages) {
-                _selectedImages = selectedImages;
-              },
-            ),
-            const SizedBox(height: 5),
-            ListTileTheme(
-              contentPadding: const EdgeInsets.only(left: 0),
-              child: CheckboxListTile(
-                value: true,
-                controlAffinity: ListTileControlAffinity.leading,
-                onChanged: (bool? value) {
-                  setState(() {
-                    //key = value;
-                  });
-                },
-                title: const Text(
-                    'I declare that all information given above is true and complete.'),
-              ),
-            ),
-            const SizedBox(height: 30),
-            if (_isInProgress) const CircularProgressIndicator(),
-            if (!_isInProgress)
-              Row(
-                children: [
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel'),
-                  ),
-                  const SizedBox(width: 16),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final isValid = _formKey.currentState!.validate();
-                      if (!isValid) {
-                        return;
-                      }
-                      _formKey.currentState!.save();
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    final isValid = _formKey.currentState!.validate();
+                    if (!isValid) {
+                      return;
+                    }
+                    _formKey.currentState!.save();
 
-                      setState(() {
-                        _isInProgress = true;
-                      });
+                    setState(() {
+                      _isInProgress = true;
+                    });
 
-                      GetImageUrl imageUrl = GetImageUrl();
-                      List<String> imageSourceUrls = [];
+                    GetImageUrl imageUrl = GetImageUrl();
+                    List<String> imageSourceUrls = [];
 
-                      if (_selectedImages.isNotEmpty) {
-                        for (var n = 0; n < _selectedImages.length; n++) {
-                          String fileExtension =
-                              p.extension(_selectedImages[n].path);
-                          await imageUrl.call(fileExtension);
+                    if (_selectedImages.isNotEmpty) {
+                      for (var n = 0; n < _selectedImages.length; n++) {
+                        String fileExtension =
+                            p.extension(_selectedImages[n].path);
+                        await imageUrl.call(fileExtension);
 
-                          if (imageUrl.success) {
-                            await uploadFile(context, imageUrl.uploadUrl,
-                                File(_selectedImages[n].path));
-                          }
-
-                          imageSourceUrls.add(imageUrl.downloadUrl);
+                        if (imageUrl.success) {
+                          await uploadFile(context, imageUrl.uploadUrl,
+                              File(_selectedImages[n].path));
                         }
-                      }
 
-                      await sendData(imageSourceUrls);
-                      showAlertDialog(context);
-                      clearFields();
-                      setState(() {
-                        _isInProgress = false;
-                      });
-                    },
-                    child: const Text('Submit'),
-                  ),
-                ],
-              ),
-            const SizedBox(height: 30),
-          ],
-        ),
+                        imageSourceUrls.add(imageUrl.downloadUrl);
+                      }
+                    }
+
+                    await sendData(imageSourceUrls);
+                    showAlertDialog(context);
+                    clearFields();
+                    setState(() {
+                      _isInProgress = false;
+                    });
+                  },
+                  child: const Text('Submit'),
+                ),
+              ],
+            ),
+          const SizedBox(height: 30),
+        ],
       ),
     );
   }

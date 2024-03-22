@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:macres/providers/dark_theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -151,7 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               height: 20,
             ),
             const Text('Dark Theme:'),
-            Switch(
+            CupertinoSwitch(
                 value: themeChange.darkTheme,
                 activeColor: Colors.green,
                 onChanged: (bool value) {

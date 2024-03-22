@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
-import 'package:macres/models/user_model.dart';
-import 'package:macres/util/user_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/checkbox_widget.dart';
 import 'dart:developer';
@@ -76,31 +74,18 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
 
   @override
   Widget build(BuildContext context) {
-    Future<UserModel> getUserData() => UserPreferences().getUser();
-
-    return FutureBuilder<UserModel>(
-      future: getUserData(),
-      builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Impact Report'),
-              backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-              foregroundColor: Colors.white,
-            ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: getForm(snapshot),
-              ),
-            ),
-          );
-        }
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Impact Report'),
+        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: getForm(),
+        ),
+      ),
     );
   }
 
@@ -160,8 +145,6 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
       log(e.toString());
     }
 
-    print(response.body);
-
     return response;
   }
 
@@ -177,7 +160,7 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
     _selectedImages.clear();
   }
 
-  Widget getForm(snapshot) {
+  Widget getForm() {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Form(
@@ -196,7 +179,7 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
                 labelText: 'Full Name',
                 border: OutlineInputBorder(),
               ),
-              initialValue: snapshot.data.name,
+
               // The validator receives the text that the user has entered.
               validator: (value) {
                 if (value == null || value.isEmpty) {

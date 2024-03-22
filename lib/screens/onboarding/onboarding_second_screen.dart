@@ -38,14 +38,17 @@ class _OnboardingSecondScreen extends State<OnboardingSecondScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(
+              height: 100.0,
+            ),
             Image.asset(
               'assets/images/onboarding2.png',
               fit: BoxFit.cover,
-              height: size.height * 0.4,
-              width: size.width,
+              height: 240.0,
+              width: 240.0,
             ),
             Container(
-              height: 400,
+              height: 430,
               padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
               child: Column(
                 children: [
