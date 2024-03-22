@@ -142,111 +142,87 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While the task is happening, show a loading spinner
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Evacuation Map'),
-                backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-                foregroundColor: Colors.white,
-              ),
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
+            return Center(
+              child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
             // If there's an error, display an error message
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Evacuation Map'),
-              ),
-              body: Center(
-                child: Text('Error: ${snapshot.error}'),
-              ),
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Evacuation Map'),
-                backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-                foregroundColor: Colors.white,
-              ),
-              body: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(1),
-                  child: Column(
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(
                     children: [
-                      Stack(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.height,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(),
-                              child: FlutterMap(
-                                mapController: mapController,
-                                options: MapOptions(
-                                  initialCenter: LatLng(lat, lon),
-                                  initialZoom: 12,
-                                ),
-                                children: [
-                                  TileLayer(
-                                    urlTemplate:
-                                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                    userAgentPackageName: 'com.example.app',
-                                  ),
-                                  CurrentLocationLayer(),
-                                  SuperclusterLayer.immutable(
-                                    indexBuilder: IndexBuilders.rootIsolate,
-                                    builder: (context, position, markerCount,
-                                            extraClusterData) =>
-                                        Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        color:
-                                            Color.fromARGB(255, 223, 110, 34),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          markerCount.toString(),
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                    initialMarkers: getMarkers(snapshot.data),
-                                  ),
-                                  Stack(children: [
-                                    Positioned(
-                                      right: 10,
-                                      top: 10,
-                                      child: FloatingActionButton(
-                                          tooltip: 'Nearest',
-                                          child: const Icon(
-                                            Icons.near_me,
-                                          ),
-                                          onPressed: () {
-                                            EvacuationModel evm =
-                                                getNearest(snapshot.data);
-
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EvacuationDetailsScreen(
-                                                        model: evm),
-                                              ),
-                                            );
-                                          }),
-                                    ),
-                                  ]),
-                                ],
-                              ),
+                      Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height,
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(),
+                          child: FlutterMap(
+                            mapController: mapController,
+                            options: MapOptions(
+                              initialCenter: LatLng(lat, lon),
+                              initialZoom: 12,
                             ),
+                            children: [
+                              TileLayer(
+                                urlTemplate:
+                                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                userAgentPackageName: 'com.example.app',
+                              ),
+                              CurrentLocationLayer(),
+                              SuperclusterLayer.immutable(
+                                indexBuilder: IndexBuilders.rootIsolate,
+                                builder: (context, position, markerCount,
+                                        extraClusterData) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    color: Color.fromARGB(255, 223, 110, 34),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      markerCount.toString(),
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                initialMarkers: getMarkers(snapshot.data),
+                              ),
+                              Stack(children: [
+                                Positioned(
+                                  right: 10,
+                                  top: 10,
+                                  child: FloatingActionButton(
+                                      tooltip: 'Nearest',
+                                      child: const Icon(
+                                        Icons.near_me,
+                                      ),
+                                      onPressed: () {
+                                        EvacuationModel evm =
+                                            getNearest(snapshot.data);
+
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                EvacuationDetailsScreen(
+                                                    model: evm),
+                                          ),
+                                        );
+                                      }),
+                                ),
+                              ]),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
             );
           }

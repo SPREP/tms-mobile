@@ -9,19 +9,7 @@ class NotificationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double mWidth = MediaQuery.of(context).size.width * 0.8;
-    String levelLabel = '';
-    switch (notification.level) {
-      case 1:
-        levelLabel = 'LOW';
-        break;
-      case 2:
-        levelLabel = 'MEDIUM';
-        break;
-      case 3:
-        levelLabel = 'HIGH';
-        break;
-      default:
-    }
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Color.fromARGB(255, 222, 223, 223)),
@@ -33,7 +21,19 @@ class NotificationWidget extends StatelessWidget {
             Container(
               color: notification.getColor(),
               height: 150.0,
-              child: notification.getIcon(),
+              width: 42.0,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    notification.getIcon(),
+                    Text(
+                      notification.getLevelText(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 8),
+                    )
+                  ]),
               padding: EdgeInsets.only(left: 3.0, right: 3.0),
             ),
             Container(

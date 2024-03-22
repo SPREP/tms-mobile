@@ -311,11 +311,13 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         Container(
           padding: const EdgeInsets.all(8),
           color: const Color.fromARGB(255, 170, 236, 178),
-          child: Text(
-            value,
-            style: const TextStyle(
-                color: Color.fromARGB(255, 104, 103, 103),
-                fontWeight: FontWeight.bold),
+          child: Flexible(
+            child: Text(
+              value,
+              style: const TextStyle(
+                  color: Color.fromARGB(255, 104, 103, 103),
+                  fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       ],

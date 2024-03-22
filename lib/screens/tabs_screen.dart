@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:macres/models/settings_model.dart';
 import 'package:macres/providers/weather_location.dart';
+import 'package:macres/screens/evacuation_map_screen.dart';
 import 'package:macres/screens/event_screen.dart';
 import 'package:macres/screens/notification_screen.dart';
 import 'package:macres/screens/report_screen.dart';
@@ -68,7 +69,7 @@ class _TabsScreenState extends State<TabsScreen> {
   }
 
   getAppBar() {
-    if ((_selectedPageIndex == 0 || _selectedPageIndex == 2)) {
+    if ((_selectedPageIndex == 0 || _selectedPageIndex == 4)) {
       return AppBar(
         backgroundColor: Colors.transparent,
         flexibleSpace: getLocationDropdown(),
@@ -130,7 +131,7 @@ class _TabsScreenState extends State<TabsScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    if (_selectedPageIndex == 0 || _selectedPageIndex == 2) {
+    if (_selectedPageIndex == 0 || _selectedPageIndex == 4) {
       activePage =
           WeatherForcastScreen(onCurrentWeatherChange: _onCurrentWeatherChange);
       if (bgFilePath == '') {
@@ -140,7 +141,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
     return Container(
       width: width,
-      decoration: _selectedPageIndex == 0 || _selectedPageIndex == 2
+      decoration: _selectedPageIndex == 0 || _selectedPageIndex == 4
           ? BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -155,23 +156,20 @@ class _TabsScreenState extends State<TabsScreen> {
             )
           : null,
       child: Scaffold(
-        backgroundColor: _selectedPageIndex == 0 || _selectedPageIndex == 2
+        backgroundColor: _selectedPageIndex == 0 || _selectedPageIndex == 4
             ? const Color.fromARGB(0, 82, 38, 38)
             : null,
         body: SingleChildScrollView(
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: height),
             child: Container(
-              padding: _selectedPageIndex == 0 || _selectedPageIndex == 2
+              padding: _selectedPageIndex == 0 || _selectedPageIndex == 4
                   ? const EdgeInsets.only(
                       right: 5,
                       left: 5,
                     )
                   : null,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 5, bottom: 5),
-                child: activePage,
-              ),
+              child: activePage,
             ),
           ),
         ),
@@ -196,18 +194,16 @@ class _TabsScreenState extends State<TabsScreen> {
                 label: 'Events',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.add_circle_outline),
-                label: 'More',
+                icon: Icon(Icons.directions),
+                label: 'Evacuation',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.warning),
                 label: 'Warnings',
               ),
               BottomNavigationBarItem(
-                icon: ImageIcon(
-                  AssetImage('assets/images/bird_icon.png'),
-                ),
-                label: 'TK',
+                icon: Icon(Icons.add_circle_outline),
+                label: 'More',
               ),
             ],
             currentIndex: _selectedPageIndex,
@@ -221,7 +217,7 @@ class _TabsScreenState extends State<TabsScreen> {
     setState(() {
       _selectedPageIndex = index;
 
-      if (_selectedPageIndex == 0 || _selectedPageIndex == 2) {
+      if (_selectedPageIndex == 0 || _selectedPageIndex == 4) {
         activePage = WeatherForcastScreen(
           onCurrentWeatherChange: _onCurrentWeatherChange,
         );
@@ -245,13 +241,13 @@ class _TabsScreenState extends State<TabsScreen> {
         actionButtons = [];
       }
 
-      if (_selectedPageIndex == 4) {
-        activePage = const TkScreen();
-        activePageTitle = 'Traditional Knowledge';
+      if (_selectedPageIndex == 2) {
+        activePage = const EvacuationMapScreen();
+        activePageTitle = 'Evacuation Map';
         actionButtons = [];
       }
 
-      if (_selectedPageIndex == 2) {
+      if (_selectedPageIndex == 4) {
         openEventReportOverlay();
       }
     });
