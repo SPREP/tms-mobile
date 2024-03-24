@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:macres/screens/evacuation_map_screen.dart';
 import 'package:macres/screens/event_report_screen.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
 import 'package:macres/screens/national_number_screen.dart';
 import 'package:macres/screens/tk_screen.dart';
-import 'package:macres/screens/user/islogin_screen.dart';
 
 class ReportScreen extends StatefulWidget {
   const ReportScreen({super.key});
@@ -37,7 +35,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.all(10.0),
                 child: options(),
               ),
             ],
@@ -62,7 +60,7 @@ class _ReportScreenState extends State<ReportScreen> {
         children: [
           const Text('Select a report you would like to submit to us.'),
           const SizedBox(
-            height: 20,
+            height: 15,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +71,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const EventReportScreen(),
+                      builder: (context) => EventReportScreen(),
                     ),
                   );
                 },
@@ -107,15 +105,14 @@ class _ReportScreenState extends State<ReportScreen> {
                 ),
               ),
               SizedBox(
-                width: 30.0,
+                width: 20.0,
               ),
               InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          const FeelEarthquakeForm(eventId: 0),
+                      builder: (context) => FeelEarthquakeForm(eventId: 0),
                     ),
                   );
                 },
@@ -152,7 +149,7 @@ class _ReportScreenState extends State<ReportScreen> {
           ),
           Divider(),
           const SizedBox(
-            height: 20,
+            height: 1.0,
           ),
           const Text('Other places'),
           const SizedBox(

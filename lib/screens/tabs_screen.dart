@@ -6,7 +6,6 @@ import 'package:macres/screens/evacuation_map_screen.dart';
 import 'package:macres/screens/event_screen.dart';
 import 'package:macres/screens/notification_screen.dart';
 import 'package:macres/screens/report_screen.dart';
-import 'package:macres/screens/tk_screen.dart';
 import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:macres/widgets/main_drawer_widget.dart';
 import 'package:provider/provider.dart';
@@ -70,14 +69,19 @@ class _TabsScreenState extends State<TabsScreen> {
 
   getAppBar() {
     if ((_selectedPageIndex == 0 || _selectedPageIndex == 4)) {
-      return AppBar(
-        backgroundColor: Colors.transparent,
-        flexibleSpace: getLocationDropdown(),
-        actions: actionButtons,
-        foregroundColor: Colors.white,
+      return PreferredSize(
+        preferredSize: Size.fromHeight(40.0),
+        child: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          flexibleSpace: getLocationDropdown(),
+          actions: actionButtons,
+          foregroundColor: Colors.white,
+        ),
       );
     } else {
       return AppBar(
+        centerTitle: true,
         title: Text(activePageTitle),
         actions: actionButtons,
         backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
@@ -90,9 +94,7 @@ class _TabsScreenState extends State<TabsScreen> {
     return Center(
         child: Column(
       children: [
-        SizedBox(
-          height: 55,
-        ),
+        Spacer(),
         DropdownButton<Location>(
           borderRadius: BorderRadius.circular(10),
           value: selectedLocation,
@@ -242,7 +244,7 @@ class _TabsScreenState extends State<TabsScreen> {
       }
 
       if (_selectedPageIndex == 2) {
-        activePage = const EvacuationMapScreen();
+        activePage = EvacuationMapScreen();
         activePageTitle = 'Evacuation Map';
         actionButtons = [];
       }

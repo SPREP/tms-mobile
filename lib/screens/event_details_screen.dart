@@ -1,13 +1,11 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:humanitarian_icons/humanitarian_icons.dart';
 import 'package:macres/models/event_model.dart';
-import 'package:macres/models/settings_model.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
-import 'package:macres/screens/forms/impact_report_form.dart';
-import 'package:macres/screens/forms/request_assistance_form.dart';
 import 'package:macres/screens/user/islogin_screen.dart';
 import 'package:macres/widgets/big_map_widget.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
@@ -49,11 +47,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       context: context,
       builder: (ctx) => BigMapWidget(eventModel: widget.eventModel),
     );
-  }
-
-  void displose() {
-    mapController.dispose();
-    super.dispose();
   }
 
   @override
@@ -141,7 +134,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               ),
             ),
             Container(
-              height: 650,
+              height: 830,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(40)),
                 color: Theme.of(context).primaryColor,
@@ -221,18 +214,39 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       widget.eventModel.tsunami != '')
                     styleLabel('Tsunami Warning',
                         widget.eventModel.tsunami.toString()),
-                  const SizedBox(height: 15),
                   if (widget.eventModel.type == EventType.earthquake &&
-                      widget.eventModel.feel!.isNotEmpty)
-                    styleLabel(
-                      'Felt',
-                      widget.eventModel.feel!
-                          .map((item) {
-                            return locationLabel[
-                                LocationExtension.fromName(item)];
-                          })
-                          .toList()
-                          .toString(),
+                      widget.eventModel.feel != null)
+                    Column(
+                      children: [
+                        Text(
+                          'Reported from Community',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Click on the button below [Did you feel it?] to report to us.',
+                          style: TextStyle(fontSize: 12.0),
+                        ),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        Container(
+                          width: 300.0,
+                          height: 200.0,
+                          child: getBarChart(),
+                        ),
+                        Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Tt - Tongatapu'),
+                              Text('Vv - Vavau'),
+                              Text('Hp - Haapai'),
+                              Text('Nfo - Niuafoou'),
+                              Text('Ntt - Niuatoputapu'),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   const SizedBox(height: 15),
                   if (widget.eventModel.type == EventType.cyclone)
@@ -295,6 +309,203 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
+  Widget getBarChart() {
+    //find out the highest value
+    double max = 0;
+
+    List<int> item = [
+      widget.eventModel.feel!.tongatapu ?? 0,
+      widget.eventModel.feel!.vavau ?? 0,
+      widget.eventModel.feel!.eua ?? 0,
+      widget.eventModel.feel!.haapai ?? 0,
+      widget.eventModel.feel!.niuafoou ?? 0,
+      widget.eventModel.feel!.niuatoputapu ?? 0
+    ];
+
+    item.forEach((value) {
+      if (value > max) max = double.parse(value.toString());
+    });
+
+    return BarChart(BarChartData(
+      barTouchData: barTouchData,
+      titlesData: titlesData,
+      borderData: borderData,
+      barGroups: barGroups,
+      gridData: const FlGridData(show: false),
+      alignment: BarChartAlignment.spaceAround,
+      maxY: max + 1, // add 1 for space
+    ));
+  }
+
+  BarTouchData get barTouchData => BarTouchData(
+        enabled: false,
+        touchTooltipData: BarTouchTooltipData(
+          tooltipBgColor: Colors.transparent,
+          tooltipPadding: EdgeInsets.zero,
+          tooltipMargin: 8,
+          getTooltipItem: (
+            BarChartGroupData group,
+            int groupIndex,
+            BarChartRodData rod,
+            int rodIndex,
+          ) {
+            return BarTooltipItem(
+              rod.toY.round().toString(),
+              const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
+        ),
+      );
+
+  Widget getTitles(double value, TitleMeta meta) {
+    final style = TextStyle(
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+    );
+    String text;
+    switch (value.toInt()) {
+      case 0:
+        text = 'Tt';
+        break;
+      case 1:
+        text = 'Hp';
+        break;
+      case 2:
+        text = 'Vv';
+        break;
+      case 3:
+        text = 'Ntt';
+        break;
+      case 4:
+        text = 'Nfo';
+        break;
+      case 5:
+        text = 'Eua';
+        break;
+      default:
+        text = '';
+        break;
+    }
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 4,
+      child: Text(text, style: style),
+    );
+  }
+
+  FlTitlesData get titlesData => FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 30,
+            getTitlesWidget: getTitles,
+          ),
+        ),
+        leftTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+      );
+
+  FlBorderData get borderData => FlBorderData(
+        show: false,
+      );
+
+  LinearGradient get _barsGradient => LinearGradient(
+        colors: [
+          Colors.blue,
+          Colors.red,
+        ],
+        begin: Alignment.bottomCenter,
+        end: Alignment.topCenter,
+      );
+
+  List<BarChartGroupData> get barGroups => [
+        BarChartGroupData(
+          x: 0,
+          barRods: [
+            BarChartRodData(
+              toY: widget.eventModel.feel!.tongatapu != null
+                  ? double.parse(widget.eventModel.feel!.tongatapu.toString())
+                  : 0,
+              gradient: _barsGradient,
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 1,
+          barRods: [
+            BarChartRodData(
+              toY: widget.eventModel.feel!.haapai != null
+                  ? double.parse(widget.eventModel.feel!.haapai.toString())
+                  : 0,
+              gradient: _barsGradient,
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 2,
+          barRods: [
+            BarChartRodData(
+              toY: widget.eventModel.feel!.vavau != null
+                  ? double.parse(widget.eventModel.feel!.vavau.toString())
+                  : 0,
+              gradient: _barsGradient,
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 3,
+          barRods: [
+            BarChartRodData(
+              toY: widget.eventModel.feel!.niuatoputapu != null
+                  ? double.parse(
+                      widget.eventModel.feel!.niuatoputapu.toString())
+                  : 0,
+              gradient: _barsGradient,
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 4,
+          barRods: [
+            BarChartRodData(
+              toY: widget.eventModel.feel!.niuafoou != null
+                  ? double.parse(widget.eventModel.feel!.niuafoou.toString())
+                  : 0,
+              gradient: _barsGradient,
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 5,
+          barRods: [
+            BarChartRodData(
+              toY: widget.eventModel.feel!.eua != null
+                  ? double.parse(widget.eventModel.feel!.eua.toString())
+                  : 0,
+              gradient: _barsGradient,
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+      ];
+
   Widget styleLabel(String label, String value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -348,5 +559,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
       ),
     );
+  }
+
+  void dispose() {
+    mapController.dispose();
+    super.dispose();
   }
 }

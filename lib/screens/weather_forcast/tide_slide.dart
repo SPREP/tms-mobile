@@ -393,7 +393,7 @@ class _TideSlideState extends State<TideSlide> {
                   Text(
                     'Current condition at ${widget.seaData.getObservedTime()}',
                     style: TextStyle(
-                      color: const Color.fromARGB(255, 192, 190, 190),
+                      color: Color.fromARGB(255, 219, 218, 218),
                       fontSize: 12,
                     ),
                   ),
