@@ -13,6 +13,7 @@ class NotificationWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Color.fromARGB(255, 222, 223, 223)),
+        color: Colors.white,
       ),
       margin: EdgeInsets.all(3.0),
       child: InkWell(
@@ -21,7 +22,7 @@ class NotificationWidget extends StatelessWidget {
             Container(
               color: notification.getColor(),
               height: 150.0,
-              width: 42.0,
+              width: 35.0,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -37,7 +38,7 @@ class NotificationWidget extends StatelessWidget {
               padding: EdgeInsets.only(left: 3.0, right: 3.0),
             ),
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(8),
               width: mWidth,
               child: Column(
                 children: [
@@ -45,7 +46,8 @@ class NotificationWidget extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       notification.title.toString(),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
                     ),
                   ),
                   Row(

@@ -1,21 +1,18 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_map_supercluster/flutter_map_supercluster.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/evacuation_model.dart';
 import 'dart:convert';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
-import 'package:macres/models/event_model.dart';
 import 'package:macres/screens/evacuation_details_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:macres/util/user_location.dart';
 
 class EvacuationMapScreen extends StatefulWidget {
-  const EvacuationMapScreen({super.key});
+  EvacuationMapScreen({super.key});
+  final userLocation = new UserLocation();
 
   @override
   State<EvacuationMapScreen> createState() => _EvacuationMapScreen();
@@ -23,13 +20,13 @@ class EvacuationMapScreen extends StatefulWidget {
 
 class _EvacuationMapScreen extends State<EvacuationMapScreen> {
   bool isLoading = false;
-  Position? _currentPosition;
+
   final mapController = MapController();
 
   @override
   void initState() {
     super.initState();
-    _getCurrentPosition();
+    widget.userLocation.getCurrentPosition();
     initEvacuation();
     setState(() {
       isLoading = true;
@@ -38,52 +35,6 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
 
   initEvacuation() async {
     //return await getEvacuation();
-  }
-
-  /**
-   * Get user current position
-   */
-  Future<void> _getCurrentPosition() async {
-    final hasPermission = await _handleLocationPermission();
-    if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
-      setState(() => _currentPosition = position);
-    }).catchError((e) {
-      debugPrint(e);
-    });
-  }
-
-  /**
-   * Handle user location permission request
-   */
-  Future<bool> _handleLocationPermission() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location services are disabled. Please enable the services')));
-      return false;
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Location permissions are denied')));
-        return false;
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
-      return false;
-    }
-    return true;
   }
 
   Future<List<EvacuationModel>> getEvacuation() async {
@@ -132,9 +83,9 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
     double lat = -21.178986;
     double lon = -175.198242;
 
-    if (_currentPosition != null) {
-      lat = _currentPosition!.latitude;
-      lon = _currentPosition!.longitude;
+    if (widget.userLocation.currentPosition != null) {
+      lat = widget.userLocation.currentPosition!.latitude;
+      lon = widget.userLocation.currentPosition!.longitude;
     }
 
     return FutureBuilder<List<EvacuationModel>>(
@@ -194,27 +145,28 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                 initialMarkers: getMarkers(snapshot.data),
                               ),
                               Stack(children: [
-                                Positioned(
-                                  right: 10,
-                                  top: 10,
-                                  child: FloatingActionButton(
-                                      tooltip: 'Nearest',
-                                      child: const Icon(
-                                        Icons.near_me,
-                                      ),
-                                      onPressed: () {
-                                        EvacuationModel evm =
-                                            getNearest(snapshot.data);
+                                if (widget.userLocation.currentPosition != null)
+                                  Positioned(
+                                    right: 10,
+                                    top: 10,
+                                    child: FloatingActionButton(
+                                        tooltip: 'Nearest',
+                                        child: const Icon(
+                                          Icons.near_me,
+                                        ),
+                                        onPressed: () {
+                                          EvacuationModel evm =
+                                              getNearest(snapshot.data);
 
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                EvacuationDetailsScreen(
-                                                    model: evm),
-                                          ),
-                                        );
-                                      }),
-                                ),
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EvacuationDetailsScreen(
+                                                      model: evm),
+                                            ),
+                                          );
+                                        }),
+                                  ),
                               ]),
                             ],
                           ),
@@ -257,12 +209,13 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
     double currentKm = 0;
     double totalKm = 0;
 
-    if (_currentPosition != null) {
+    if (widget.userLocation.currentPosition != null) {
       for (var item in data) {
         km = distance.as(
           LengthUnit.Kilometer,
           new LatLng(item.lat, item.lon),
-          new LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          new LatLng(widget.userLocation.currentPosition!.latitude,
+              widget.userLocation.currentPosition!.longitude),
         );
 
         totalKm += km;

@@ -85,7 +85,7 @@ class _NotificationScreen extends State<NotificationScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
-        content: Text('Error: Unable to load notification.'),
+        content: Text('Error: Unable to load warnings.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -105,7 +105,7 @@ class _NotificationScreen extends State<NotificationScreen> {
               )
             : apiData.isEmpty
                 ? const Center(
-                    child: Text('No notification at this time'),
+                    child: Text('No warnings at this time'),
                   )
                 : Column(
                     children: apiData.map<Widget>((notificationObject) {

@@ -26,9 +26,9 @@ class _EventScreen extends State<EventScreen> {
   }
 
   getEvents() async {
-    var username = AppConfig.userName;
-    var password = AppConfig.password;
-    var host = AppConfig.baseUrl;
+    String username = AppConfig.userName;
+    String password = AppConfig.password;
+    String host = AppConfig.baseUrl;
     String endpoint = '/event?_format=json';
 
     final basicAuth =
@@ -82,7 +82,9 @@ class _EventScreen extends State<EventScreen> {
             lon: lon,
             category: int.parse(item.value['field_category'] ?? '0'),
             name: item.value['field_name'] ?? '',
-            feel: item.value['feel'] ?? [],
+            feel: item.value['feel'] != null
+                ? Feel.fromJson(item.value['feel'])
+                : null,
             location: item.value['field_region'] ?? '',
             body: item.value['body'] ?? '',
           ));

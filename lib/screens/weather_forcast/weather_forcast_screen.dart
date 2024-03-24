@@ -67,14 +67,22 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   late NotificationModel notificationData;
 
   bool isLoading = false;
-  late Timer timer;
+  late Timer _timerWeather;
+  late Timer _timerDateTime;
+
+  String dateTime = DateFormat("EEE dd MMM, hh:mm a").format(DateTime.now());
 
   @override
   void initState() {
-    super.initState();
+    _timerWeather = Timer.periodic(
+      const Duration(minutes: 2),
+      (Timer t) => getWeather(),
+    );
 
-    timer =
-        Timer.periodic(const Duration(minutes: 2), (Timer t) => getWeather());
+    _timerDateTime = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) => dateTimeUpdate(),
+    );
 
     notificationData = NotificationModel();
 
@@ -84,12 +92,21 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
       getWeather();
       getNotification();
     });
+
+    super.initState();
+  }
+
+  void dateTimeUpdate() {
+    setState(() {
+      dateTime = DateFormat("EEE dd MMM, hh:mm a").format(DateTime.now());
+    });
   }
 
   @override
   void dispose() {
     myController.dispose();
-    timer.cancel(); //cancel the timer here
+    _timerWeather.cancel(); //cancel the timer here
+    _timerDateTime.cancel();
     super.dispose();
   }
 
@@ -273,7 +290,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
-        content: Text('Error: Unable to load notification..'),
+        content: Text('Error: Unable to load .'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -484,8 +501,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                         ),
                         Row(
                           children: [
-                            Text(DateFormat("EEE dd MMM, hh:mm a")
-                                .format(DateTime.now())),
+                            Text(dateTime),
                             const Spacer(),
                             Text(currentData.getIconDefinition().toString()),
                             // @todo - remove if not needed in the future.
@@ -691,6 +707,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                   const SizedBox(height: 10),
                   Container(
                     height: 600,
+                    margin: EdgeInsets.only(bottom: 10.0),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,

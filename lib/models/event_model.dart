@@ -46,7 +46,7 @@ class EventModel {
   double lon;
   num? id;
   String? name;
-  List? feel = [];
+  Feel? feel = Feel();
   String? tsunami;
 
   EventModel(
@@ -104,5 +104,32 @@ class EventModel {
         return Color.fromARGB(255, 179, 157, 90);
     }
     return const Color.fromARGB(255, 131, 149, 234);
+  }
+}
+
+class Feel {
+  int? tongatapu;
+  int? vavau;
+  int? eua;
+  int? haapai;
+  int? niuafoou;
+  int? niuatoputapu;
+
+  Feel(
+      {this.tongatapu,
+      this.vavau,
+      this.eua,
+      this.haapai,
+      this.niuafoou,
+      this.niuatoputapu}) {}
+
+  factory Feel.fromJson(Map<String, dynamic> json) {
+    return Feel(
+        tongatapu: json['tongatapu'],
+        vavau: json['vavau'],
+        eua: json['eua'],
+        haapai: json['haapai'],
+        niuafoou: json['niuafoou'],
+        niuatoputapu: json['niuatoputapu']);
   }
 }

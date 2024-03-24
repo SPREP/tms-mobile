@@ -3,13 +3,14 @@ import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:macres/util/user_location.dart';
 import 'dart:convert';
-import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FeelEarthquakeForm extends StatefulWidget {
-  const FeelEarthquakeForm({super.key, required this.eventId});
+  FeelEarthquakeForm({super.key, required this.eventId});
   final eventId;
+  final userLocation = new UserLocation();
 
   @override
   State<FeelEarthquakeForm> createState() => _FeelEarthquakeFormState();
@@ -19,7 +20,7 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
   final _formKey = GlobalKey<FormState>();
   Location? _selectedLocation;
   String? _selectedRating;
-  var _isInProgress = false;
+  bool _isInProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +40,7 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
 
     // Set default value to match Location settings.
     _loadSelectedLocation();
+    widget.userLocation.getCurrentPosition();
   }
 
   Future<void> _loadSelectedLocation() async {
@@ -52,10 +54,17 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
   }
 
   Future<http.Response> sendData() async {
-    var username = AppConfig.userName;
-    var password = AppConfig.password;
-    var host = AppConfig.baseUrl;
-    var endpoint = '/feel-earthquake?_format=json';
+    String username = AppConfig.userName;
+    String password = AppConfig.password;
+    String host = AppConfig.baseUrl;
+    String endpoint = '/feel-earthquake?_format=json';
+    double lat = 0;
+    double lon = 0;
+
+    if (widget.userLocation.currentPosition != null) {
+      lat = widget.userLocation.currentPosition!.latitude;
+      lon = widget.userLocation.currentPosition!.longitude;
+    }
 
     final basicAuth =
         "Basic ${base64.encode(utf8.encode('$username:$password'))}";
@@ -72,16 +81,15 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
           {
             "event_id": widget.eventId,
             "location": _selectedLocation!.name,
-            "rate_earthquake": _selectedRating.toString(),
-            "lat": '',
-            "lng": ''
+            "rate_earthquake": _selectedRating!.toLowerCase(),
+            "lat": lat,
+            "lng": lon
           }
         ]),
       );
     } catch (e) {
       log(e.toString());
     }
-
     return res;
   }
 
@@ -140,7 +148,8 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
             }).toList(),
             onChanged: (val) {
               setState(() {
-                _selectedRating = val.toString();
+                if (val != null || val!.isNotEmpty || val != '')
+                  _selectedRating = val.toString();
               });
             },
             validator: (val) {
@@ -163,13 +172,13 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
                 ),
                 const SizedBox(width: 16),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
                       setState(() {
                         _isInProgress = true;
                       });
-                      sendData();
+                      await sendData();
                       showAlertDialog(context);
                       setState(() {
                         _selectedRating = null;
