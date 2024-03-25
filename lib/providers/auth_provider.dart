@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/user_model.dart';
 import 'package:macres/providers/user_provider.dart';
 import 'package:macres/util/user_preferences.dart';
+import 'package:provider/provider.dart';
 
 enum Status {
   NotLoggedIn,
@@ -53,7 +55,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<bool> isLogin(UserModel user) async {
     Response response = await get(
-      Uri.parse("${AppConfig.baseUrl}/user/${user.userId}?_format=json"),
+      Uri.parse("${AppConfig.baseUrl}/user/${user.userId}?_format=json&test1"),
       headers: {
         'Content-Type': 'application/json',
         'Cookie': user.token.toString()
@@ -61,8 +63,14 @@ class AuthProvider with ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
+      _loggedInStatus = Status.LoggedIn;
+      notifyListeners();
       return true;
     } else {
+      print('remove user from isLogin');
+      _loggedInStatus = Status.NotLoggedIn;
+      notifyListeners();
+
       UserPreferences userp = new UserPreferences();
       userp.removeUser();
       return false;
@@ -93,7 +101,7 @@ class AuthProvider with ChangeNotifier {
     final user = await getUser();
 
     Response response = await get(
-      Uri.parse("${AppConfig.prodURL}/session/token"),
+      Uri.parse("${AppConfig.activeURL}/session/token"),
       headers: {
         'Content-Type': 'application/json',
         'Cookie': user.token.toString()
@@ -103,7 +111,7 @@ class AuthProvider with ChangeNotifier {
     return response.body;
   }
 
-  Future<Map<String, dynamic>> profileUpdate(List data) async {
+  Future<Map<String, dynamic>> profileUpdate(List data, context) async {
     var result;
 
     Future<UserModel> getUser() => UserPreferences().getUser();
@@ -129,12 +137,8 @@ class AuthProvider with ChangeNotifier {
 
       UserModel updatedUser = UserModel.fromJson(responseData);
       updatedUser.token = user.token; //<-- put back the token
-      UserPreferences().saveUser(updatedUser);
-
-      //notify there's an update to user
-      UserProvider userProvider = new UserProvider();
-      userProvider.setUser(updatedUser);
-      userProvider.notifyListeners();
+      await UserPreferences().saveUser(updatedUser);
+      Provider.of<UserProvider>(context, listen: false).setUser(updatedUser);
 
       result = {
         'status_code': response.statusCode,
@@ -186,6 +190,7 @@ class AuthProvider with ChangeNotifier {
 
       var cookiesJar = header['set-cookie']!.split(';');
       authUser.token = cookiesJar[0];
+
       UserPreferences().saveUser(authUser);
       _loggedInStatus = Status.LoggedIn;
       notifyListeners();
