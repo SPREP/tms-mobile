@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/user_model.dart';
@@ -104,18 +106,9 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
                   width: 20,
                 ),
                 // Login/Logout buttons.
-                FutureBuilder(
-                  future:
-                      getUserData(), // Replace _yourFutureFunction with the actual function that returns a Future
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      // Show a loading indicator while waiting for the future to complete
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      // Show an error message if the future throws an error
-                      return Text('Error: ${snapshot.error}');
-                    } else if (snapshot.data?.token == null) {
-                      // Render the UI based on the data from the future
+                Consumer2<UserProvider, AuthProvider>(
+                  builder: (context, userProvider, authProvider, child) {
+                    if (authProvider.loggedInStatus != Status.LoggedIn) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -160,6 +153,7 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
             trailing: const Icon(
               Icons.arrow_forward_ios,
               size: 15,
+              color: Color.fromARGB(255, 98, 97, 97),
             ),
             leading: Icon(Icons.home,
                 size: 26, color: Color.fromARGB(255, 98, 97, 97)),

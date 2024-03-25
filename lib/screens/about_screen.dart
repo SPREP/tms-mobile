@@ -11,14 +11,17 @@ class AboutScreen extends StatelessWidget {
         backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
         foregroundColor: Colors.white,
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
           child: Column(children: [
             Text(
-              'About this App',
-              maxLines: 100,
-              overflow: TextOverflow.ellipsis,
+              'This App is developed and maintained by the Tonga Meteorological Service.',
+            ),
+            Image.asset(
+              'assets/images/met_logo.jpg',
+              width: 150.0,
+              height: 150.0,
             ),
           ]),
         ),
