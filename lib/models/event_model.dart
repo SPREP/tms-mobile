@@ -74,7 +74,7 @@ class EventModel {
       case EventType.earthquake:
         return Icon(WeatherIcons.earthquake, color: colour, size: size);
       case EventType.cyclone:
-        return Icon(WeatherIcons.hurricane, color: colour, size: size);
+        return Icon(Icons.cyclone, color: colour, size: size);
       case EventType.volcano:
         return Icon(WeatherIcons.volcano, color: colour, size: size);
       case EventType.fire:

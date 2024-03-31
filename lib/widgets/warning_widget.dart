@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:macres/models/notification_model.dart';
-import 'package:macres/screens/notification_details_screen.dart';
+import 'package:macres/models/warning_model.dart';
+import 'package:macres/screens/warning_details_screen.dart';
 
-class NotificationWidget extends StatelessWidget {
-  const NotificationWidget({super.key, required this.notification});
-  final NotificationModel notification;
+class WarningWidget extends StatelessWidget {
+  const WarningWidget({super.key, required this.warning});
+  final WarningModel warning;
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +20,15 @@ class NotificationWidget extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              color: notification.getColor(),
+              color: warning.getColor(),
               height: 150.0,
-              width: 35.0,
+              width: 42.0,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    notification.getIcon(),
+                    warning.getIcon(),
                     Text(
-                      notification.getLevelText(),
+                      warning.getLevelText(),
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -45,7 +45,7 @@ class NotificationWidget extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      notification.title.toString(),
+                      warning.title.toString(),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black),
                     ),
@@ -59,7 +59,7 @@ class NotificationWidget extends StatelessWidget {
                           avatar: Icon(Icons.lock_clock),
                           backgroundColor: Color.fromARGB(255, 234, 233, 233),
                           label: Text(
-                            notification.date.toString(),
+                            warning.date.toString(),
                             style: TextStyle(color: Colors.black),
                           ),
                         ),
@@ -71,7 +71,7 @@ class NotificationWidget extends StatelessWidget {
                           padding: EdgeInsets.all(2.0),
                           backgroundColor: Color.fromARGB(255, 234, 233, 233),
                           label: Text(
-                            notification.time.toString(),
+                            warning.time.toString(),
                             style: TextStyle(color: Colors.black),
                           ),
                         ),
@@ -90,8 +90,8 @@ class NotificationWidget extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => NotificationDetailsScreen(
-                notificationModel: notification,
+              builder: (context) => WarningDetailsScreen(
+                warningModel: warning,
               ),
             ),
           );

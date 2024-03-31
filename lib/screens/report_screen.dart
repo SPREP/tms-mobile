@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:macres/screens/event_report_screen.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
 import 'package:macres/screens/national_number_screen.dart';
-import 'package:macres/screens/tk_screen.dart';
+import 'package:macres/screens/tk_front_screen.dart';
+import 'package:macres/screens/tk_map_screen.dart';
 
 class ReportScreen extends StatefulWidget {
   const ReportScreen({super.key});
@@ -164,7 +165,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const NationalNumberScreen(),
+                      builder: (context) => NationalNumberScreen(),
                     ),
                   );
                 },
@@ -205,17 +206,17 @@ class _ReportScreenState extends State<ReportScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const TkScreen(),
+                      builder: (context) => const TkFrontScreen(),
                     ),
                   );
                 },
                 child: Container(
                   height: boxHeight,
-                  width: 100,
+                  width: 150.0,
                   child: Column(children: [
                     Container(
-                      width: 50,
-                      height: 50,
+                      width: 150.0,
+                      height: 50.0,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
@@ -231,7 +232,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       height: 5.0,
                     ),
                     Text(
-                      'TK',
+                      'Traditional Knowledge',
                       style: TextStyle(fontSize: fontSize),
                     ),
                   ]),

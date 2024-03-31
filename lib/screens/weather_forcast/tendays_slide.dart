@@ -58,7 +58,12 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
                   ],
                 ),
                 Spacer(),
-                new Center(child: item.getIcon(25.0, 25.0)),
+                new Center(
+                    child: Container(
+                  height: 30.0,
+                  width: 30.0,
+                  child: item.getIcon(),
+                )),
                 SizedBox(
                   width: 30.0,
                 ),

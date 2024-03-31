@@ -1,3 +1,4 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,6 +17,7 @@ class WeatherModel {
   String? location;
   String? day;
   String? observedDate;
+  String? windDirectionDegree;
 
   String dayOrNight = 'day';
 
@@ -33,7 +35,8 @@ class WeatherModel {
       this.warning,
       this.location,
       this.day,
-      this.observedDate}) {
+      this.observedDate,
+      this.windDirectionDegree}) {
     int hours = DateTime.now().hour;
     dayOrNight = (hours >= 7 && hours <= 20) ? 'day' : 'night';
   }
@@ -61,40 +64,33 @@ class WeatherModel {
     return ((int.parse(value) * 9 / 5) + 32).toStringAsFixed(0);
   }
 
-  getIcon(double width, double height) {
+  getIcon() {
     String icon;
 
     switch (iconId) {
       case 1:
-        icon =
-            dayOrNight == 'day' ? 'day_clear.png' : 'night_full_moon_clear.png';
+        icon = dayOrNight == 'day' ? 'sunny' : 'night_clear_sky';
         break;
       case 2:
-        icon = dayOrNight == 'day'
-            ? 'day_partial_cloud.png'
-            : 'night_full_moon_partial_cloud.png';
+        icon =
+            dayOrNight == 'day' ? 'day_partial_cloud' : 'night_partial_cloud';
         break;
       case 3:
-        icon = dayOrNight == 'day' ? 'cloudy.png' : 'cloudy.png';
+        icon = dayOrNight == 'day' ? 'cloudy' : 'cloudy';
+        break;
+
+      case 10:
+        icon = dayOrNight == 'day' ? 'snow' : 'snow';
         break;
       case 4:
-      case 6:
-      case 10:
-        icon =
-            dayOrNight == 'day' ? 'day_sleet.png' : 'night_full_moon_sleet.png';
-        break;
-      case 7:
-        icon = 'rain.png';
-        break;
       case 5:
-        icon =
-            dayOrNight == 'day' ? 'day_rain.png' : 'night_full_moon_rain.png';
+      case 6:
+      case 7:
+        icon = 'rain';
         break;
       case 8:
       case 9:
-        icon = dayOrNight == 'day'
-            ? 'day_rain_thunder.png'
-            : 'night_full_moon_rain_thunder.png';
+        icon = dayOrNight == 'day' ? 'thunder_storm' : 'thunder_storm';
         break;
       default:
         icon = '';
@@ -102,10 +98,10 @@ class WeatherModel {
     }
 
     if (icon == '') return Text(icon);
-    return Image.asset(
-      'assets/images/${icon}',
-      width: width,
-      height: height,
+
+    return FlareActor(
+      "assets/flare/weather_icons/${icon}.flr",
+      animation: "idle",
     );
   }
 
@@ -161,6 +157,7 @@ class CurrentWeatherModel extends WeatherModel {
     super.minTemp,
     super.maxTemp,
     super.observedDate,
+    super.windDirectionDegree,
   });
 }
 

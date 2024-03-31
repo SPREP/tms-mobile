@@ -181,8 +181,7 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => const NationalNumberScreen()),
+                MaterialPageRoute(builder: (context) => NationalNumberScreen()),
               );
             },
           ),

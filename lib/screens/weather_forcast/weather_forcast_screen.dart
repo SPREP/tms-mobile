@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:macres/config/app_config.dart';
-import 'package:macres/models/notification_model.dart';
+import 'package:macres/models/warning_model.dart';
 import 'package:macres/models/sea_model.dart';
 import 'package:macres/models/tide_model.dart';
 import 'package:macres/models/weather_model.dart';
@@ -11,7 +11,8 @@ import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
 import 'package:macres/screens/weather_forcast/tide_slide.dart';
 import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide.dart';
-import 'package:macres/widgets/notification_widget.dart';
+import 'package:macres/util/user_location.dart';
+import 'package:macres/widgets/warning_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_icons/weather_icons.dart';
@@ -20,7 +21,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class WeatherForcastScreen extends StatefulWidget {
-  const WeatherForcastScreen({super.key, required this.onCurrentWeatherChange});
+  WeatherForcastScreen({super.key, required this.onCurrentWeatherChange});
+
+  final userLocation = new UserLocation();
 
   final String Function(String filepath, String dayOrNight)
       onCurrentWeatherChange;
@@ -64,13 +67,12 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     Color.fromARGB(255, 20, 24, 27)
   ];
 
-  late NotificationModel notificationData;
+  late WarningModel warningData;
 
   bool isLoading = false;
   late Timer _timerWeather;
-  late Timer _timerDateTime;
 
-  String dateTime = DateFormat("EEE dd MMM, hh:mm a").format(DateTime.now());
+  String dateTime = DateFormat("EEE dd MMM").format(DateTime.now());
 
   @override
   void initState() {
@@ -79,18 +81,13 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
       (Timer t) => getWeather(),
     );
 
-    _timerDateTime = Timer.periodic(
-      const Duration(seconds: 1),
-      (timer) => dateTimeUpdate(),
-    );
-
-    notificationData = NotificationModel();
+    warningData = WarningModel();
 
     setLocation();
     setState(() {
       isLoading = true;
       getWeather();
-      getNotification();
+      getWarning();
     });
 
     super.initState();
@@ -98,7 +95,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
   void dateTimeUpdate() {
     setState(() {
-      dateTime = DateFormat("EEE dd MMM, hh:mm a").format(DateTime.now());
+      dateTime = DateFormat("EEE dd MMM").format(DateTime.now());
     });
   }
 
@@ -106,7 +103,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   void dispose() {
     myController.dispose();
     _timerWeather.cancel(); //cancel the timer here
-    _timerDateTime.cancel();
     super.dispose();
   }
 
@@ -229,7 +225,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     return Location.tongatapu;
   }
 
-  getNotification() async {
+  getWarning() async {
     var username = AppConfig.userName;
     var password = AppConfig.password;
     var host = AppConfig.baseUrl;
@@ -237,7 +233,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     var prefs = await SharedPreferences.getInstance();
     var lng = prefs.getString('user_language');
 
-    String endpoint = '/notification/$lng?_format=json';
+    String endpoint = '/warning/$lng?_format=json';
 
     final basicAuth =
         "Basic ${base64.encode(utf8.encode('$username:$password'))}";
@@ -260,16 +256,16 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         }
 
         final Map<String, dynamic> listData = jsonDecode(response.body);
-        NotificationModel loadedItem = NotificationModel();
+        WarningModel loadedItem = WarningModel();
 
         for (final item in listData.entries) {
-          final notificationLevel = int.parse(item.value['level']);
+          final warningLevel = int.parse(item.value['level']);
           // Only show warning notification
-          if (notificationLevel != 2 && notificationLevel != 3) continue;
+          if (warningLevel != 2 && warningLevel != 3) continue;
 
           //Only show warning for today
           if (isToday(int.parse(item.value['timestamp']))) {
-            loadedItem = NotificationModel(
+            loadedItem = WarningModel(
                 id: int.parse(item.value['id']),
                 date: item.value['date'],
                 time: item.value['time'],
@@ -281,7 +277,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         }
 
         setState(() {
-          notificationData = loadedItem;
+          warningData = loadedItem;
           //isLoading = false;
         });
 
@@ -343,7 +339,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         if (listData['tide'].length > 0) {
           tideData.clear();
           for (final item in listData['tide']) {
-            var tideModel = TideModel(
+            TideModel tideModel = TideModel(
               id: item[1],
               status: item[3],
               time: item[4],
@@ -359,7 +355,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         if (listData['sea'].length > 0) {
           seaData.clear();
           for (final item in listData['sea']) {
-            var seaModel = SeaModel(
+            SeaModel seaModel = SeaModel(
                 level: item[1],
                 temp: item[2],
                 location: item[0],
@@ -372,7 +368,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         if (listData['10days'].length > 0) {
           tenDaysData.clear();
           for (final item in listData['10days']) {
-            var dataModel = TenDaysForecastModel(
+            TenDaysForecastModel dataModel = TenDaysForecastModel(
                 iconId: int.parse(item[1]),
                 day: item[2],
                 maxTemp: item[3],
@@ -386,7 +382,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         if (listData['weather'].length > 0) {
           currentWeatherData.clear();
           for (final item in listData['weather']) {
-            var dataModel = CurrentWeatherModel(
+            CurrentWeatherModel dataModel = CurrentWeatherModel(
                 location: item[0],
                 iconId: int.parse(item[1]),
                 currentTemp: item[2],
@@ -395,7 +391,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                 windDirection: item[5],
                 windSpeed: item[6],
                 visibility: item[7],
-                observedDate: item[8]);
+                observedDate: item[8],
+                windDirectionDegree: item[9]);
 
             currentWeatherData.add(dataModel);
             if (convertToLocation(item[0]) == selectedLocation) {
@@ -470,8 +467,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                   Container(
                     child: Column(
                       children: [
-                        if (notificationData.body != null)
-                          NotificationWidget(notification: notificationData)
+                        if (warningData.body != null)
+                          WarningWidget(warning: warningData)
                       ],
                     ),
                   ),
@@ -495,15 +492,24 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        Text('TODAY'),
+                        Text('CURRENT WEATHER CONDITIONS'),
                         SizedBox(
                           height: 20.0,
                         ),
                         Row(
                           children: [
-                            Text(dateTime),
+                            Text(
+                              dateTime,
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 226, 226, 226)),
+                            ),
                             const Spacer(),
-                            Text(currentData.getIconDefinition().toString()),
+                            Text(
+                              locationLabel[selectedLocation].toString(),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+
                             // @todo - remove if not needed in the future.
                             // Degrees icon.
                             // const Spacer(),
@@ -517,36 +523,49 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           ],
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 0,
                         ),
                         Row(
                           children: [
-                            Text(
-                              "${currentData.currentTemp}",
-                              style: const TextStyle(
-                                  fontSize: 60, fontWeight: FontWeight.normal),
-                              textAlign: TextAlign.left,
-                            ),
-                            Align(
-                              heightFactor: 1.5,
-                              alignment: Alignment.topRight,
-                              child: Text(
-                                "\u00B0${selectedTempretureUnit.toUpperCase()}",
-                                style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ),
-                            const Spacer(),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(children: [
+                                    Text(
+                                      "${currentData.currentTemp}",
+                                      style: const TextStyle(
+                                          fontSize: 60,
+                                          fontWeight: FontWeight.normal),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    Align(
+                                      heightFactor: 1.5,
+                                      alignment: Alignment.topRight,
+                                      child: Text(
+                                        "\u00B0${selectedTempretureUnit.toUpperCase()}",
+                                        style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                    ),
+                                  ]),
+                                  Text(
+                                    currentData.getIconDefinition().toString(),
+                                    style: TextStyle(fontSize: 19),
+                                  ),
+                                ]),
                             Column(
                               children: [
-                                currentData.getIcon(50.0, 50.0),
+                                Container(
+                                  height: 150.0,
+                                  width: 150.0,
+                                  child: currentData.getIcon(),
+                                )
                               ],
                             ),
-                            const Spacer(),
                           ],
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 0),
                         Row(
                           children: [
                             Column(
@@ -579,29 +598,44 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                             const Spacer(),
                             Column(
                               children: [
-                                const Icon(
-                                  Icons.explore_outlined,
-                                  color: Colors.white,
-                                  size: 30,
+                                SizedBox(
+                                  height: 45.0,
+                                  width: 30.0,
+                                  child: WindIcon(
+                                    degree: num.parse(
+                                        currentData.windDirectionDegree!),
+                                    color: Colors.white,
+                                    size: 35,
+                                  ),
                                 ),
-                                const SizedBox(height: 5),
-                                Text('${currentData.windDirection}'),
-                                Text('${currentData.windSpeed} knts'),
+                                const Text('Wind'),
+                                // Text('${currentData.windDirection}'),
+                                Text('${currentData.windSpeed} km/h'),
                               ],
                             ),
                             const Spacer(),
                             Column(
                               children: [
-                                const Icon(
-                                  Icons.visibility_outlined,
-                                  color: Colors.white,
-                                  size: 30,
+                                SizedBox(
+                                  height: 10.0,
                                 ),
+                                SizedBox(
+                                  height: 5.0,
+                                  child: const Icon(
+                                    Icons.visibility_outlined,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
                                 const Text('Visibility'),
-                                Text('${currentData.visibility} m'),
+                                Text('${(currentData.visibility)} km'),
                               ],
                             ),
                           ],
+                        ),
+                        SizedBox(
+                          height: 20.0,
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 20),
@@ -625,7 +659,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                   // 24 Hours widget
                   const SizedBox(height: 10),
                   Container(
-                    height: 350,
+                    height: 360,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
