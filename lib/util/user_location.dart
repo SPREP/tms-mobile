@@ -4,6 +4,10 @@ import 'package:geolocator/geolocator.dart';
 class UserLocation {
   Position? currentPosition;
 
+  UserLocation() {
+    getCurrentPosition();
+  }
+
   /**
    * Get user current position
    */

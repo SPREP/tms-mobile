@@ -4,12 +4,13 @@ import 'package:macres/models/settings_model.dart';
 import 'package:macres/providers/weather_location.dart';
 import 'package:macres/screens/evacuation_map_screen.dart';
 import 'package:macres/screens/event_screen.dart';
-import 'package:macres/screens/notification_screen.dart';
+import 'package:macres/screens/warning_screen.dart';
 import 'package:macres/screens/report_screen.dart';
 import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:macres/widgets/main_drawer_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:macres/util/magnifier.dart' as Mag;
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -29,6 +30,7 @@ class _TabsScreenState extends State<TabsScreen> {
   String bgFilePath = '';
   String dayOrNightStatus = 'day';
   Location selectedLocation = Location.tongatapu;
+  bool visibility = false;
 
   String _onCurrentWeatherChange(String filepath, String dayOrNight) {
     setState(() {
@@ -72,18 +74,42 @@ class _TabsScreenState extends State<TabsScreen> {
       return PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(
-          centerTitle: true,
+          centerTitle: false,
           backgroundColor: Colors.transparent,
           flexibleSpace: getLocationDropdown(),
-          actions: actionButtons,
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  visibility = !visibility;
+                });
+              },
+              child: Icon(
+                visibility ? Icons.visibility : Icons.visibility_off,
+                color: Colors.white,
+              ),
+            ),
+          ],
           foregroundColor: Colors.white,
         ),
       );
     } else {
       return AppBar(
-        centerTitle: true,
+        centerTitle: false,
         title: Text(activePageTitle),
-        actions: actionButtons,
+        actions: [
+          TextButton(
+            onPressed: () {
+              setState(() {
+                visibility = !visibility;
+              });
+            },
+            child: Icon(
+              visibility ? Icons.visibility : Icons.visibility_off,
+              color: Colors.white,
+            ),
+          ),
+        ],
         backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
         foregroundColor: Colors.white,
       );
@@ -95,34 +121,46 @@ class _TabsScreenState extends State<TabsScreen> {
         child: Column(
       children: [
         Spacer(),
-        DropdownButton<Location>(
-          borderRadius: BorderRadius.circular(10),
-          value: selectedLocation,
-          dropdownColor: dayOrNightStatus == 'day'
-              ? Color.fromARGB(255, 33, 123, 187)
-              : Color.fromARGB(255, 70, 73, 76),
-          icon: const Icon(
-            Icons.expand_more,
-            color: Colors.white,
-          ),
-          items: Location.values.map((Location value) {
-            return DropdownMenuItem<Location>(
-              value: value,
-              child: Text(
-                locationLabel[value].toString(),
-                style: const TextStyle(color: Colors.white),
-              ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedLocation = value!;
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          margin: EdgeInsets.only(bottom: 3.0),
+          height: 30.0,
+          decoration: BoxDecoration(
+              color: dayOrNightStatus == 'day'
+                  ? Color.fromARGB(255, 26, 99, 152)
+                  : Color.fromARGB(255, 88, 88, 88),
+              borderRadius: BorderRadius.circular(10)),
+          child: DropdownButton<Location>(
+            underline: SizedBox(),
+            borderRadius: BorderRadius.circular(10),
+            value: selectedLocation,
+            dropdownColor: dayOrNightStatus == 'day'
+                ? Color.fromARGB(255, 33, 123, 187)
+                : Color.fromARGB(255, 70, 73, 76),
+            icon: const Icon(
+              Icons.expand_more,
+              color: Colors.white,
+            ),
+            items: Location.values.map((Location value) {
+              return DropdownMenuItem<Location>(
+                value: value,
+                child: Text(
+                  locationLabel[value].toString(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedLocation = value!;
 
-              WeatherLocationProvider weatherLocationProvider =
-                  Provider.of<WeatherLocationProvider>(context, listen: false);
-              weatherLocationProvider.setLocation(value);
-            });
-          },
+                WeatherLocationProvider weatherLocationProvider =
+                    Provider.of<WeatherLocationProvider>(context,
+                        listen: false);
+                weatherLocationProvider.setLocation(value);
+              });
+            },
+          ),
         ),
       ],
     ));
@@ -141,74 +179,79 @@ class _TabsScreenState extends State<TabsScreen> {
       }
     }
 
-    return Container(
-      width: width,
-      decoration: _selectedPageIndex == 0 || _selectedPageIndex == 4
-          ? BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: dayOrNightStatus == 'day'
-                    ? <Color>[Color.fromARGB(255, 3, 55, 97), Colors.blue]
-                    : <Color>[
-                        Color.fromARGB(255, 64, 65, 67),
-                        Color.fromARGB(255, 20, 24, 27)
-                      ],
-              ),
-            )
-          : null,
-      child: Scaffold(
-        backgroundColor: _selectedPageIndex == 0 || _selectedPageIndex == 4
-            ? const Color.fromARGB(0, 82, 38, 38)
+    return Mag.Magnifier(
+      size: Size(250.0, 250.0),
+      enabled: visibility ? true : false,
+      child: Container(
+        width: width,
+        decoration: _selectedPageIndex == 0 || _selectedPageIndex == 4
+            ? BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: dayOrNightStatus == 'day'
+                      ? <Color>[Color.fromARGB(255, 3, 55, 97), Colors.blue]
+                      : <Color>[
+                          Color.fromARGB(255, 64, 65, 67),
+                          Color.fromARGB(255, 20, 24, 27)
+                        ],
+                ),
+              )
             : null,
-        body: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: height),
-            child: Container(
-              padding: _selectedPageIndex == 0 || _selectedPageIndex == 4
-                  ? const EdgeInsets.only(
-                      right: 5,
-                      left: 5,
-                    )
-                  : null,
-              child: activePage,
+        child: Scaffold(
+          backgroundColor: _selectedPageIndex == 0 || _selectedPageIndex == 4
+              ? const Color.fromARGB(0, 82, 38, 38)
+              : null,
+          body: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: height),
+              child: Container(
+                padding: _selectedPageIndex == 0 || _selectedPageIndex == 4
+                    ? const EdgeInsets.only(
+                        right: 5,
+                        left: 5,
+                      )
+                    : null,
+                child: activePage,
+              ),
             ),
           ),
-        ),
-        drawer: MainDrawerWidget(),
-        appBar: getAppBar(),
-        bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                  top: BorderSide(
-                      color: Color.fromARGB(255, 233, 232, 232), width: 1.0))),
-          child: BottomNavigationBar(
-            onTap: _selectPage,
-            type: BottomNavigationBarType.fixed,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_filled),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.event),
-                label: 'Events',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.directions),
-                label: 'Evacuation',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.warning),
-                label: 'Warnings',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.add_circle_outline),
-                label: 'More',
-              ),
-            ],
-            currentIndex: _selectedPageIndex,
+          drawer: MainDrawerWidget(),
+          appBar: getAppBar(),
+          bottomNavigationBar: Container(
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                    top: BorderSide(
+                        color: Color.fromARGB(255, 233, 232, 232),
+                        width: 1.0))),
+            child: BottomNavigationBar(
+              onTap: _selectPage,
+              type: BottomNavigationBarType.fixed,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_filled),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.event),
+                  label: 'Events',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.directions),
+                  label: 'Evacuation',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.warning),
+                  label: 'Warnings',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.add_circle_outline),
+                  label: 'More',
+                ),
+              ],
+              currentIndex: _selectedPageIndex,
+            ),
           ),
         ),
       ),
@@ -234,19 +277,16 @@ class _TabsScreenState extends State<TabsScreen> {
       if (_selectedPageIndex == 1) {
         activePage = const EventScreen();
         activePageTitle = 'Events';
-        actionButtons = [];
       }
 
       if (_selectedPageIndex == 3) {
-        activePage = const NotificationScreen();
+        activePage = const WarningScreen();
         activePageTitle = 'Warnings';
-        actionButtons = [];
       }
 
       if (_selectedPageIndex == 2) {
         activePage = EvacuationMapScreen();
         activePageTitle = 'Evacuation Map';
-        actionButtons = [];
       }
 
       if (_selectedPageIndex == 4) {

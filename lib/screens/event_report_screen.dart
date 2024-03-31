@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:macres/widgets/image_input.dart';
 import 'package:path/path.dart' as p;
+import 'package:macres/util/magnifier.dart' as Mag;
 
 class EventReportScreen extends StatefulWidget {
   EventReportScreen({super.key});
@@ -24,7 +25,7 @@ class _EventReportScreenState extends State<EventReportScreen> {
   TextEditingController bodyController = TextEditingController();
   List<File> _selectedImages = [];
   final _formKey = GlobalKey<FormState>();
-
+  bool visibility = false;
   var _isInProgress = false;
 
   @override
@@ -92,126 +93,146 @@ class _EventReportScreenState extends State<EventReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Event Report'),
-          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-          foregroundColor: Colors.white,
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(0),
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 10, bottom: 20, left: 10, right: 10),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    const Text(
-                      "Fill in the following fields, to report an event from your location. For exmaple:  If you see a fire, you can report it here.  If you see a smoke coming out from a Volcano.",
-                      style: TextStyle(fontSize: 13),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: titleController,
-                      maxLength: 50,
-                      decoration: const InputDecoration(
-                        label: Text('Title'),
+    return Mag.Magnifier(
+      size: Size(250.0, 250.0),
+      enabled: visibility ? true : false,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Event Report'),
+            backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+            foregroundColor: Colors.white,
+            centerTitle: false,
+            elevation: 0,
+            actions: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    visibility = !visibility;
+                  });
+                },
+                child: Icon(
+                  visibility ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(0),
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 10, bottom: 20, left: 10, right: 10),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 15,
                       ),
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Enter the event title';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: bodyController,
-                      maxLines: 5,
-                      decoration: const InputDecoration(
-                        label: Text('Enter the event details here'),
+                      const Text(
+                        "Fill in the following fields, to report an event from your location. For exmaple:  If you see a fire, you can report it here.  If you see a smoke coming out from a Volcano.",
+                        style: TextStyle(fontSize: 13),
                       ),
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return "Enter the event details";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    ImageInput(
-                      onPickImage: (selectedImages) {
-                        _selectedImages = selectedImages;
-                      },
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        const Spacer(),
-                        const SizedBox(width: 16),
-                        TextButton(
-                            onPressed: () {
-                              setState(() {
-                                clearFields();
-                              });
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('Cancel')),
-                        const SizedBox(width: 20),
-                        if (_isInProgress) const CircularProgressIndicator(),
-                        if (!_isInProgress)
-                          ElevatedButton(
-                            onPressed: () async {
-                              final isValid = _formKey.currentState!.validate();
-                              if (!isValid) {
-                                return;
-                              }
-                              _formKey.currentState!.save();
-
-                              setState(() {
-                                _isInProgress = true;
-                              });
-
-                              GetImageUrl imageUrl = GetImageUrl();
-                              List<String> imageSourceUrls = [];
-
-                              if (_selectedImages.isNotEmpty) {
-                                for (var n = 0;
-                                    n < _selectedImages.length;
-                                    n++) {
-                                  String fileExtension =
-                                      p.extension(_selectedImages[n].path);
-                                  await imageUrl.call(fileExtension);
-
-                                  if (imageUrl.success) {
-                                    await uploadFile(
-                                        context,
-                                        imageUrl.uploadUrl,
-                                        File(_selectedImages[n].path));
-                                  }
-
-                                  imageSourceUrls.add(imageUrl.downloadUrl);
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: titleController,
+                        maxLength: 50,
+                        decoration: const InputDecoration(
+                          label: Text('Title'),
+                        ),
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return 'Enter the event title';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        controller: bodyController,
+                        maxLines: 5,
+                        decoration: const InputDecoration(
+                          label: Text('Enter the event details here'),
+                        ),
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return "Enter the event details";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      ImageInput(
+                        onPickImage: (selectedImages) {
+                          _selectedImages = selectedImages;
+                        },
+                      ),
+                      const SizedBox(height: 5),
+                      Row(
+                        children: [
+                          const Spacer(),
+                          const SizedBox(width: 16),
+                          TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  clearFields();
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancel')),
+                          const SizedBox(width: 20),
+                          if (_isInProgress) const CircularProgressIndicator(),
+                          if (!_isInProgress)
+                            ElevatedButton(
+                              onPressed: () async {
+                                final isValid =
+                                    _formKey.currentState!.validate();
+                                if (!isValid) {
+                                  return;
                                 }
-                              }
+                                _formKey.currentState!.save();
 
-                              await sendData(imageSourceUrls);
-                              showAlertDialog(context);
-                              setState(() {
-                                clearFields();
-                                _isInProgress = false;
-                              });
-                            },
-                            child: const Text('Submit'),
-                          ),
-                      ],
-                    ),
-                  ],
+                                setState(() {
+                                  _isInProgress = true;
+                                });
+
+                                GetImageUrl imageUrl = GetImageUrl();
+                                List<String> imageSourceUrls = [];
+
+                                if (_selectedImages.isNotEmpty) {
+                                  for (var n = 0;
+                                      n < _selectedImages.length;
+                                      n++) {
+                                    String fileExtension =
+                                        p.extension(_selectedImages[n].path);
+                                    await imageUrl.call(fileExtension);
+
+                                    if (imageUrl.success) {
+                                      await uploadFile(
+                                          context,
+                                          imageUrl.uploadUrl,
+                                          File(_selectedImages[n].path));
+                                    }
+
+                                    imageSourceUrls.add(imageUrl.downloadUrl);
+                                  }
+                                }
+
+                                await sendData(imageSourceUrls);
+                                showAlertDialog(context);
+                                setState(() {
+                                  clearFields();
+                                  _isInProgress = false;
+                                });
+                              },
+                              child: const Text('Submit'),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:macres/util/user_location.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:macres/util/magnifier.dart' as Mag;
 
 class FeelEarthquakeForm extends StatefulWidget {
   FeelEarthquakeForm({super.key, required this.eventId});
@@ -21,26 +22,44 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
   Location? _selectedLocation;
   String? _selectedRating;
   bool _isInProgress = false;
+  bool visibility = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(padding: EdgeInsets.all(20), child: getForm()),
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-        foregroundColor: Colors.white,
-        title: Text('Did you feel the earthquake?'),
+    return Mag.Magnifier(
+      size: Size(250.0, 250.0),
+      enabled: visibility ? true : false,
+      child: Scaffold(
+        body: Padding(padding: EdgeInsets.all(20), child: getForm()),
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+          foregroundColor: Colors.white,
+          title: Text('Did you feel the earthquake?'),
+          centerTitle: false,
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  visibility = !visibility;
+                });
+              },
+              child: Icon(
+                visibility ? Icons.visibility : Icons.visibility_off,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   @override
   void initState() {
-    super.initState();
-
     // Set default value to match Location settings.
     _loadSelectedLocation();
     widget.userLocation.getCurrentPosition();
+    super.initState();
   }
 
   Future<void> _loadSelectedLocation() async {

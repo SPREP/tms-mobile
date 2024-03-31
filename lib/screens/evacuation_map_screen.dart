@@ -1,7 +1,12 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_map_supercluster/flutter_map_supercluster.dart';
+
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/evacuation_model.dart';
 import 'dart:convert';
@@ -21,20 +26,19 @@ class EvacuationMapScreen extends StatefulWidget {
 class _EvacuationMapScreen extends State<EvacuationMapScreen> {
   bool isLoading = false;
 
-  final mapController = MapController();
+  late AlignOnUpdate _alignPositionOnUpdate;
+  late final StreamController<double?> _alignPositionStreamController;
 
   @override
   void initState() {
+    _alignPositionOnUpdate = AlignOnUpdate.never;
+    _alignPositionStreamController = StreamController<double?>();
     super.initState();
-    widget.userLocation.getCurrentPosition();
-    initEvacuation();
-    setState(() {
-      isLoading = true;
-    });
   }
 
-  initEvacuation() async {
-    //return await getEvacuation();
+  void displose() {
+    _alignPositionStreamController.close();
+    super.dispose();
   }
 
   Future<List<EvacuationModel>> getEvacuation() async {
@@ -113,7 +117,6 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                         child: ClipRRect(
                           borderRadius: const BorderRadius.only(),
                           child: FlutterMap(
-                            mapController: mapController,
                             options: MapOptions(
                               initialCenter: LatLng(lat, lon),
                               initialZoom: 12,
@@ -124,7 +127,26 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                     'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                                 userAgentPackageName: 'com.example.app',
                               ),
-                              CurrentLocationLayer(),
+                              CurrentLocationLayer(
+                                alignPositionStream:
+                                    _alignPositionStreamController.stream,
+                                alignPositionOnUpdate: _alignPositionOnUpdate,
+                                style: LocationMarkerStyle(
+                                  markerSize: Size.square(50),
+                                  marker: DefaultLocationMarker(
+                                    child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          'You are here',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 11,
+                                              height: 0),
+                                        )),
+                                  ),
+                                ),
+                              ),
                               SuperclusterLayer.immutable(
                                 indexBuilder: IndexBuilders.rootIsolate,
                                 builder: (context, position, markerCount,
@@ -197,11 +219,6 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
     return markers;
   }
 
-  void displose() {
-    mapController.dispose();
-    super.dispose();
-  }
-
   getNearest(data) {
     EvacuationModel evacuationPoint = EvacuationModel();
     final Distance distance = Distance();
@@ -234,6 +251,36 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
     evacuationPoint.nearestKm = totalKm;
 
     return evacuationPoint;
+  }
+
+  getCurrentPositionMarker() {
+    return Stack(
+      children: [
+        Icon(
+          Icons.add_location,
+          color: Color.fromARGB(255, 6, 124, 45),
+          size: 50,
+        ),
+        Positioned(
+          left: 13,
+          top: 8,
+          child: Container(
+            width: 24,
+            height: 24,
+            child: Center(
+              child: CircleAvatar(
+                radius: 10,
+                backgroundColor: Colors.white,
+                child: CircleAvatar(
+                  radius: 11,
+                  backgroundColor: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
   }
 
   getMarker(String image, EvacuationModel model) {

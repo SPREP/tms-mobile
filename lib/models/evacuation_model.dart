@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EvacuationModel {
-  Widget? body;
+  String? body;
   String? title;
   String? image_large;
   String? image_thumbnail;

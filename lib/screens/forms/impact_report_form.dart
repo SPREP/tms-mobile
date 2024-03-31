@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:macres/widgets/image_input.dart';
 import 'package:path/path.dart' as p;
+import 'package:macres/util/magnifier.dart' as Mag;
 
 class ImpactReportForm extends StatefulWidget {
   const ImpactReportForm({super.key, required this.eventId});
@@ -22,6 +23,7 @@ class ImpactReportForm extends StatefulWidget {
 
 class _ImpactReportFormState extends State<ImpactReportForm> {
   final _formKey = GlobalKey<FormState>();
+  bool visibility = false;
 
   List<File> _selectedImages = [];
   var _isInProgress = false;
@@ -74,16 +76,34 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Impact Report'),
-        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-        foregroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: getForm(),
+    return Mag.Magnifier(
+      size: Size(250.0, 250.0),
+      enabled: visibility ? true : false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Impact Report'),
+          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+          foregroundColor: Colors.white,
+          centerTitle: false,
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  visibility = !visibility;
+                });
+              },
+              child: Icon(
+                visibility ? Icons.visibility : Icons.visibility_off,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: getForm(),
+          ),
         ),
       ),
     );

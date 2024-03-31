@@ -46,11 +46,15 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
                 fontSize: 16,
               ),
             ),
-            widget.currentData.getIcon(50.0, 50.0),
+            Container(
+              height: 80.0,
+              width: 80.0,
+              child: widget.currentData.getIcon(),
+            ),
           ],
         ),
         const SizedBox(
-          height: 30,
+          height: 10,
         ),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Column(children: [
@@ -87,6 +91,9 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
             Text('${widget.currentData.windSpeed.toString()} knts'),
           ]),
         ]),
+        SizedBox(
+          height: 5,
+        ),
       ],
     );
   }

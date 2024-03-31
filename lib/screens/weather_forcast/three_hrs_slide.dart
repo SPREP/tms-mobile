@@ -33,10 +33,10 @@ class _ThreeHoursSlideState extends State<ThreeHoursSlide> {
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
             "${widget.currentData.currentTemp}\u00B0",
-            style: const TextStyle(fontSize: 30),
+            style: const TextStyle(fontSize: 40),
           ),
           const SizedBox(
-            width: 40,
+            width: 10,
           ),
           Column(
             children: [
@@ -46,13 +46,14 @@ class _ThreeHoursSlideState extends State<ThreeHoursSlide> {
                   fontSize: 16,
                 ),
               ),
-              widget.currentData.getIcon(50.0, 50.0),
+              Container(
+                height: 80.0,
+                width: 80.0,
+                child: widget.currentData.getIcon(),
+              ),
             ],
           ),
         ]),
-        const SizedBox(
-          height: 30,
-        ),
         Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

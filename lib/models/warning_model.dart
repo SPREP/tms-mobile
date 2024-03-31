@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class NotificationModel {
+class WarningModel {
   num? id;
   num? level;
   String? body;
@@ -9,7 +9,7 @@ class NotificationModel {
   String? title;
   String? location;
 
-  NotificationModel({
+  WarningModel({
     this.level,
     this.body,
     this.time,

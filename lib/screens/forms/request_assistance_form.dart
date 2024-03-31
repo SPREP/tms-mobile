@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
-import 'package:macres/models/user_model.dart';
-import 'package:macres/util/user_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/checkbox_widget.dart';
 import 'dart:developer';
@@ -14,6 +12,7 @@ import 'dart:io';
 import 'package:macres/widgets/image_input.dart';
 import 'package:path/path.dart' as p;
 import 'package:geolocator/geolocator.dart';
+import 'package:macres/util/magnifier.dart' as Mag;
 
 class RequestAssistanceForm extends StatefulWidget {
   const RequestAssistanceForm({super.key, required this.eventId});
@@ -25,6 +24,7 @@ class RequestAssistanceForm extends StatefulWidget {
 
 class _RequestAssistanceForm extends State<RequestAssistanceForm> {
   final _formKey = GlobalKey<FormState>();
+  bool visibility = false;
 
   List<File> _selectedImages = [];
   var _isInProgress = false;
@@ -121,16 +121,35 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Request Assistance'),
-        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-        foregroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: getForm(),
+    return Mag.Magnifier(
+      size: Size(250.0, 250.0),
+      enabled: visibility ? true : false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Request Assistance'),
+          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+          foregroundColor: Colors.white,
+          centerTitle: false,
+          elevation: 0,
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  visibility = !visibility;
+                });
+              },
+              child: Icon(
+                visibility ? Icons.visibility : Icons.visibility_off,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: getForm(),
+          ),
         ),
       ),
     );

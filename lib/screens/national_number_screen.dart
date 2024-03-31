@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:macres/widgets/national_number_widget.dart';
 import 'package:macres/models/national_number_model.dart';
 import 'package:macres/models/settings_model.dart';
+import 'package:macres/util/magnifier.dart' as Mag;
 
-class NationalNumberScreen extends StatelessWidget {
-  const NationalNumberScreen({super.key});
+class NationalNumberScreen extends StatefulWidget {
+  NationalNumberScreen({super.key});
+
+  @override
+  State<NationalNumberScreen> createState() => _NationalNumberScreenState();
+}
+
+class _NationalNumberScreenState extends State<NationalNumberScreen> {
+  bool visibility = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,31 +67,49 @@ class NationalNumberScreen extends StatelessWidget {
       Category.wccc: ["+676 7320547"],
     };
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('National number'),
-        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-        foregroundColor: Colors.white,
-      ),
-      body: const SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(padding: EdgeInsets.only(top: 30)),
-            Text("Just tap the number you want to call"),
-            SizedBox(height: 10),
-            NationalNumberWidget(contactNumber: tongatapuNumbers),
-            SizedBox(height: 10),
-            NationalNumberWidget(contactNumber: haapaiNumbers),
-            SizedBox(height: 10),
-            NationalNumberWidget(contactNumber: vavauNumbers),
-            SizedBox(height: 10),
-            NationalNumberWidget(contactNumber: niuafoouNumbers),
-            SizedBox(height: 10),
-            NationalNumberWidget(contactNumber: niuatoputapuNumbers),
-            SizedBox(height: 10),
-            NationalNumberWidget(contactNumber: euaNumbers),
-            Padding(padding: EdgeInsets.only(bottom: 30)),
+    return Mag.Magnifier(
+      size: Size(250.0, 250.0),
+      enabled: visibility ? true : false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('National number'),
+          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
+          foregroundColor: Colors.white,
+          centerTitle: false,
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  visibility = !visibility;
+                });
+              },
+              child: Icon(
+                visibility ? Icons.visibility : Icons.visibility_off,
+                color: Colors.white,
+              ),
+            ),
           ],
+        ),
+        body: const SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(padding: EdgeInsets.only(top: 30)),
+              Text("Just tap the number you want to call"),
+              SizedBox(height: 10),
+              NationalNumberWidget(contactNumber: tongatapuNumbers),
+              SizedBox(height: 10),
+              NationalNumberWidget(contactNumber: haapaiNumbers),
+              SizedBox(height: 10),
+              NationalNumberWidget(contactNumber: vavauNumbers),
+              SizedBox(height: 10),
+              NationalNumberWidget(contactNumber: niuafoouNumbers),
+              SizedBox(height: 10),
+              NationalNumberWidget(contactNumber: niuatoputapuNumbers),
+              SizedBox(height: 10),
+              NationalNumberWidget(contactNumber: euaNumbers),
+              Padding(padding: EdgeInsets.only(bottom: 30)),
+            ],
+          ),
         ),
       ),
     );
