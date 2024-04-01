@@ -38,13 +38,15 @@ class TkIndicatorModel {
   String? desc;
   String? photo;
   int? id;
+  int? weight;
 
-  TkIndicatorModel({this.name, this.desc, this.photo, this.id}) {}
+  TkIndicatorModel({this.name, this.desc, this.photo, this.id, this.weight}) {}
 
   TkIndicatorModel.fromJson(dynamic json) {
     name = json['name'];
     desc = json['desc'];
     photo = json['photo'];
     id = json['id'];
+    weight = json['weight'];
   }
 }

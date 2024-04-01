@@ -18,6 +18,7 @@ class WeatherModel {
   String? day;
   String? observedDate;
   String? windDirectionDegree;
+  String? solarRadiation;
 
   String dayOrNight = 'day';
 
@@ -36,9 +37,21 @@ class WeatherModel {
       this.location,
       this.day,
       this.observedDate,
-      this.windDirectionDegree}) {
-    int hours = DateTime.now().hour;
-    dayOrNight = (hours >= 7 && hours <= 20) ? 'day' : 'night';
+      this.windDirectionDegree,
+      this.solarRadiation}) {
+    if (this.solarRadiation != '' && this.solarRadiation != null) {
+      //Use solar radiation to determine day or night
+      double solar = double.parse(this.solarRadiation.toString());
+      if (solar > 50) {
+        dayOrNight = 'day';
+      } else if (solar < 50) {
+        dayOrNight = 'night';
+      }
+    } else {
+      //If solar radiation is not available then use the time
+      int hours = DateTime.now().hour;
+      dayOrNight = (hours >= 7 && hours <= 20) ? 'day' : 'night';
+    }
   }
 
   void celsiusToFahrenheight() {
@@ -145,20 +158,20 @@ class TenDaysForecastModel extends WeatherModel {
 }
 
 class CurrentWeatherModel extends WeatherModel {
-  CurrentWeatherModel({
-    super.iconId,
-    super.currentTemp,
-    super.humidity,
-    super.pressure,
-    super.windDirection,
-    super.windSpeed,
-    super.visibility,
-    super.location,
-    super.minTemp,
-    super.maxTemp,
-    super.observedDate,
-    super.windDirectionDegree,
-  });
+  CurrentWeatherModel(
+      {super.iconId,
+      super.currentTemp,
+      super.humidity,
+      super.pressure,
+      super.windDirection,
+      super.windSpeed,
+      super.visibility,
+      super.location,
+      super.minTemp,
+      super.maxTemp,
+      super.observedDate,
+      super.windDirectionDegree,
+      super.solarRadiation});
 }
 
 class ThreeHoursForecastModel extends WeatherModel {

@@ -136,16 +136,20 @@ class _TkIndicatorsScreenState extends State<TkIndicatorsScreen> {
   }
 
   Widget formatIndicators(data) {
-    counter++;
     return Container(
       color: Color.fromARGB(255, 237, 235, 235),
       margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          CachedNetworkImage(
+            imageUrl: data.photo,
+            placeholder: (context, url) => new CircularProgressIndicator(),
+            errorWidget: (context, url, error) => new Icon(Icons.error),
+          ),
           Padding(
             padding: EdgeInsets.only(left: 10.0, top: 10.0),
-            child: Text('${counter}. ${data.name}',
+            child: Text('${data.weight}. ${data.name}',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
                 textAlign: TextAlign.left),
           ),
@@ -159,12 +163,7 @@ class _TkIndicatorsScreenState extends State<TkIndicatorsScreen> {
             child: Text(data.desc),
           ),
           SizedBox(
-            height: 10.0,
-          ),
-          CachedNetworkImage(
-            imageUrl: data.photo,
-            placeholder: (context, url) => new CircularProgressIndicator(),
-            errorWidget: (context, url, error) => new Icon(Icons.error),
+            height: 5.0,
           ),
         ],
       ),
