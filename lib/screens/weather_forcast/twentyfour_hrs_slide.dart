@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macres/widgets/weather_property_widget.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class TwentyFourHoursSlide extends StatefulWidget {
@@ -56,40 +57,41 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
         const SizedBox(
           height: 10,
         ),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Column(children: [
-            const Icon(
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Spacer(),
+          WeatherProperty(
+            title: 'Max: ${widget.currentData.maxTemp}\u00B0',
+            value: 'Min: ${widget.currentData.minTemp}\u00B0',
+            unit: '',
+            icon: Icon(
               WeatherIcons.thermometer,
               color: Colors.white,
               size: 30,
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Max: ${widget.currentData.maxTemp}\u00B0",
-              style: const TextStyle(fontSize: 16),
-            ),
-            Text(
-              "Min: ${widget.currentData.minTemp}\u00B0",
-              style: const TextStyle(fontSize: 16),
-            ),
-          ]),
-          const SizedBox(
-            width: 40,
           ),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const Icon(
-              Icons.explore,
+          Spacer(),
+          WeatherProperty(
+            title: 'Wind Direction',
+            value: widget.currentData.windDirection.toString(),
+            unit: '',
+            icon: Icon(
+              WeatherIcons.wind_direction,
               color: Colors.white,
               size: 30,
             ),
-            const SizedBox(
-              height: 10,
+          ),
+          Spacer(),
+          WeatherProperty(
+            title: 'Wind Speed',
+            value: widget.currentData.windSpeed.toString(),
+            unit: 'km/h',
+            icon: Icon(
+              WeatherIcons.strong_wind,
+              color: Colors.white,
+              size: 30,
             ),
-            Text(widget.currentData.windDirection.toString()),
-            Text('${widget.currentData.windSpeed.toString()} knts'),
-          ]),
+          ),
+          Spacer(),
         ]),
         SizedBox(
           height: 5,

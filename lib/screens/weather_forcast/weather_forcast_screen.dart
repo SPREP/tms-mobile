@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/warning_model.dart';
@@ -13,6 +15,7 @@ import 'package:macres/screens/weather_forcast/tide_slide.dart';
 import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide.dart';
 import 'package:macres/util/user_location.dart';
 import 'package:macres/widgets/warning_widget.dart';
+import 'package:macres/widgets/weather_property_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_icons/weather_icons.dart';
@@ -392,7 +395,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                 windSpeed: item[6],
                 visibility: item[7],
                 observedDate: item[8],
-                windDirectionDegree: item[9]);
+                windDirectionDegree: item[9],
+                solarRadiation: item[10]);
 
             currentWeatherData.add(dataModel);
             if (convertToLocation(item[0]) == selectedLocation) {
@@ -489,156 +493,177 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                         Radius.circular(20),
                       ),
                     ),
-                    padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        Text('CURRENT WEATHER CONDITIONS'),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              dateTime,
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 226, 226, 226)),
+                        Container(
+                          padding: EdgeInsets.all(20.0),
+                          child: Column(children: [
+                            Text('CURRENT WEATHER CONDITIONS'),
+                            SizedBox(
+                              height: 20.0,
                             ),
-                            const Spacer(),
-                            Text(
-                              locationLabel[selectedLocation].toString(),
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.white),
-                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  dateTime,
+                                  style: TextStyle(
+                                      color:
+                                          Color.fromARGB(255, 226, 226, 226)),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  locationLabel[selectedLocation].toString(),
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.white),
+                                ),
 
-                            // @todo - remove if not needed in the future.
-                            // Degrees icon.
-                            // const Spacer(),
-                            // Icon(
-                            //   selectedTempretureUnit == 'c'
-                            //       ? WeatherIcons.celsius
-                            //       : WeatherIcons.fahrenheit,
-                            //   color: Colors.white,
-                            //   size: 30.0,
-                            // ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 0,
-                        ),
-                        Row(
-                          children: [
-                            Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(children: [
-                                    Text(
-                                      "${currentData.currentTemp}",
-                                      style: const TextStyle(
-                                          fontSize: 60,
-                                          fontWeight: FontWeight.normal),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    Align(
-                                      heightFactor: 1.5,
-                                      alignment: Alignment.topRight,
-                                      child: Text(
-                                        "\u00B0${selectedTempretureUnit.toUpperCase()}",
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.normal),
+                                // @todo - remove if not needed in the future.
+                                // Degrees icon.
+                                // const Spacer(),
+                                // Icon(
+                                //   selectedTempretureUnit == 'c'
+                                //       ? WeatherIcons.celsius
+                                //       : WeatherIcons.fahrenheit,
+                                //   color: Colors.white,
+                                //   size: 30.0,
+                                // ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 0,
+                            ),
+                            Row(
+                              children: [
+                                Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(children: [
+                                        Text(
+                                          "${currentData.currentTemp}",
+                                          style: const TextStyle(
+                                              fontSize: 60,
+                                              fontWeight: FontWeight.normal),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        Align(
+                                          heightFactor: 1.5,
+                                          alignment: Alignment.topRight,
+                                          child: Text(
+                                            "\u00B0${selectedTempretureUnit.toUpperCase()}",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.normal),
+                                          ),
+                                        ),
+                                      ]),
+                                      Text(
+                                        currentData
+                                            .getIconDefinition()
+                                            .toString(),
+                                        style: TextStyle(fontSize: 19),
                                       ),
-                                    ),
-                                  ]),
-                                  Text(
-                                    currentData.getIconDefinition().toString(),
-                                    style: TextStyle(fontSize: 19),
-                                  ),
-                                ]),
-                            Column(
-                              children: [
-                                Container(
-                                  height: 150.0,
-                                  width: 150.0,
-                                  child: currentData.getIcon(),
-                                )
+                                    ]),
+                                Column(
+                                  children: [
+                                    Container(
+                                      height: 130.0,
+                                      width: 130.0,
+                                      child: currentData.getIcon(),
+                                    )
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
+                          ]),
                         ),
-                        const SizedBox(height: 0),
+                        const SizedBox(height: 10.0),
                         Row(
                           children: [
-                            Column(
-                              children: [
-                                const Icon(
-                                  WeatherIcons.humidity,
+                            const Spacer(),
+                            WeatherProperty(
+                              title: 'Humidity',
+                              value: currentData.humidity,
+                              unit: '%',
+                              icon: Icon(
+                                WeatherIcons.humidity,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                            const Spacer(),
+                            WeatherProperty(
+                              title: 'Pressure',
+                              value: currentData.pressure,
+                              unit: 'mb',
+                              icon: Icon(
+                                WeatherIcons.barometer,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                            const Spacer(),
+                            WeatherProperty(
+                                title: 'Wind Speed',
+                                value: currentData.windSpeed,
+                                unit: 'km/h',
+                                icon: Icon(
+                                  WeatherIcons.strong_wind,
                                   color: Colors.white,
-                                  size: 30,
-                                ),
-                                const SizedBox(height: 10),
-                                const Text('Humidity'),
-                                Text('${currentData.humidity}%'),
-                              ],
-                            ),
+                                )),
                             const Spacer(),
-                            Column(
-                              children: [
-                                const Icon(
-                                  WeatherIcons.barometer,
-                                  color: Colors.white,
-                                  size: 30,
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Text('Pressure'),
-                                Text('${currentData.pressure} mb'),
-                              ],
-                            ),
-                            const Spacer(),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  height: 45.0,
-                                  width: 30.0,
-                                  child: WindIcon(
-                                    degree: num.parse(
-                                        currentData.windDirectionDegree!),
-                                    color: Colors.white,
-                                    size: 35,
-                                  ),
-                                ),
-                                const Text('Wind'),
-                                // Text('${currentData.windDirection}'),
-                                Text('${currentData.windSpeed} km/h'),
-                              ],
-                            ),
-                            const Spacer(),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  height: 10.0,
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                  child: const Icon(
-                                    Icons.visibility_outlined,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                ),
-                                const SizedBox(height: 30),
-                                const Text('Visibility'),
-                                Text('${(currentData.visibility)} km'),
-                              ],
-                            ),
                           ],
                         ),
                         SizedBox(
-                          height: 20.0,
+                          height: 10.0,
+                        ),
+                        Row(
+                          children: [
+                            const Spacer(),
+                            WeatherProperty(
+                              title: 'Wind Direction',
+                              value: currentData.windDirection,
+                              unit: '',
+                              icon: Container(
+                                height: 38.0,
+                                child: WindIcon(
+                                  degree: num.parse(
+                                      currentData.windDirectionDegree!),
+                                  color: Colors.white,
+                                  size: 35,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            WeatherProperty(
+                              title: 'Visibility',
+                              value: currentData.visibility,
+                              unit: 'km',
+                              icon: Icon(
+                                Icons.visibility_outlined,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                            const Spacer(),
+                            WeatherProperty(
+                              title: 'Solar Radiation',
+                              value: currentData.solarRadiation,
+                              unit: 'W/m\u00b2',
+                              icon: Icon(
+                                Icons.solar_power_rounded,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                            const Spacer(),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10.0,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 20),
+                          padding: EdgeInsets.all(20.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -659,7 +684,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                   // 24 Hours widget
                   const SizedBox(height: 10),
                   Container(
-                    height: 360,
+                    height: 390,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
@@ -686,7 +711,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                   // 3 Hours widget
                   const SizedBox(height: 10),
                   Container(
-                    height: 300,
+                    height: 330,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
