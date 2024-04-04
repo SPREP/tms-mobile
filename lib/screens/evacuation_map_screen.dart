@@ -216,6 +216,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
         ),
       );
     }
+
     return markers;
   }
 
