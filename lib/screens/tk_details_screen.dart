@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:intl/intl.dart';
 import 'package:macres/models/tk_model.dart';
+import 'package:latlong2/latlong.dart';
 
 class TkDetailsScreen extends StatefulWidget {
   const TkDetailsScreen({super.key, required this.tkModel});
@@ -12,6 +14,71 @@ class TkDetailsScreen extends StatefulWidget {
 }
 
 class _TkDetailsScreenState extends State<TkDetailsScreen> {
+  Widget getMap(TkModel model) {
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          height: 150.0,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(),
+            child: FlutterMap(
+              mapController: MapController(),
+              options: MapOptions(
+                initialCenter: LatLng(model.lat!, model.lon!),
+                initialZoom: 10,
+              ),
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.app',
+                ),
+                MarkerLayer(
+                  markers: [getMarker(model)],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  getMarker(TkModel item) {
+    return Marker(
+      point: LatLng(item.lat!, item.lon!),
+      width: 50,
+      height: 50,
+      child: Stack(
+        children: [
+          Icon(
+            Icons.add_location,
+            color: Color.fromARGB(255, 215, 27, 27),
+            size: 50,
+          ),
+          Positioned(
+            left: 13,
+            top: 8,
+            child: Container(
+              width: 24,
+              height: 24,
+              child: Center(
+                child: CircleAvatar(
+                  radius: 14,
+                  backgroundColor: Colors.white,
+                  child: CircleAvatar(
+                    radius: 11,
+                    backgroundImage: NetworkImage(item.image!),
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     String photoTime = '';
@@ -38,9 +105,14 @@ class _TkDetailsScreenState extends State<TkDetailsScreen> {
         ),
         body: SingleChildScrollView(
           child: Column(children: [
+            getMap(widget.tkModel),
+            SizedBox(
+              height: 10.0,
+            ),
             Image.network(
               widget.tkModel.image!,
-              height: 300.0,
+              height: 250.0,
+              fit: BoxFit.contain,
             ),
             Container(
               padding: EdgeInsets.all(20.0),
@@ -50,6 +122,10 @@ class _TkDetailsScreenState extends State<TkDetailsScreen> {
                 children: [
                   Text('Title: ${widget.tkModel.title}'),
                   Text('Photo Time: $photoTime'),
+                  Text(
+                    'Indicator: ${widget.tkModel.indicator!.name}',
+                    softWrap: true,
+                  ),
                   SizedBox(
                     height: 10.0,
                   ),
