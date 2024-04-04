@@ -8,6 +8,9 @@ class TkModel {
   String? date;
   String? timestamp;
   TkIndicatorModel? indicator;
+  String? author;
+  String? author_photo;
+  String? author_name;
 
   TkModel(
       {this.title,
@@ -18,18 +21,22 @@ class TkModel {
       this.time,
       this.date,
       this.timestamp,
-      this.indicator}) {}
+      this.indicator,
+      this.author_name,
+      this.author_photo}) {}
 
   TkModel.fromJson(dynamic json) {
     id = json['id'];
     title = json['title'];
     time = json['time'];
     date = json['date'];
-    lat = json['lat'];
-    lon = json['lon'];
+    lat = json['lat'] != '' ? double.parse(json['lat'].toString()) : 0.0;
+    lon = json['lon'] != '' ? double.parse(json['lon'].toString()) : 0.0;
     timestamp = json['timestamp'];
     image = json['photo'];
     indicator = TkIndicatorModel.fromJson(json['indicator']);
+    author_name = json['author_name'];
+    author_photo = json['author_image'];
   }
 }
 

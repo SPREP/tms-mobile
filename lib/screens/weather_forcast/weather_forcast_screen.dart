@@ -61,12 +61,12 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   List<SeaModel> seaData = [];
 
   List<Color> widgetBackgroundDayColors = <Color>[
+    const Color.fromARGB(255, 21, 123, 207),
     Color.fromARGB(255, 22, 83, 133),
-    const Color.fromARGB(255, 21, 123, 207)
   ];
 
   List<Color> widgetBackgroundNightColors = <Color>[
-    Color.fromARGB(255, 40, 43, 46),
+    Color.fromARGB(255, 74, 78, 82),
     Color.fromARGB(255, 20, 24, 27)
   ];
 
