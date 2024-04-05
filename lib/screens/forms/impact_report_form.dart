@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
+import 'package:macres/util/user_location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/checkbox_widget.dart';
 import 'dart:developer';
@@ -24,7 +25,7 @@ class ImpactReportForm extends StatefulWidget {
 class _ImpactReportFormState extends State<ImpactReportForm> {
   final _formKey = GlobalKey<FormState>();
   bool visibility = false;
-
+  final userLocation = new UserLocation();
   List<File> _selectedImages = [];
   var _isInProgress = false;
 
@@ -119,6 +120,15 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
         "Basic ${base64.encode(utf8.encode('$username:$password'))}";
     dynamic response;
 
+    //get user GPS location
+    double lat = 0.0;
+    double lon = 0.0;
+
+    if (userLocation.currentPosition != null) {
+      lat = userLocation.currentPosition!.latitude;
+      lon = userLocation.currentPosition!.longitude;
+    }
+
     try {
       response = await http.post(
         Uri.parse('$host$endpoint'),
@@ -138,6 +148,8 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
             "images": imageSourceUrls,
             "anyone_missing": _anyoneMissing,
             "anyone_passed_away": _anyonePassedAway,
+            "lat": lat,
+            "lon": lon,
             "impacted_items": [
               waterTank == true ? 'watertank' : '',
               noHouse == true ? 'waterhouse' : '',

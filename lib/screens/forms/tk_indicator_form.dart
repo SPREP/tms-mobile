@@ -5,14 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/tk_model.dart';
+import 'package:macres/models/user_model.dart';
+import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/util/get_image_url.dart';
 import 'package:macres/util/upload_file.dart';
 import 'package:macres/util/user_location.dart';
+import 'package:macres/util/user_preferences.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:macres/widgets/image_input.dart';
 import 'package:native_exif/native_exif.dart';
 import 'package:path/path.dart' as p;
+import 'package:provider/provider.dart';
 
 class TkIndicatorForm extends StatefulWidget {
   const TkIndicatorForm({super.key});
@@ -28,6 +32,8 @@ class _TkIndicatorFormState extends State<TkIndicatorForm> {
   final _formKey = GlobalKey<FormState>();
   final AsyncMemoizer<List<TkIndicatorModel>> _memoizer =
       AsyncMemoizer<List<TkIndicatorModel>>();
+  AuthProvider authprovider = new AuthProvider();
+  Future<UserModel> getUserData() => UserPreferences().getUser();
 
   bool _isInProgress = false;
   int _indicators_field_value = 1;
@@ -36,6 +42,13 @@ class _TkIndicatorFormState extends State<TkIndicatorForm> {
   DateTime _photo_date = new DateTime.now();
   late UserLocation _ul;
   bool _mapOn = false;
+  dynamic _user;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    authprovider = Provider.of<AuthProvider>(context);
+  }
 
   @override
   void dispose() {
@@ -47,6 +60,7 @@ class _TkIndicatorFormState extends State<TkIndicatorForm> {
   @override
   initState() {
     requestLocation();
+
     super.initState();
   }
 
@@ -67,12 +81,18 @@ class _TkIndicatorFormState extends State<TkIndicatorForm> {
     dynamic res;
     var result = {};
 
+    _user = await getUserData();
+
+    //get csrfToken
+    var csrfToken = await authprovider.getCsrfToken();
+
     try {
       http.Response res = await http.post(
         Uri.parse('$host$endpoint'),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': basicAuth
+          'Cookie': _user.token.toString(),
+          'X-CSRF-Token': csrfToken
         },
         body: json.encode([
           {
@@ -334,7 +354,7 @@ class _TkIndicatorFormState extends State<TkIndicatorForm> {
                   Container(
                     height: 400,
                     child: FlutterLocationPicker(
-                      initZoom: 11,
+                      initZoom: 9,
                       minZoomLevel: 5,
                       maxZoomLevel: 16,
                       trackMyPosition: true,

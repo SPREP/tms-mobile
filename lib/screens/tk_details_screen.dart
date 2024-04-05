@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:intl/intl.dart';
@@ -67,8 +68,13 @@ class _TkDetailsScreenState extends State<TkDetailsScreen> {
                   radius: 14,
                   backgroundColor: Colors.white,
                   child: CircleAvatar(
+                    backgroundColor: Colors.white,
                     radius: 11,
-                    backgroundImage: NetworkImage(item.image!),
+                    child: Icon(
+                      Icons.photo_camera,
+                      size: 20.0,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ),
@@ -94,7 +100,7 @@ class _TkDetailsScreenState extends State<TkDetailsScreen> {
     //Reported by date
     var report_date = DateTime.fromMillisecondsSinceEpoch(
         int.parse(widget.tkModel.timestamp.toString()) * 1000);
-    var output_date = DateFormat('MM/dd/yyyy').format(report_date);
+    var output_date = DateFormat('dd MMMM yyyy').format(report_date);
 
     return Scaffold(
         appBar: AppBar(
@@ -109,10 +115,10 @@ class _TkDetailsScreenState extends State<TkDetailsScreen> {
             SizedBox(
               height: 10.0,
             ),
-            Image.network(
-              widget.tkModel.image!,
-              height: 250.0,
-              fit: BoxFit.contain,
+            CachedNetworkImage(
+              imageUrl: widget.tkModel.image!,
+              placeholder: (context, url) => new CircularProgressIndicator(),
+              errorWidget: (context, url, error) => new Icon(Icons.error),
             ),
             Container(
               padding: EdgeInsets.all(20.0),
@@ -126,6 +132,10 @@ class _TkDetailsScreenState extends State<TkDetailsScreen> {
                     'Indicator: ${widget.tkModel.indicator!.name}',
                     softWrap: true,
                   ),
+                  Text(
+                    'Meaning: ${widget.tkModel.indicator!.desc}',
+                    softWrap: true,
+                  ),
                   SizedBox(
                     height: 10.0,
                   ),
@@ -135,16 +145,24 @@ class _TkDetailsScreenState extends State<TkDetailsScreen> {
                   SizedBox(
                     height: 10.0,
                   ),
+                  Text('Reported by'),
+                  SizedBox(
+                    height: 10.0,
+                  ),
                   Row(
                     children: [
-                      Text('Reported by'),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Image.network(
-                        widget.tkModel.author_photo!,
-                        width: 40.0,
-                        height: 40.0,
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 20,
+                        child: ClipOval(
+                          child: Image.network(
+                            widget.tkModel.author_photo!,
+                            width: 40.0,
+                            height: 40.0,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                          ),
+                        ),
                       ),
                       SizedBox(
                         width: 10.0,
@@ -153,9 +171,9 @@ class _TkDetailsScreenState extends State<TkDetailsScreen> {
                       SizedBox(
                         width: 5.0,
                       ),
+                      Text('on $output_date'),
                     ],
                   ),
-                  Text('on $output_date'),
                 ],
               ),
             ),

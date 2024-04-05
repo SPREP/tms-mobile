@@ -169,7 +169,7 @@ class _EventReportScreenState extends State<EventReportScreen> {
                           _selectedImages = selectedImages;
                         },
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 10),
                       Row(
                         children: [
                           const Spacer(),
@@ -229,6 +229,9 @@ class _EventReportScreenState extends State<EventReportScreen> {
                               },
                               child: const Text('Submit'),
                             ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
                         ],
                       ),
                     ],
