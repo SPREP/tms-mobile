@@ -6,6 +6,8 @@ import 'package:macres/models/event_model.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
+import 'package:macres/screens/forms/impact_report_form.dart';
+import 'package:macres/screens/forms/request_assistance_form.dart';
 import 'package:macres/screens/user/islogin_screen.dart';
 import 'package:macres/widgets/big_map_widget.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
@@ -274,12 +276,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       child: ElevatedButton.icon(
                           icon: const Icon(Icons.draw),
                           onPressed: () {
+                            var destination = ImpactReportForm(
+                                eventId: widget.eventModel.id!);
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => new IsLogin(
-                                    next: 'impact',
-                                    eventId: widget.eventModel.id!),
+                                  destination: destination,
+                                ),
                               ),
                             );
                           },
@@ -290,12 +295,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       child: ElevatedButton.icon(
                           icon: const Icon(Icons.assistant),
                           onPressed: () {
+                            var destination = RequestAssistanceForm(
+                                eventId: widget.eventModel.id!);
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => new IsLogin(
-                                    next: 'assistance',
-                                    eventId: widget.eventModel.id!),
+                                  destination: destination,
+                                ),
                               ),
                             );
                           },

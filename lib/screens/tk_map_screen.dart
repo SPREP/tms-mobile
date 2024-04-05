@@ -10,6 +10,7 @@ import 'package:macres/screens/tk_details_screen.dart';
 import 'dart:convert';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
+import 'package:macres/screens/user/islogin_screen.dart';
 
 class TkMapScreen extends StatefulWidget {
   const TkMapScreen({super.key});
@@ -130,9 +131,13 @@ class _TkMapScreen extends State<TkMapScreen> {
                       children: [
                         TextButton.icon(
                           onPressed: () {
-                            Navigator.of(context).push(
+                            var destination = TkIndicatorForm();
+                            Navigator.push(
+                              context,
                               MaterialPageRoute(
-                                builder: (context) => TkIndicatorForm(),
+                                builder: (context) => new IsLogin(
+                                  destination: destination,
+                                ),
                               ),
                             );
                           },
@@ -162,7 +167,7 @@ class _TkMapScreen extends State<TkMapScreen> {
                             mapController: mapController,
                             options: MapOptions(
                               initialCenter: LatLng(-21.178986, -175.198242),
-                              initialZoom: 5,
+                              initialZoom: 8,
                             ),
                             children: [
                               TileLayer(
@@ -227,8 +232,13 @@ class _TkMapScreen extends State<TkMapScreen> {
                   radius: 14,
                   backgroundColor: Colors.white,
                   child: CircleAvatar(
+                    backgroundColor: Colors.white,
                     radius: 11,
-                    backgroundImage: NetworkImage(item.image!),
+                    child: Icon(
+                      Icons.photo_camera,
+                      size: 20.0,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ),

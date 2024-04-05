@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
+import 'package:macres/util/user_location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/checkbox_widget.dart';
 import 'dart:developer';
@@ -25,7 +26,7 @@ class RequestAssistanceForm extends StatefulWidget {
 class _RequestAssistanceForm extends State<RequestAssistanceForm> {
   final _formKey = GlobalKey<FormState>();
   bool visibility = false;
-
+  final userLocation = new UserLocation();
   List<File> _selectedImages = [];
   var _isInProgress = false;
 
@@ -165,6 +166,15 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
         "Basic ${base64.encode(utf8.encode('$username:$password'))}";
     dynamic res;
 
+    //get user GPS location
+    double lat = 0.0;
+    double lon = 0.0;
+
+    if (userLocation.currentPosition != null) {
+      lat = userLocation.currentPosition!.latitude;
+      lon = userLocation.currentPosition!.longitude;
+    }
+
     try {
       res = await http.post(
         Uri.parse('$host$endpoint'),
@@ -184,6 +194,8 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
             "have_water": _haveWater,
             "have_food": _haveFood,
             "have_house": _haveHouse,
+            "lat": lat,
+            "lon": lon,
             "needed_now": [
               needWater == true ? 'water' : '',
               needFood == true ? 'food' : '',

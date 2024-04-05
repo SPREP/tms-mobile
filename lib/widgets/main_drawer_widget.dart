@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/user_model.dart';
@@ -27,8 +25,6 @@ class MainDrawerWidget extends StatefulWidget {
 class _MainDrawerWidgetState extends State<MainDrawerWidget> {
   @override
   Widget build(BuildContext context) {
-    Future<UserModel> getUserData() => UserPreferences().getUser();
-
     Consumer<AuthProvider> authConsumer =
         Consumer<AuthProvider>(builder: (context, authProvider, child) {
       return Column(
