@@ -8,8 +8,6 @@ class AboutScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('About Us'),
-        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-        foregroundColor: Colors.white,
       ),
       body: Center(
         child: Padding(

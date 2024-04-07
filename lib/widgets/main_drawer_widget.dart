@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
-import 'package:macres/models/user_model.dart';
 import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/providers/user_provider.dart';
 import 'package:macres/screens/about_screen.dart';
@@ -11,7 +10,6 @@ import 'package:macres/screens/tabs_screen.dart';
 import 'package:macres/screens/user/login_screen.dart';
 import 'package:macres/screens/user/profile_screen.dart';
 import 'package:macres/screens/user/signup_screen.dart';
-import 'package:macres/util/user_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -59,10 +57,10 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
       child: Column(
         children: [
           DrawerHeader(
-            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Color.fromRGBO(92, 125, 138, 1.0),
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
+            padding: const EdgeInsets.all(20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -149,10 +147,11 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
             trailing: const Icon(
               Icons.arrow_forward_ios,
               size: 15,
-              color: Color.fromARGB(255, 98, 97, 97),
             ),
-            leading: Icon(Icons.home,
-                size: 26, color: Color.fromARGB(255, 98, 97, 97)),
+            leading: Icon(
+              Icons.home,
+              size: 26,
+            ),
             title: Text(
               'Home',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
@@ -164,10 +163,14 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
             ),
           ),
           ListTile(
-            trailing: const Icon(Icons.arrow_forward_ios,
-                size: 15, color: Color.fromARGB(255, 98, 97, 97)),
-            leading: Icon(Icons.phone_outlined,
-                size: 26, color: Color.fromARGB(255, 98, 97, 97)),
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              size: 15,
+            ),
+            leading: Icon(
+              Icons.phone_outlined,
+              size: 26,
+            ),
             title: Text(
               'National Numbers',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
@@ -183,10 +186,14 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
           ),
           const Divider(),
           ListTile(
-            trailing: const Icon(Icons.arrow_forward_ios,
-                size: 15, color: Color.fromARGB(255, 98, 97, 97)),
-            leading: Icon(Icons.settings,
-                size: 26, color: Color.fromARGB(255, 98, 97, 97)),
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              size: 15,
+            ),
+            leading: Icon(
+              Icons.settings,
+              size: 26,
+            ),
             title: Text(
               'Settings',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
@@ -201,10 +208,14 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
             },
           ),
           ListTile(
-            trailing: const Icon(Icons.arrow_forward_ios,
-                size: 15, color: Color.fromARGB(255, 98, 97, 97)),
-            leading: Icon(Icons.help,
-                size: 26, color: Color.fromARGB(255, 98, 97, 97)),
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              size: 15,
+            ),
+            leading: Icon(
+              Icons.help,
+              size: 26,
+            ),
             title: Text(
               'Contact',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
@@ -219,10 +230,14 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
             },
           ),
           ListTile(
-            trailing: const Icon(Icons.arrow_forward_ios,
-                size: 15, color: Color.fromARGB(255, 98, 97, 97)),
-            leading: Icon(Icons.info,
-                size: 26, color: Color.fromARGB(255, 98, 97, 97)),
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              size: 15,
+            ),
+            leading: Icon(
+              Icons.info,
+              size: 26,
+            ),
             title: Text(
               'About',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(

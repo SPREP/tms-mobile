@@ -8,8 +8,6 @@ class ContactScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Contact Info'),
-        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-        foregroundColor: Colors.white,
       ),
       body: const Padding(
         padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),

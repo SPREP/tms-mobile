@@ -121,7 +121,7 @@ class _EventScreen extends State<EventScreen> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(0.0),
         child: isLoading
             ? const Center(
                 child: CircularProgressIndicator(),

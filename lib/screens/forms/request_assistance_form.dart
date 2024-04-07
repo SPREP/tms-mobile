@@ -1,7 +1,14 @@
+import 'package:another_flushbar/flushbar.dart';
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/settings_model.dart';
+import 'package:macres/models/user_model.dart';
+import 'package:macres/models/village_model.dart';
+import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/util/user_location.dart';
+import 'package:macres/util/user_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/checkbox_widget.dart';
 import 'dart:developer';
@@ -24,13 +31,16 @@ class RequestAssistanceForm extends StatefulWidget {
 }
 
 class _RequestAssistanceForm extends State<RequestAssistanceForm> {
+  Future<UserModel> getUserData() => UserPreferences().getUser();
   final _formKey = GlobalKey<FormState>();
   bool visibility = false;
   final userLocation = new UserLocation();
   List<File> _selectedImages = [];
   var _isInProgress = false;
+  List<VillageModel> _villageData = [];
 
   Location? _selectedLocation;
+  int? _villageId;
   String? _selectedCategory;
   String? gender;
   int? _haveWater;
@@ -70,16 +80,21 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
   bool? road = false;
   bool? plantation = false;
 
+  bool _declare = true;
+
   late Position userPosition;
+  dynamic _user;
+  AuthProvider authprovider = new AuthProvider();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    authprovider = Provider.of<AuthProvider>(context);
+  }
 
   @override
   void initState() {
-    // var response = _getCurrentUserLocation();
-    // if (!response.isNull) {
-    //   userPosition = response;
-    // }
     super.initState();
-
     // Set default value to match Location settings.
     _loadSelectedLocation();
   }
@@ -88,36 +103,10 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
     final prefs = await SharedPreferences.getInstance();
     var location = prefs.getString('user_location');
     if (location != false) {
-      setState(() {
-        _selectedLocation = LocationExtension.fromName(location);
-      });
+      _selectedLocation = LocationExtension.fromName(location);
+      _villageData = await getVillages();
+      setState(() {});
     }
-  }
-
-  _getCurrentUserLocation() async {
-    // Check if location services are enabled.
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return;
-    }
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return;
-    }
-
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    log(position.toString());
-    print(position.toString());
-
-    return position;
   }
 
   @override
@@ -128,9 +117,6 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Request Assistance'),
-          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-          foregroundColor: Colors.white,
-          centerTitle: false,
           elevation: 0,
           actions: [
             TextButton(
@@ -157,13 +143,9 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
   }
 
   Future<http.Response> sendData(imageSourceUrls) async {
-    var username = AppConfig.userName;
-    var password = AppConfig.password;
     var host = AppConfig.baseUrl;
     var endpoint = '/request-assistance?_format=json';
 
-    final basicAuth =
-        "Basic ${base64.encode(utf8.encode('$username:$password'))}";
     dynamic res;
 
     //get user GPS location
@@ -175,12 +157,19 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
       lon = userLocation.currentPosition!.longitude;
     }
 
+    //load user model
+    _user = await getUserData();
+
+    //get csrfToken
+    var csrfToken = await authprovider.getCsrfToken();
+
     try {
       res = await http.post(
         Uri.parse('$host$endpoint'),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': basicAuth
+          'Cookie': _user.token.toString(),
+          'X-CSRF-Token': csrfToken
         },
         body: json.encode([
           {
@@ -196,6 +185,7 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
             "have_house": _haveHouse,
             "lat": lat,
             "lon": lon,
+            "village": _villageId,
             "needed_now": [
               needWater == true ? 'water' : '',
               needFood == true ? 'food' : '',
@@ -260,7 +250,8 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
           ),
           const SizedBox(height: 10),
           TextFormField(
-            decoration: const InputDecoration(
+            style: TextStyle(color: Theme.of(context).hintColor),
+            decoration: InputDecoration(
               labelText: 'Full Name',
               border: OutlineInputBorder(),
             ),
@@ -278,6 +269,7 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            style: TextStyle(color: Theme.of(context).hintColor),
             decoration: const InputDecoration(
               labelText: 'Phone Number',
               border: OutlineInputBorder(),
@@ -295,6 +287,7 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
           ),
           const SizedBox(height: 20),
           DropdownButtonFormField(
+            style: TextStyle(color: Theme.of(context).hintColor),
             decoration: const InputDecoration(
               labelText: 'Location',
               border: OutlineInputBorder(),
@@ -307,10 +300,11 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
                 child: Text(locationLabel[value].toString()),
               );
             }).toList(),
-            onChanged: (val) {
-              setState(() {
-                _selectedLocation = val!;
-              });
+            onChanged: (val) async {
+              _selectedLocation = val!;
+              _villageId = null;
+              _villageData = await getVillages();
+              setState(() {});
             },
             validator: (val) {
               if (val == null) {
@@ -320,6 +314,39 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
               return null;
             },
           ),
+          if (_selectedLocation != null)
+            Column(children: [
+              SizedBox(
+                height: 20.0,
+              ),
+              DropdownButtonFormField(
+                style: TextStyle(color: Theme.of(context).hintColor),
+                decoration: const InputDecoration(
+                  labelText: 'Village',
+                  border: OutlineInputBorder(),
+                ),
+                hint: const Text('Choose your village'),
+                value: _villageId,
+                items: _villageData.map<DropdownMenuItem<int>>((value) {
+                  return DropdownMenuItem<int>(
+                    value: value.id,
+                    child: Text(value.name!),
+                  );
+                }).toList(),
+                onChanged: (val) {
+                  setState(() {
+                    _villageId = val!;
+                  });
+                },
+                validator: (val) {
+                  if (val == null) {
+                    String errMsg = "Please select your village.";
+                    return errMsg;
+                  }
+                  return null;
+                },
+              )
+            ]),
           const SizedBox(height: 40),
           const Align(
               alignment: Alignment.centerLeft,
@@ -734,7 +761,6 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
               keyboardType: TextInputType.multiline,
               maxLines: 5),
           const SizedBox(height: 20),
-          const SizedBox(height: 20),
           ImageInput(
             onPickImage: (selectedImages) {
               _selectedImages = selectedImages;
@@ -744,11 +770,11 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
           ListTileTheme(
             contentPadding: const EdgeInsets.only(left: 0),
             child: CheckboxListTile(
-              value: true,
+              value: _declare,
               controlAffinity: ListTileControlAffinity.leading,
               onChanged: (bool? value) {
                 setState(() {
-                  //key = value;
+                  _declare = value!;
                 });
               },
               title: const Text(
@@ -796,12 +822,24 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
                       }
                     }
 
-                    await sendData(imageSourceUrls);
-                    showAlertDialog(context);
+                    var result = await sendData(imageSourceUrls);
+
                     clearFields();
                     setState(() {
                       _isInProgress = false;
                     });
+
+                    if (result.statusCode == 201) {
+                      showAlertDialog(context);
+                    } else {
+                      Flushbar(
+                        title: "Error",
+                        message: "There's an error, please try again later",
+                        duration: Duration(seconds: 3),
+                      ).show(context).then(
+                            (value) => Navigator.pop(context),
+                          );
+                    }
                   },
                   child: const Text('Submit'),
                 ),
@@ -813,11 +851,54 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
     );
   }
 
+  Future<List<VillageModel>> getVillages() async {
+    var username = AppConfig.userName;
+    var password = AppConfig.password;
+    var host = AppConfig.baseUrl;
+
+    var rid = locationIds[_selectedLocation];
+
+    String endpoint = '/village/$rid?_format=json';
+    List<VillageModel> data = [];
+
+    final basicAuth =
+        "Basic ${base64.encode(utf8.encode('$username:$password'))}";
+    dynamic response;
+    try {
+      response = await http.get(
+        Uri.parse('$host$endpoint'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': basicAuth
+        },
+      );
+
+      if (response.statusCode == 200) {
+        if (jsonDecode(response.body).isEmpty) {
+          return [];
+        }
+
+        final loaded_data = json.decode(response.body) as List<dynamic>;
+        return loaded_data.map((json) => VillageModel.fromJson(json)).toList();
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      const snackBar = SnackBar(
+        content: Text('Error: Unable to load village data.'),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      print(e);
+    }
+    return data;
+  }
+
   showAlertDialog(BuildContext context) {
     //Button
     Widget okButton = TextButton(
       child: const Text("OK"),
       onPressed: () {
+        Navigator.of(context).pop();
         Navigator.of(context).pop();
       },
     );

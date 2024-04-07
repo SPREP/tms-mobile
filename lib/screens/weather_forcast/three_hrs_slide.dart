@@ -56,6 +56,9 @@ class _ThreeHoursSlideState extends State<ThreeHoursSlide> {
             ],
           ),
         ]),
+        SizedBox(
+          height: 20.0,
+        ),
         Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

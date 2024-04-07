@@ -118,10 +118,7 @@ class _WarningDetailsScreenState extends State<WarningDetailsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Warning Details'),
-          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-          foregroundColor: Colors.white,
           elevation: 0,
-          centerTitle: false,
           actions: [
             IconButton(
               icon: isPlaying
@@ -188,22 +185,24 @@ class _WarningDetailsScreenState extends State<WarningDetailsScreen> {
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
+                      SizedBox(
+                        width: 2.0,
+                      ),
                       Chip(
                         avatar: Icon(Icons.calendar_today),
                         padding: EdgeInsets.all(2.0),
-                        backgroundColor: Color.fromARGB(255, 234, 233, 233),
                         label: Text(
                           widget.warningModel.time.toString(),
-                          style: TextStyle(color: Colors.black),
                         ),
+                      ),
+                      SizedBox(
+                        width: 4.0,
                       ),
                       Chip(
                         avatar: Icon(Icons.lock_clock),
                         padding: EdgeInsets.all(2.0),
-                        backgroundColor: Color.fromARGB(255, 234, 233, 233),
                         label: Text(
                           widget.warningModel.date.toString(),
-                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                     ],

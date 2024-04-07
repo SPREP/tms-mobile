@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/warning_model.dart';
 import 'package:macres/widgets/warning_widget.dart';
-import 'package:macres/models/settings_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WarningScreen extends StatefulWidget {
@@ -98,7 +97,7 @@ class _WarningScreen extends State<WarningScreen> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.only(top: 2, bottom: 2),
         child: isLoading
             ? const Center(
                 child: CircularProgressIndicator(),

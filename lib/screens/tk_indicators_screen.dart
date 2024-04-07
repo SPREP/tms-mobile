@@ -6,7 +6,6 @@ import 'package:macres/config/app_config.dart';
 import 'package:macres/models/tk_model.dart';
 import 'package:macres/util/magnifier.dart' as Mag;
 import 'package:http/http.dart' as http;
-import 'package:async/async.dart';
 
 class TkIndicatorsScreen extends StatefulWidget {
   const TkIndicatorsScreen({super.key});
@@ -94,11 +93,8 @@ class _TkIndicatorsScreenState extends State<TkIndicatorsScreen> {
       enabled: visibility ? true : false,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-          foregroundColor: Colors.white,
           title: const Text('Traditional Indicators'),
           elevation: 0,
-          centerTitle: false,
           actions: [
             TextButton(
               onPressed: () {
@@ -137,7 +133,6 @@ class _TkIndicatorsScreenState extends State<TkIndicatorsScreen> {
 
   Widget formatIndicators(data) {
     return Container(
-      color: Color.fromARGB(255, 237, 235, 235),
       margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

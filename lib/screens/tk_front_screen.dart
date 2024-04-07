@@ -20,8 +20,6 @@ class _TkFrontScreenState extends State<TkFrontScreen> {
       enabled: visibility ? true : false,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-          foregroundColor: Colors.white,
           title: const Text('Traditional Knowledge'),
           centerTitle: false,
           elevation: 0,

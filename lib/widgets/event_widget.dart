@@ -22,8 +22,12 @@ class EventWidget extends StatelessWidget {
             Container(
               width: 50.0,
               height: 120.0,
-              child: event.getIcon(40.0, const Color.fromARGB(255, 86, 85, 85)),
-              color: Color.fromARGB(255, 238, 239, 239),
+              child: event.getIcon(
+                  40.0,
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : const Color.fromARGB(255, 86, 85, 85)),
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
             ),
             Container(
               padding: const EdgeInsets.all(10),
