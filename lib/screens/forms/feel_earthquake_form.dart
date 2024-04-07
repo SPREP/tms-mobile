@@ -1,5 +1,9 @@
+import 'package:another_flushbar/flushbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:macres/config/app_config.dart';
+import 'package:macres/models/earthquake_rate_model.dart';
 import 'package:macres/models/settings_model.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
@@ -23,6 +27,7 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
   String? _selectedRating;
   bool _isInProgress = false;
   bool visibility = false;
+  num _rate_field_value = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +35,9 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
       size: Size(250.0, 250.0),
       enabled: visibility ? true : false,
       child: Scaffold(
-        body: Padding(padding: EdgeInsets.all(20), child: getForm()),
+        body: Padding(padding: EdgeInsets.all(20), child: getForm(context)),
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-          foregroundColor: Colors.white,
-          title: Text('Did you feel the earthquake?'),
-          centerTitle: false,
+          title: Text('Feel the earthquake?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -72,7 +74,7 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
     }
   }
 
-  Future<http.Response> sendData() async {
+  Future<Map<String, dynamic>> sendData() async {
     String username = AppConfig.userName;
     String password = AppConfig.password;
     String host = AppConfig.baseUrl;
@@ -100,7 +102,7 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
           {
             "event_id": widget.eventId,
             "location": _selectedLocation!.name,
-            "rate_earthquake": _selectedRating!.toLowerCase(),
+            "rate_earthquake": _rate_field_value,
             "lat": lat,
             "lng": lon
           }
@@ -109,10 +111,140 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
     } catch (e) {
       log(e.toString());
     }
-    return res;
+
+    if (res.statusCode == 201) {
+      return {'status_code': 201};
+    } else {
+      return {'status_code': res.statusCode};
+    }
   }
 
-  Widget getForm() {
+  Widget _getRateDropdown() {
+    List<EarthquakeRateModel> rates = [];
+
+    rates.add(
+      EarthquakeRateModel(
+        name: 'Weak',
+        desc: "Feel the Virations",
+        id: 1,
+        image: 'assets/images/earthquake/2.jpg',
+      ),
+    );
+
+    rates.add(
+      EarthquakeRateModel(
+        name: 'Light',
+        desc: "Light swing",
+        id: 2,
+        image: 'assets/images/earthquake/3.jpg',
+      ),
+    );
+
+    rates.add(
+      EarthquakeRateModel(
+        name: 'Moderate',
+        desc: "Windows rattle or break, light damage",
+        id: 3,
+        image: 'assets/images/earthquake/4.jpg',
+      ),
+    );
+
+    rates.add(
+      EarthquakeRateModel(
+        name: 'Strong',
+        desc: "Crack in buildings, falling branches",
+        id: 4,
+        image: 'assets/images/earthquake/5.jpg',
+      ),
+    );
+
+    rates.add(
+      EarthquakeRateModel(
+        name: 'Major',
+        desc: "Building collapse, landslides",
+        id: 5,
+        image: 'assets/images/earthquake/6.jpg',
+      ),
+    );
+
+    rates.add(
+      EarthquakeRateModel(
+        name: 'Severe',
+        desc: "Devastation, many deaths",
+        id: 6,
+        image: 'assets/images/earthquake/7.jpg',
+      ),
+    );
+
+    return DropdownButtonFormField(
+      alignment: Alignment.centerLeft,
+      isDense: false,
+      isExpanded: true,
+      validator: (value) {
+        if (value == 0) {
+          return 'Please rate the earthquake';
+        }
+        return null;
+      },
+      hint: Text('Rate the earthquake'),
+      style: TextStyle(color: Theme.of(context).hintColor),
+      decoration: const InputDecoration(
+        labelText: 'Rate the earthquake',
+        border: OutlineInputBorder(),
+      ),
+      value: _rate_field_value,
+      items: rates.map<DropdownMenuItem<int>>((map) {
+        return DropdownMenuItem<int>(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Color.fromARGB(255, 180, 179, 179),
+                ),
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 150,
+                  height: 150,
+                  child: Image.asset(
+                    map.image.toString(),
+                  ),
+                ),
+                SizedBox(
+                  width: 20.0,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      map.name.toString(),
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 130,
+                      child: Text(
+                        map.desc.toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal, fontSize: 12.0),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          value: map.id,
+        );
+      }).toList(),
+      onChanged: (v) {
+        this._rate_field_value = v!;
+      },
+    );
+  }
+
+  Widget getForm(context) {
     return Form(
       key: _formKey,
       child: Column(
@@ -122,6 +254,7 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
           ),
           const SizedBox(height: 20),
           DropdownButtonFormField(
+            style: TextStyle(color: Theme.of(context).hintColor),
             decoration: const InputDecoration(
               labelText: 'Choose your location',
               border: OutlineInputBorder(),
@@ -148,37 +281,7 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
             },
           ),
           const SizedBox(height: 20),
-          DropdownButtonFormField(
-            decoration: const InputDecoration(
-              labelText: 'Rate the earthquake',
-              border: OutlineInputBorder(),
-            ),
-            hint: const Text('Rate the earthquake'),
-            value: _selectedRating,
-            items: <String>['Weak', 'Light', 'Moderate', 'Strong', 'Severe']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(
-                  value,
-                  style: const TextStyle(fontSize: 15),
-                ),
-              );
-            }).toList(),
-            onChanged: (val) {
-              setState(() {
-                if (val != null || val!.isNotEmpty || val != '')
-                  _selectedRating = val.toString();
-              });
-            },
-            validator: (val) {
-              if (val == null) {
-                String errMsg = "Please rate the earthquake";
-                return errMsg;
-              }
-              return null;
-            },
-          ),
+          _getRateDropdown(),
           const SizedBox(height: 50),
           if (_isInProgress) const CircularProgressIndicator(),
           if (!_isInProgress)
@@ -197,13 +300,25 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
                       setState(() {
                         _isInProgress = true;
                       });
-                      await sendData();
-                      showAlertDialog(context);
-                      setState(() {
-                        _selectedRating = null;
-                        _selectedLocation = null;
-                        _isInProgress = false;
-                      });
+
+                      final Map<String, dynamic> response = await sendData();
+
+                      if (response['status_code'] == 201) {
+                        setState(() {
+                          _selectedRating = null;
+                          _selectedLocation = null;
+                          _isInProgress = false;
+                        });
+                        showAlertDialog(context);
+                      } else {
+                        Flushbar(
+                          title: "Error",
+                          message: "There's an error, please try again later",
+                          duration: Duration(seconds: 3),
+                        ).show(context).then(
+                              (value) => Navigator.pop(context),
+                            );
+                      }
                     }
                   },
                   child: const Text('Submit'),
@@ -215,11 +330,12 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
     );
   }
 
-  showAlertDialog(BuildContext context) {
+  showAlertDialog(context) {
     //Button
     Widget okButton = TextButton(
       child: const Text("OK"),
       onPressed: () {
+        Navigator.of(context).pop();
         Navigator.of(context).pop();
       },
     );

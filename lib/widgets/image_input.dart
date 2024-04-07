@@ -94,7 +94,7 @@ class _ImageInputState extends State<ImageInput> {
           ),
         if (widget.onPickImage != null)
           Container(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).scaffoldBackgroundColor,
             height: 150,
             width: 300,
             child: GridView.builder(

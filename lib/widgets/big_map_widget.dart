@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:macres/util/dark_theme_preference.dart';
+import 'package:macres/util/theme_preference.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,7 +15,6 @@ class BigMapWidget extends StatefulWidget {
 }
 
 class _BigMapWidgetState extends State<BigMapWidget> {
-  DarkThemePreference darkTheme = new DarkThemePreference();
   final mapController = MapController();
 
   Widget getCentre() {
@@ -36,6 +35,39 @@ class _BigMapWidgetState extends State<BigMapWidget> {
     );
   }
 
+  //Build map dark mode
+  Widget _darkModeTileBuilder(
+    BuildContext context,
+    Widget tileWidget,
+    TileImage tile,
+  ) {
+    return ColorFiltered(
+      colorFilter: const ColorFilter.matrix(<double>[
+        -0.2126,
+        -0.7152,
+        -0.0722,
+        0,
+        255,
+        -0.2126,
+        -0.7152,
+        -0.0722,
+        0,
+        255,
+        -0.2126,
+        -0.7152,
+        -0.0722,
+        0,
+        255,
+        0,
+        0,
+        0,
+        1,
+        0,
+      ]),
+      child: tileWidget,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
@@ -46,8 +78,12 @@ class _BigMapWidgetState extends State<BigMapWidget> {
       ),
       children: [
         TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'com.example.app'),
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'com.example.app',
+          tileBuilder: (Theme.of(context).brightness == Brightness.dark)
+              ? _darkModeTileBuilder
+              : null,
+        ),
         MarkerLayer(
           markers: [
             Marker(

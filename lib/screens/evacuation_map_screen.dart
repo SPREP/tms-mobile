@@ -126,6 +126,10 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                 urlTemplate:
                                     'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                                 userAgentPackageName: 'com.example.app',
+                                tileBuilder: (Theme.of(context).brightness ==
+                                        Brightness.dark)
+                                    ? _darkModeTileBuilder
+                                    : null,
                               ),
                               CurrentLocationLayer(
                                 alignPositionStream:
@@ -218,6 +222,39 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
     }
 
     return markers;
+  }
+
+  //Build map dark mode
+  Widget _darkModeTileBuilder(
+    BuildContext context,
+    Widget tileWidget,
+    TileImage tile,
+  ) {
+    return ColorFiltered(
+      colorFilter: const ColorFilter.matrix(<double>[
+        -0.2126,
+        -0.7152,
+        -0.0722,
+        0,
+        255,
+        -0.2126,
+        -0.7152,
+        -0.0722,
+        0,
+        255,
+        -0.2126,
+        -0.7152,
+        -0.0722,
+        0,
+        255,
+        0,
+        0,
+        0,
+        1,
+        0,
+      ]),
+      child: tileWidget,
+    );
   }
 
   getNearest(data) {

@@ -110,8 +110,6 @@ class _TabsScreenState extends State<TabsScreen> {
             ),
           ),
         ],
-        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-        foregroundColor: Colors.white,
       );
     }
   }
@@ -391,6 +389,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
   void openEventReportOverlay() {
     showModalBottomSheet(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         isScrollControlled: true,
         isDismissible: true,
         context: context,
@@ -399,11 +398,10 @@ class _TabsScreenState extends State<TabsScreen> {
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(20),
           ),
+          side: BorderSide(color: Colors.white, width: 1.0),
         ),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
+        clipBehavior: Clip.hardEdge,
         builder: (context) => DraggableScrollableSheet(
-            snap: true,
-            expand: false,
-            builder: (_, controller) => const ReportScreen()));
+            expand: false, builder: (_, controller) => const ReportScreen()));
   }
 }

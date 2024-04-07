@@ -73,9 +73,6 @@ class _NationalNumberScreenState extends State<NationalNumberScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('National number'),
-          backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-          foregroundColor: Colors.white,
-          centerTitle: false,
           actions: [
             TextButton(
               onPressed: () {

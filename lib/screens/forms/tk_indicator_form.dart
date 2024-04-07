@@ -174,8 +174,6 @@ class _TkIndicatorFormState extends State<TkIndicatorForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Indicator'),
-        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-        foregroundColor: Colors.white,
       ),
       body: builder(context),
     );
@@ -231,7 +229,7 @@ class _TkIndicatorFormState extends State<TkIndicatorForm> {
                       shape: Border(
                           bottom: BorderSide(
                               color: const Color.fromARGB(255, 154, 153, 153))),
-                      tileColor: Color.fromARGB(255, 225, 225, 225),
+                      tileColor: Theme.of(context).scaffoldBackgroundColor,
                       title: Text(
                         map.name,
                         style: TextStyle(fontWeight: FontWeight.bold),
@@ -272,6 +270,7 @@ class _TkIndicatorFormState extends State<TkIndicatorForm> {
               TextFormField(
                 controller: titleController,
                 maxLength: 50,
+                style: TextStyle(color: Theme.of(context).hintColor),
                 decoration: const InputDecoration(
                   label: Text('Title'),
                 ),
@@ -354,10 +353,7 @@ class _TkIndicatorFormState extends State<TkIndicatorForm> {
                   Container(
                     height: 400,
                     child: FlutterLocationPicker(
-                      initZoom: 9,
-                      minZoomLevel: 5,
-                      maxZoomLevel: 16,
-                      trackMyPosition: true,
+                      initZoom: 11,
                       initPosition: LatLong(-21.178986, -175.198242),
                       showLocationController:
                           _ul.currentPosition != null ? true : false,

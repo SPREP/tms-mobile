@@ -101,9 +101,6 @@ class _EventReportScreenState extends State<EventReportScreen> {
         child: Scaffold(
           appBar: AppBar(
             title: const Text('Event Report'),
-            backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-            foregroundColor: Colors.white,
-            centerTitle: false,
             elevation: 0,
             actions: [
               TextButton(
@@ -221,11 +218,12 @@ class _EventReportScreenState extends State<EventReportScreen> {
                                 }
 
                                 await sendData(imageSourceUrls);
-                                showAlertDialog(context);
+
                                 setState(() {
                                   clearFields();
                                   _isInProgress = false;
                                 });
+                                showAlertDialog(context);
                               },
                               child: const Text('Submit'),
                             ),
@@ -265,6 +263,7 @@ class _EventReportScreenState extends State<EventReportScreen> {
     Widget okButton = TextButton(
       child: const Text("OK"),
       onPressed: () {
+        Navigator.of(context).pop();
         Navigator.of(context).pop();
       },
     );

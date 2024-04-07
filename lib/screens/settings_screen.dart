@@ -72,13 +72,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
-    final themeChange = Provider.of<DarkThemeProvider>(context);
+    final themeChange = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-        foregroundColor: Colors.white,
-        centerTitle: true,
         title: const Row(children: [
           Icon(Icons.settings),
           SizedBox(width: 10),
@@ -133,6 +130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Form(
               key: userLocationKey,
               child: DropdownButtonFormField(
+                style: TextStyle(color: Theme.of(context).hintColor),
                 decoration: const InputDecoration(border: OutlineInputBorder()),
                 value: _selectedLocation,
                 items: Location.values.map((value) {

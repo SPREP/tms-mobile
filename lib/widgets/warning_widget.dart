@@ -13,9 +13,8 @@ class WarningWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Color.fromARGB(255, 222, 223, 223)),
-        color: Colors.white,
       ),
-      margin: EdgeInsets.all(3.0),
+      margin: EdgeInsets.only(bottom: 10.0),
       child: InkWell(
         child: Row(
           children: [
@@ -35,7 +34,6 @@ class WarningWidget extends StatelessWidget {
                           fontSize: 8),
                     )
                   ]),
-              padding: EdgeInsets.only(left: 3.0, right: 3.0),
             ),
             Container(
               padding: const EdgeInsets.all(8),
@@ -47,7 +45,8 @@ class WarningWidget extends StatelessWidget {
                     child: Text(
                       warning.title.toString(),
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   Row(
@@ -57,10 +56,8 @@ class WarningWidget extends StatelessWidget {
                         transform: new Matrix4.identity()..scale(0.8),
                         child: Chip(
                           avatar: Icon(Icons.lock_clock),
-                          backgroundColor: Color.fromARGB(255, 234, 233, 233),
                           label: Text(
                             warning.date.toString(),
-                            style: TextStyle(color: Colors.black),
                           ),
                         ),
                       ),
@@ -68,11 +65,8 @@ class WarningWidget extends StatelessWidget {
                         transform: new Matrix4.identity()..scale(0.8),
                         child: new Chip(
                           avatar: Icon(Icons.calendar_today),
-                          padding: EdgeInsets.all(2.0),
-                          backgroundColor: Color.fromARGB(255, 234, 233, 233),
                           label: Text(
                             warning.time.toString(),
-                            style: TextStyle(color: Colors.black),
                           ),
                         ),
                       ),

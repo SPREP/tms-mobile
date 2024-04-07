@@ -81,17 +81,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 border: Border.all(
                   color: const Color.fromARGB(255, 148, 155, 167),
                 ),
-                color: const Color.fromARGB(255, 235, 235, 234),
+                color: Theme.of(context).scaffoldBackgroundColor,
               ),
-              height: 300,
+              height: 300.0,
               child: ClipRRect(
                 borderRadius: const BorderRadius.only(),
                 child: widget.eventModel.lat == 0
                     ? const Center(
                         child: Text(
                         'Map is not available',
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 47, 47, 47)),
                       ))
                     : FlutterMap(
                         mapController: mapController,
@@ -105,6 +103,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             urlTemplate:
                                 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                             userAgentPackageName: 'com.example.app',
+                            tileBuilder: (Theme.of(context).brightness ==
+                                    Brightness.dark)
+                                ? _darkModeTileBuilder
+                                : null,
                           ),
                           MarkerLayer(
                             markers: [
@@ -136,21 +138,22 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               ),
             ),
             Container(
-              height: 830,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(40)),
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
+                border: Border.all(color: Colors.white, width: 1.0),
               ),
               width: double.infinity,
               padding: const EdgeInsets.all(20.0),
               margin: const EdgeInsets.only(top: 250),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       widget.eventModel
-                          .getIcon(50, const Color.fromARGB(255, 84, 83, 84)),
+                          .getIcon(50, Theme.of(context).hintColor),
                       SizedBox(
                         width: 10.0,
                       ),
@@ -317,6 +320,39 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
+  //Build map dark mode
+  Widget _darkModeTileBuilder(
+    BuildContext context,
+    Widget tileWidget,
+    TileImage tile,
+  ) {
+    return ColorFiltered(
+      colorFilter: const ColorFilter.matrix(<double>[
+        -0.2126,
+        -0.7152,
+        -0.0722,
+        0,
+        255,
+        -0.2126,
+        -0.7152,
+        -0.0722,
+        0,
+        255,
+        -0.2126,
+        -0.7152,
+        -0.0722,
+        0,
+        255,
+        0,
+        0,
+        0,
+        1,
+        0,
+      ]),
+      child: tileWidget,
+    );
+  }
+
   Widget getBarChart() {
     //find out the highest value
     double max = 0;
@@ -360,7 +396,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             return BarTooltipItem(
               rod.toY.round().toString(),
               const TextStyle(
-                color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
             );
@@ -370,7 +405,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   Widget getTitles(double value, TitleMeta meta) {
     final style = TextStyle(
-      color: Colors.black,
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
@@ -547,10 +581,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     return ClipOval(
       child: DefaultTextStyle.merge(
         child: Container(
-          width: 95,
-          height: 95,
-          color: theColor,
+          width: 99,
+          height: 99,
           padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white, width: 1.0),
+            borderRadius: BorderRadius.all(Radius.circular(50.0)),
+            color: theColor,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

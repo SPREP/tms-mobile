@@ -19,8 +19,6 @@ class _EvacuationDetailsScreenState extends State<EvacuationDetailsScreen> {
       appBar: AppBar(
         title: const Text('Evacuation Details'),
         elevation: 0,
-        backgroundColor: Color.fromRGBO(92, 125, 138, 1.0),
-        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: EdgeInsets.all(20),
