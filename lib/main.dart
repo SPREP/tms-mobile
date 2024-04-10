@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/providers/dark_theme_provider.dart';
+import 'package:macres/providers/event_counter_provider.dart';
 import 'package:macres/providers/locale_provider.dart';
 import 'package:macres/providers/tide_provider.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
 import 'package:macres/providers/twentyfour_hours_provider.dart';
 import 'package:macres/providers/user_provider.dart';
+import 'package:macres/providers/warning_counter_provider%20copy.dart';
 import 'package:macres/providers/weather_location.dart';
 import 'package:macres/screens/tabs_screen.dart';
 import 'package:macres/util/theme_styles.dart';
@@ -18,11 +20,38 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vibration/vibration.dart';
 import 'to_intl.dart';
 import 'firebase_options.dart';
 
+//Handle notification message in background
+@pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message");
+  final prefs = await SharedPreferences.getInstance();
+
+  //increase warning counter
+  if (message.data['warning'] == '1') {
+    int warningTotalCounter = 0;
+    int currentTotalWarnings = prefs.getInt('total_new_warnings') ?? 0;
+    warningTotalCounter = currentTotalWarnings + 1;
+    prefs.setInt('total_new_warnings', warningTotalCounter);
+  }
+
+  //increase event counter
+  if (message.data['event'] == '1') {
+    int eventTotalCounter = 0;
+    int currentTotalEvents = prefs.getInt('total_new_events') ?? 0;
+    eventTotalCounter = currentTotalEvents + 1;
+    prefs.setInt('total_new_events', eventTotalCounter);
+  }
+
+  if (message.notification != null) {
+    // print('Message also contained a notification: ${message.notification}');
+    //vibrate the device when receive message
+    if (await Vibration.hasVibrator() != false) {
+      Vibration.vibrate();
+    }
+  }
 }
 
 Future main() async {
@@ -40,12 +69,13 @@ Future main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  //FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   //set page orientation
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((value) => runApp(App(showOnboarding: showOnboarding)));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
+    (value) => runApp(App(showOnboarding: showOnboarding)),
+  );
 
   //runApp(App(showOnboarding: showOnboarding));
 }
@@ -86,6 +116,8 @@ class _AppState extends State<App> {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => TideProvider()),
         ChangeNotifierProvider(create: (context) => WeatherLocationProvider()),
+        ChangeNotifierProvider(create: (context) => EventCounterProvider()),
+        ChangeNotifierProvider(create: (context) => WarningCounterProvider()),
       ],
       child: Consumer2<LocaleProvider, ThemeProvider>(
         builder: (context, localeProvider, ThemeProvider, child) => MaterialApp(

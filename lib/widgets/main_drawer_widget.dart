@@ -58,7 +58,10 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onPrimaryContainer
+                  .withOpacity(0.7),
             ),
             padding: const EdgeInsets.all(20),
             child: Row(

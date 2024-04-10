@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/warning_model.dart';
@@ -13,7 +11,6 @@ import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
 import 'package:macres/screens/weather_forcast/tide_slide.dart';
 import 'package:macres/screens/weather_forcast/twentyfour_hrs_slide.dart';
-import 'package:macres/util/user_location.dart';
 import 'package:macres/widgets/warning_widget.dart';
 import 'package:macres/widgets/weather_property_widget.dart';
 import 'package:provider/provider.dart';
@@ -25,8 +22,6 @@ import 'package:http/http.dart' as http;
 
 class WeatherForcastScreen extends StatefulWidget {
   WeatherForcastScreen({super.key, required this.onCurrentWeatherChange});
-
-  final userLocation = new UserLocation();
 
   final String Function(String filepath, String dayOrNight)
       onCurrentWeatherChange;
@@ -74,7 +69,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
   bool isLoading = false;
   late Timer _timerWeather;
-
   String dateTime = DateFormat("EEE dd MMM").format(DateTime.now());
 
   @override
@@ -543,7 +537,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                           "${currentData.currentTemp}",
                                           style: const TextStyle(
                                               fontSize: 60,
-                                              fontWeight: FontWeight.normal),
+                                              fontWeight: FontWeight.w300),
                                           textAlign: TextAlign.left,
                                         ),
                                         Align(
@@ -553,7 +547,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                             "\u00B0${selectedTempretureUnit.toUpperCase()}",
                                             style: TextStyle(
                                                 fontSize: 30,
-                                                fontWeight: FontWeight.normal),
+                                                fontWeight: FontWeight.w300),
                                           ),
                                         ),
                                       ]),

@@ -12,6 +12,7 @@ class WarningWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
         border: Border.all(color: Color.fromARGB(255, 222, 223, 223)),
       ),
       margin: EdgeInsets.only(bottom: 10.0),
@@ -36,7 +37,7 @@ class WarningWidget extends StatelessWidget {
                   ]),
             ),
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(8),
               width: mWidth,
               child: Column(
                 children: [
@@ -44,8 +45,9 @@ class WarningWidget extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       warning.title.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        color: Theme.of(context).hintColor,
                       ),
                     ),
                   ),

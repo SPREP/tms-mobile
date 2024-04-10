@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:macres/main.dart';
 import 'package:macres/models/settings_model.dart';
+import 'package:macres/providers/event_counter_provider.dart';
 import 'package:macres/providers/weather_location.dart';
 import 'package:macres/screens/evacuation_map_screen.dart';
 import 'package:macres/screens/event_screen.dart';
@@ -169,6 +171,9 @@ class _TabsScreenState extends State<TabsScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
+    int _totalNewWarnings = 0;
+    int _totalNewEvents = 0;
+
     if (_selectedPageIndex == 0 || _selectedPageIndex == 4) {
       activePage =
           WeatherForcastScreen(onCurrentWeatherChange: _onCurrentWeatherChange);
@@ -226,22 +231,79 @@ class _TabsScreenState extends State<TabsScreen> {
             child: BottomNavigationBar(
               onTap: _selectPage,
               type: BottomNavigationBarType.fixed,
-              items: const [
+              items: [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home_filled),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.event),
-                  label: 'Events',
-                ),
+                    label: 'Events',
+                    icon: _totalNewEvents < 1
+                        ? Icon(Icons.event)
+                        : Stack(
+                            children: <Widget>[
+                              Icon(Icons.event),
+                              Positioned(
+                                right: 0,
+                                bottom: 0,
+                                child: Container(
+                                  padding: EdgeInsets.all(1),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  constraints: BoxConstraints(
+                                    minWidth: 14,
+                                    minHeight: 14,
+                                  ),
+                                  child: Text(
+                                    _totalNewEvents.toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 8,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              )
+                            ],
+                          )),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.directions),
                   label: 'Evacuation',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.warning),
                   label: 'Warnings',
+                  icon: _totalNewWarnings < 1
+                      ? Icon(Icons.warning)
+                      : Stack(
+                          children: <Widget>[
+                            Icon(Icons.warning),
+                            Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                padding: EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                constraints: BoxConstraints(
+                                  minWidth: 14,
+                                  minHeight: 14,
+                                ),
+                                child: Text(
+                                  _totalNewWarnings.toString(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 8,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.add_circle_outline),

@@ -45,7 +45,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                 height: 130.0,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color.fromARGB(255, 80, 96, 161),
+                  color: Theme.of(context).colorScheme.primary,
                   border: Border.all(
                     color: Color.fromARGB(255, 225, 223, 223),
                     width: 9.0,
@@ -64,11 +64,11 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                   children: [
                     Text(
                       // localizations.onBoardingSubtitle,
-                      "Tonga Meteorological Service Forecasts, Warnings and Response",
-                      style: const TextStyle(
+                      "Tonga Joint Early Warning and Response",
+                      style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 152, 150, 150)),
+                          color: Theme.of(context).colorScheme.primary),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),

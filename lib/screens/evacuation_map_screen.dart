@@ -14,6 +14,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 import 'package:macres/screens/evacuation_details_screen.dart';
 import 'package:macres/util/user_location.dart';
+import 'package:macres/widgets/evacuation_map_legend.dart';
 
 class EvacuationMapScreen extends StatefulWidget {
   EvacuationMapScreen({super.key});
@@ -28,6 +29,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
 
   late AlignOnUpdate _alignPositionOnUpdate;
   late final StreamController<double?> _alignPositionStreamController;
+  bool _showLegends = false;
 
   @override
   void initState() {
@@ -193,6 +195,13 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                           );
                                         }),
                                   ),
+                              ]),
+                              Stack(children: [
+                                Positioned(
+                                  left: 0,
+                                  bottom: -110,
+                                  child: EvacuationMapLegend(),
+                                ),
                               ]),
                             ],
                           ),
