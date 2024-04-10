@@ -4,6 +4,7 @@ import 'package:macres/models/event_model.dart';
 import 'package:macres/widgets/event_widget.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({super.key});
@@ -18,11 +19,19 @@ class _EventScreen extends State<EventScreen> {
 
   @override
   void initState() {
-    super.initState();
+    _clearCounter();
     setState(() {
       isLoading = true;
       getEvents();
     });
+    super.initState();
+  }
+
+  void _clearCounter() async {
+    //save values
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('total_new_events', 0);
+    setState(() {});
   }
 
   getEvents() async {

@@ -8,10 +8,12 @@
     "onBoardListItem3": "Receive Critical Notifications and Alerts (Tsunami, Weather, Volcanic and more)",
     "onBoardListItem4": "Send Disaster Impact Report",
     "onBoardListItem5": "Send Assitance Request",
+    "onBoardListItem6": "View the TSunami safe zone map, where to evacuate during TSunami warning",
+    "onBoardListItem7": "View the Traditional Knowledge map and report indicators",
     "@onBoardListItem1": {
         "description": "The list of what the app do in the onboarding second page."
     },
-    "onBoardingHeadingText": "This app, allows you to report to us events.  You can send us your post disaster impact report, request assistance and more.",
+    "onBoardingHeadingText": "What you can do in this app:",
     "@onBoardingHeadingText": {
         "description": "The onboarding second screen heading text"
     },

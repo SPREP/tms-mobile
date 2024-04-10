@@ -111,46 +111,6 @@ class _ReportScreenState extends State<ReportScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => NationalNumberScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: 100,
-                  child: Column(children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        border: Border.all(
-                            color: Color.fromARGB(255, 209, 207, 207)),
-                      ),
-                      child: const Icon(
-                        Icons.phone,
-                        size: 30,
-                        color: Color.fromARGB(255, 170, 89, 23),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Text(
-                      'National Number',
-                      style: TextStyle(fontSize: fontSize),
-                    ),
-                  ]),
-                ),
-              ),
-              SizedBox(
-                width: 10.0,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
                       builder: (context) => FeelEarthquakeForm(eventId: 0),
                     ),
                   );
@@ -200,6 +160,7 @@ class _ReportScreenState extends State<ReportScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              /*
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -241,6 +202,45 @@ class _ReportScreenState extends State<ReportScreen> {
                     ),
                     Text(
                       'Emergency Alert',
+                      style: TextStyle(fontSize: fontSize),
+                    ),
+                  ]),
+                ),
+              ),
+              */
+
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NationalNumberScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 150,
+                  child: Column(children: [
+                    Container(
+                      width: 150,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                            color: Color.fromARGB(255, 209, 207, 207)),
+                      ),
+                      child: const Icon(
+                        Icons.phone,
+                        size: 30,
+                        color: Color.fromARGB(255, 170, 89, 23),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Text(
+                      'National Number',
                       style: TextStyle(fontSize: fontSize),
                     ),
                   ]),

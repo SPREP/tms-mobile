@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:macres/config/app_config.dart';
@@ -66,7 +67,6 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
       return true;
     } else {
-      print('remove user from isLogin');
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
 

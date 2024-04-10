@@ -1,7 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/earthquake_rate_model.dart';
 import 'package:macres/models/settings_model.dart';
@@ -206,7 +204,7 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
             child: Row(
               children: [
                 Container(
-                  width: 150,
+                  width: 140,
                   height: 150,
                   child: Image.asset(
                     map.image.toString(),
@@ -215,22 +213,21 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
                 SizedBox(
                   width: 20.0,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      map.name.toString(),
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 130,
-                      child: Text(
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        map.name.toString(),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
                         map.desc.toString(),
                         style: TextStyle(
                             fontWeight: FontWeight.normal, fontSize: 12.0),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 )
               ],
             ),

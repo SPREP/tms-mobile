@@ -48,7 +48,7 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
                     Text(
                       item.day.toString(),
                       style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                          color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                     Text(
                       item.getIconDefinition(),

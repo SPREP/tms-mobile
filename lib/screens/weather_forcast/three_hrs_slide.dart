@@ -35,7 +35,7 @@ class _ThreeHoursSlideState extends State<ThreeHoursSlide> {
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
             "${widget.currentData.currentTemp}\u00B0",
-            style: const TextStyle(fontSize: 40),
+            style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w300),
           ),
           const SizedBox(
             width: 10,

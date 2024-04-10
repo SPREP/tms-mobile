@@ -30,7 +30,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   void setupPushNotifications() async {
     final fcm = FirebaseMessaging.instance;
-    fcm.requestPermission();
+    fcm.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: true,
+      provisional: false,
+      sound: true,
+    );
     fcmInstance = fcm;
   }
 
@@ -65,6 +73,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         prefs.setString('user_language', _selectedLanguage!.name.toString());
 
         //Push notification subscribe user
+        fcmInstance.subscribeToTopic('tonga'.toString());
         fcmInstance.subscribeToTopic(_selectedLanguage!.name.toString());
         fcmInstance.subscribeToTopic(_selectedLocation.toLowerCase());
       }
@@ -120,7 +129,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   borderRadius: BorderRadius.circular(1),
                 ),
                 foregroundColor: Colors.white,
-                backgroundColor: const Color.fromARGB(255, 110, 107, 99),
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 minimumSize: const Size.fromHeight(80),
               ),
               child:
@@ -146,7 +155,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               },
             )
           : Container(
-              color: const Color.fromARGB(255, 110, 107, 99),
+              color: Theme.of(context).colorScheme.primary,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               height: 80,
               child: Row(

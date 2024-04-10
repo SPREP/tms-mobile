@@ -19,11 +19,19 @@ class _WarningScreen extends State<WarningScreen> {
 
   @override
   void initState() {
-    super.initState();
+    _clearCounter();
     setState(() {
       isLoading = true;
       getEvents();
     });
+    super.initState();
+  }
+
+  void _clearCounter() async {
+    //save values
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('total_new_warnings', 0);
+    setState(() {});
   }
 
   getEvents() async {
