@@ -11,7 +11,6 @@ class WeatherProperty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 5.0, right: 5.0),
       height: 120.0,
       width: 100.0,
       alignment: Alignment.center,

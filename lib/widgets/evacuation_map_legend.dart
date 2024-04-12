@@ -19,7 +19,7 @@ class _EvacuationMapLegendState extends State<EvacuationMapLegend>
 
   late final Animation<Offset> _offsetAnimation = Tween<Offset>(
     begin: Offset.zero,
-    end: const Offset(0, -0.7),
+    end: const Offset(0, 0.7),
   ).animate(
     CurvedAnimation(
       parent: _controller,
@@ -41,39 +41,10 @@ class _EvacuationMapLegendState extends State<EvacuationMapLegend>
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: Column(children: [
-            TextButton(
-              onPressed: () {
-                pos == false
-                    ? _controller.animateTo(15.0,
-                        duration: Duration(seconds: 2))
-                    : _controller.reverse();
-                pos = !pos;
-                setState(() {});
-              },
-              child: Container(
-                padding: EdgeInsets.only(
-                    top: 5.0, left: 5.0, bottom: 5.0, right: 10.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10.0),
-                        topRight: Radius.circular(10.0)),
-                    color: Theme.of(context).appBarTheme.backgroundColor),
-                child: Row(children: [
-                  Icon(
-                    pos ? Icons.expand_more : Icons.expand_less,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    'Map Legend',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ]),
-              ),
-            ),
             Container(
-              height: 300,
+              height: 295,
               width: 250,
-              transform: Matrix4.translationValues(0.0, -10.0, 0.0),
+              transform: Matrix4.translationValues(0.0, 9.0, 0.0),
               padding: EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
@@ -81,6 +52,7 @@ class _EvacuationMapLegendState extends State<EvacuationMapLegend>
                     color: Theme.of(context).appBarTheme.backgroundColor!),
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Row(children: [
                     Icon(
@@ -131,6 +103,35 @@ class _EvacuationMapLegendState extends State<EvacuationMapLegend>
                     Text('Your current location.')
                   ]),
                 ],
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                pos == false
+                    ? _controller.animateTo(15.0,
+                        duration: Duration(seconds: 2))
+                    : _controller.reverse();
+                pos = !pos;
+                setState(() {});
+              },
+              child: Container(
+                padding: EdgeInsets.only(
+                    top: 5.0, left: 5.0, bottom: 5.0, right: 10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10.0),
+                        bottomRight: Radius.circular(10.0)),
+                    color: Theme.of(context).appBarTheme.backgroundColor),
+                child: Row(children: [
+                  Icon(
+                    pos ? Icons.expand_less : Icons.expand_more,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    'Map Legend',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ]),
               ),
             ),
           ]),

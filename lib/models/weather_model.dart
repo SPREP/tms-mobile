@@ -39,6 +39,10 @@ class WeatherModel {
       this.observedDate,
       this.windDirectionDegree,
       this.solarRadiation}) {
+    isDayOrNight();
+  }
+
+  void isDayOrNight() {
     if (this.solarRadiation != '' && this.solarRadiation != null) {
       //Use solar radiation to determine day or night
       double solar = double.parse(this.solarRadiation.toString());
@@ -171,7 +175,9 @@ class CurrentWeatherModel extends WeatherModel {
       super.maxTemp,
       super.observedDate,
       super.windDirectionDegree,
-      super.solarRadiation});
+      super.solarRadiation}) {
+    super.isDayOrNight();
+  }
 }
 
 class ThreeHoursForecastModel extends WeatherModel {
@@ -183,7 +189,9 @@ class ThreeHoursForecastModel extends WeatherModel {
     super.windSpeed,
     super.visibility,
     super.location,
-  });
+  }) {
+    super.isDayOrNight();
+  }
 }
 
 class TwentyFourHoursForecastModel extends WeatherModel {
@@ -196,5 +204,7 @@ class TwentyFourHoursForecastModel extends WeatherModel {
     super.windDirection,
     super.windSpeed,
     super.warning,
-  });
+  }) {
+    super.isDayOrNight();
+  }
 }

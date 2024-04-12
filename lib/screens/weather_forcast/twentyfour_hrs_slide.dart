@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:macres/widgets/weather_property_widget.dart';
 import 'package:weather_icons/weather_icons.dart';
@@ -14,6 +15,11 @@ class TwentyFourHoursSlide extends StatefulWidget {
 class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
   @override
   Widget build(BuildContext context) {
+    //We find the size of the screen to better format the content
+    final screenWidth = MediaQuery.of(context).size.width;
+    var isSmallDevice = false;
+    if (screenWidth <= 350.0) isSmallDevice = true;
+
     return Column(
       children: [
         const Row(
@@ -57,42 +63,72 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
         const SizedBox(
           height: 10,
         ),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Spacer(),
-          WeatherProperty(
-            title: 'Max: ${widget.currentData.maxTemp}\u00B0',
-            value: 'Min: ${widget.currentData.minTemp}\u00B0',
-            unit: '',
-            icon: Icon(
-              WeatherIcons.thermometer,
-              color: Colors.white,
-              size: 30,
+        if (!isSmallDevice)
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            WeatherProperty(
+              title: 'Max: ${widget.currentData.maxTemp}\u00B0',
+              value: 'Min: ${widget.currentData.minTemp}\u00B0',
+              unit: '',
+              icon: Icon(
+                WeatherIcons.thermometer,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
-          ),
-          Spacer(),
-          WeatherProperty(
-            title: 'Wind Direction',
-            value: widget.currentData.windDirection.toString(),
-            unit: '',
-            icon: Icon(
-              WeatherIcons.wind_direction,
-              color: Colors.white,
-              size: 30,
+            WeatherProperty(
+              title: 'Wind Direction',
+              value: widget.currentData.windDirection.toString(),
+              unit: '',
+              icon: Icon(
+                WeatherIcons.wind_direction,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
-          ),
-          Spacer(),
-          WeatherProperty(
-            title: 'Wind Speed',
-            value: widget.currentData.windSpeed.toString(),
-            unit: 'km/h',
-            icon: Icon(
-              WeatherIcons.strong_wind,
-              color: Colors.white,
-              size: 30,
+            WeatherProperty(
+              title: 'Wind Speed',
+              value: widget.currentData.windSpeed.toString(),
+              unit: 'km/h',
+              icon: Icon(
+                WeatherIcons.strong_wind,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
-          ),
-          Spacer(),
-        ]),
+          ]),
+        if (isSmallDevice)
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            WeatherProperty(
+              title: 'Max: ${widget.currentData.maxTemp}\u00B0',
+              value: 'Min: ${widget.currentData.minTemp}\u00B0',
+              unit: '',
+              icon: Icon(
+                WeatherIcons.thermometer,
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+            WeatherProperty(
+              title: 'Wind Direction',
+              value: widget.currentData.windDirection.toString(),
+              unit: '',
+              icon: Icon(
+                WeatherIcons.wind_direction,
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+            WeatherProperty(
+              title: 'Wind Speed',
+              value: widget.currentData.windSpeed.toString(),
+              unit: 'km/h',
+              icon: Icon(
+                WeatherIcons.strong_wind,
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+          ]),
         SizedBox(
           height: 5,
         ),

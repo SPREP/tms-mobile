@@ -63,7 +63,7 @@ class _ReportScreenState extends State<ReportScreen> {
             height: 15,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
@@ -76,7 +76,6 @@ class _ReportScreenState extends State<ReportScreen> {
                   );
                 },
                 child: Container(
-                  width: boxWidth,
                   child: Column(children: [
                     Container(
                       width: 40,
@@ -116,7 +115,6 @@ class _ReportScreenState extends State<ReportScreen> {
                   );
                 },
                 child: Container(
-                  width: 100.0,
                   child: Column(children: [
                     Container(
                       width: 40,
@@ -157,7 +155,7 @@ class _ReportScreenState extends State<ReportScreen> {
             height: 20,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               /*
@@ -219,10 +217,9 @@ class _ReportScreenState extends State<ReportScreen> {
                   );
                 },
                 child: Container(
-                  width: 150,
                   child: Column(children: [
                     Container(
-                      width: 150,
+                      width: 50,
                       height: 50,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -246,9 +243,6 @@ class _ReportScreenState extends State<ReportScreen> {
                   ]),
                 ),
               ),
-              SizedBox(
-                width: 20,
-              ),
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -259,10 +253,9 @@ class _ReportScreenState extends State<ReportScreen> {
                   );
                 },
                 child: Container(
-                  width: 150.0,
                   child: Column(children: [
                     Container(
-                      width: 150.0,
+                      width: 50.0,
                       height: 50.0,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,

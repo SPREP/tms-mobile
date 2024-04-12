@@ -83,14 +83,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ]),
       ),
       body: Padding(
-        padding:
-            const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text("${localizations.onBoardingLanguage}:"),
             Consumer<LocaleProvider>(
               builder: (context, localeProvider, child) => Row(
                 children: [
-                  Text("${localizations.onBoardingLanguage}:"),
                   Radio(
                     value: Language.en,
                     groupValue: _selectedLanguage,
@@ -127,6 +127,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             const SizedBox(height: 20),
+            Text("Location:"),
+            const SizedBox(height: 10),
             Form(
               key: userLocationKey,
               child: DropdownButtonFormField(

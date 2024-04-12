@@ -24,17 +24,20 @@ class _ImageInputState extends State<ImageInput> {
 
   @override
   Widget build(BuildContext context) {
+    //We find the size of the screen to better format the content
+    final screenWidth = MediaQuery.of(context).size.width;
+    var isSmallDevice = false;
+    if (screenWidth <= 350.0) isSmallDevice = true;
+
     return Column(
       children: [
         Container(
             decoration: BoxDecoration(
               border: Border.all(
-                width: 1,
                 color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
               ),
             ),
-            height: 50,
-            width: double.infinity,
+            height: isSmallDevice ? 100 : 50,
             alignment: Alignment.topLeft,
             child: Row(
               children: [
@@ -42,20 +45,54 @@ class _ImageInputState extends State<ImageInput> {
                   TextButton.icon(
                     onPressed: _getImages,
                     icon: const Icon(Icons.camera),
-                    label: const Text('Choose Photos'),
+                    label: const Text(
+                      'Choose Photos',
+                      softWrap: true,
+                    ),
                   ),
-                if (widget.onChooseImage != null)
+                if (isSmallDevice)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.onChooseImage != null)
+                        TextButton.icon(
+                          onPressed: _getImage,
+                          icon: const Icon(Icons.camera),
+                          label: const Text(
+                            'Choose Photo',
+                            softWrap: true,
+                          ),
+                        ),
+                      if (widget.onPickImage == null) Spacer(),
+                      if (widget.onTakePhoto != null)
+                        TextButton.icon(
+                          onPressed: _takePhoto,
+                          icon: const Icon(Icons.photo_camera),
+                          label: const Text(
+                            'Take Photo',
+                            softWrap: true,
+                          ),
+                        ),
+                    ],
+                  ),
+                if (widget.onChooseImage != null && !isSmallDevice)
                   TextButton.icon(
                     onPressed: _getImage,
                     icon: const Icon(Icons.camera),
-                    label: const Text('Choose Photo'),
+                    label: const Text(
+                      'Choose Photo',
+                      softWrap: true,
+                    ),
                   ),
                 if (widget.onPickImage == null) Spacer(),
-                if (widget.onTakePhoto != null)
+                if (widget.onTakePhoto != null && !isSmallDevice)
                   TextButton.icon(
                     onPressed: _takePhoto,
                     icon: const Icon(Icons.photo_camera),
-                    label: const Text('Take Photo'),
+                    label: const Text(
+                      'Take Photo',
+                      softWrap: true,
+                    ),
                   ),
               ],
             )),

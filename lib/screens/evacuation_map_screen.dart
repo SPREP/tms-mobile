@@ -30,6 +30,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
   late AlignOnUpdate _alignPositionOnUpdate;
   late final StreamController<double?> _alignPositionStreamController;
   bool _showLegends = false;
+  double _mapheight = 0.0;
 
   @override
   void initState() {
@@ -41,6 +42,16 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
   void displose() {
     _alignPositionStreamController.close();
     super.dispose();
+  }
+
+  getMapHeight() {
+    //calculate the map height
+    final fullHeight = MediaQuery.of(context).size.height;
+    final appBar = AppBar();
+    final appBarHeight =
+        appBar.preferredSize.height; // + MediaQuery.of(context).padding.top;
+    final mapHeight = fullHeight - appBarHeight;
+    return mapHeight;
   }
 
   Future<List<EvacuationModel>> getEvacuation() async {
@@ -94,6 +105,8 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
       lon = widget.userLocation.currentPosition!.longitude;
     }
 
+    _mapheight = getMapHeight();
+
     return FutureBuilder<List<EvacuationModel>>(
         future: getEvacuation(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -115,7 +128,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                     children: [
                       Container(
                         width: double.infinity,
-                        height: MediaQuery.of(context).size.height,
+                        height: this._mapheight,
                         child: ClipRRect(
                           borderRadius: const BorderRadius.only(),
                           child: FlutterMap(
@@ -199,7 +212,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                               Stack(children: [
                                 Positioned(
                                   left: 0,
-                                  bottom: -110,
+                                  top: -305,
                                   child: EvacuationMapLegend(),
                                 ),
                               ]),

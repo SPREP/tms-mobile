@@ -159,11 +159,23 @@ class _WarningDetailsScreenState extends State<WarningDetailsScreen> {
                   Row(
                     children: [
                       Container(
-                        padding: EdgeInsets.only(right: 10.0),
-                        child: Icon(
-                          Icons.warning,
-                          color: widget.warningModel.getColor(),
-                          size: 40.0,
+                        padding: EdgeInsets.all(5.0),
+                        margin: EdgeInsets.only(right: 10.0),
+                        color: widget.warningModel.getColor(),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.warning,
+                              color: Colors.white,
+                              size: 40.0,
+                            ),
+                            Text(
+                              widget.warningModel.getLevelText(),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white),
+                            ),
+                          ],
                         ),
                       ),
                       Flexible(
@@ -177,17 +189,6 @@ class _WarningDetailsScreenState extends State<WarningDetailsScreen> {
                   ),
                   Row(
                     children: [
-                      Chip(
-                        padding: EdgeInsets.all(2.0),
-                        backgroundColor: widget.warningModel.getColor(),
-                        label: Text(
-                          widget.warningModel.getLevelText(),
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 2.0,
-                      ),
                       Chip(
                         avatar: Icon(Icons.calendar_today),
                         padding: EdgeInsets.all(2.0),
