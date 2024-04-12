@@ -573,8 +573,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                         ),
                         const SizedBox(height: 10.0),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            const Spacer(),
                             WeatherProperty(
                               title: 'Humidity',
                               value: currentData.humidity,
@@ -585,7 +585,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                 size: 30,
                               ),
                             ),
-                            const Spacer(),
                             WeatherProperty(
                               title: 'Pressure',
                               value: currentData.pressure,
@@ -596,7 +595,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                 size: 30,
                               ),
                             ),
-                            const Spacer(),
                             WeatherProperty(
                                 title: 'Wind Speed',
                                 value: currentData.windSpeed,
@@ -605,15 +603,14 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                   WeatherIcons.strong_wind,
                                   color: Colors.white,
                                 )),
-                            const Spacer(),
                           ],
                         ),
                         SizedBox(
                           height: 10.0,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            const Spacer(),
                             WeatherProperty(
                               title: 'Wind Direction',
                               value: currentData.windDirection,
@@ -628,7 +625,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                 ),
                               ),
                             ),
-                            const Spacer(),
                             WeatherProperty(
                               title: 'Visibility',
                               value: currentData.visibility,
@@ -639,7 +635,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                 size: 30,
                               ),
                             ),
-                            const Spacer(),
                             WeatherProperty(
                               title: 'Solar Radiation',
                               value: currentData.solarRadiation,
@@ -650,7 +645,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                 size: 30,
                               ),
                             ),
-                            const Spacer(),
                           ],
                         ),
                         SizedBox(

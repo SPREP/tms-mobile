@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
 import 'package:weather_icons/weather_icons.dart';
 
@@ -104,6 +105,16 @@ class EventModel {
         return Color.fromARGB(255, 179, 157, 90);
     }
     return const Color.fromARGB(255, 131, 149, 234);
+  }
+
+  getShortDate() {
+    DateFormat format = new DateFormat("dd/MM/yyyy");
+    DateTime shortDate = format.parse(this.date.toString());
+
+    //new format
+    final DateFormat formatter = DateFormat('dd/MM/yy');
+    final String formatted = formatter.format(shortDate);
+    return formatted;
   }
 }
 

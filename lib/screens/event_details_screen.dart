@@ -173,7 +173,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             Icons.calendar_month,
                             color: Colors.white,
                           ),
-                          Text(widget.eventModel.date.toString()),
+                          Text(widget.eventModel.getShortDate().toString()),
                           Colors.blue),
                       roundContent(
                           const Icon(
@@ -581,8 +581,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     return ClipOval(
       child: DefaultTextStyle.merge(
         child: Container(
-          width: 99,
-          height: 99,
+          width: 77,
+          height: 77,
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white, width: 1.0),

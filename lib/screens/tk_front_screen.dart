@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:macres/screens/tk_indicators_screen.dart';
 import 'package:macres/screens/tk_map_screen.dart';
 import 'package:macres/util/magnifier.dart' as Mag;
@@ -37,7 +38,7 @@ class _TkFrontScreenState extends State<TkFrontScreen> {
             ),
           ],
         ),
-        body: Center(
+        body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(20.0),
             child: Column(
@@ -53,9 +54,9 @@ class _TkFrontScreenState extends State<TkFrontScreen> {
                 SizedBox(
                   height: 20.0,
                 ),
-                Flexible(
-                  child: Text(
-                      'The islands of Tonga have been inhabited for over 3000 years. During this time, Tongans learned to use natural indicators to forecast and predict the weather and climate and its impacts. These knowledge are still useful today for both traditional and contemporary weather and climate forecasting.'),
+                Text(
+                  'The islands of Tonga have been inhabited for over 3000 years. During this time, Tongans learned to use natural indicators to forecast and predict the weather and climate and its impacts. These knowledge are still useful today for both traditional and contemporary weather and climate forecasting.',
+                  softWrap: true,
                 ),
                 SizedBox(
                   height: 30.0,
