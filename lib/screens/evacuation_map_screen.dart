@@ -186,6 +186,13 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                 initialMarkers: getMarkers(snapshot.data),
                               ),
                               Stack(children: [
+                                Positioned(
+                                  left: 0,
+                                  top: -305,
+                                  child: EvacuationMapLegend(),
+                                ),
+                              ]),
+                              Stack(children: [
                                 if (widget.userLocation.currentPosition != null)
                                   Positioned(
                                     right: 10,
@@ -208,13 +215,6 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                           );
                                         }),
                                   ),
-                              ]),
-                              Stack(children: [
-                                Positioned(
-                                  left: 0,
-                                  top: -305,
-                                  child: EvacuationMapLegend(),
-                                ),
                               ]),
                             ],
                           ),
