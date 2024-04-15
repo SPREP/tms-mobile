@@ -254,6 +254,27 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               );
             },
           ),
+          const Spacer(),
+          const Text(
+            'Version ' + AppConfig.version,
+            style: TextStyle(fontSize: 13),
+          ),
+          const Text('Tonga Meteorological Service',
+              style: TextStyle(fontSize: 13)),
+          InkWell(
+            onTap: () => launchUrl(
+                Uri.parse('http://app.met.gov.to/app/privacy-policy')),
+            child: Text(
+              'Privacy Policy',
+              style: TextStyle(
+                  fontSize: 13,
+                  decoration: TextDecoration.underline,
+                  color: Colors.blue),
+            ),
+          ),
+          const SizedBox(
+            height: 50,
+          ),
         ],
       ),
     );
