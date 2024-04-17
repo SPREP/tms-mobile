@@ -42,7 +42,7 @@ class _EvacuationMapLegendState extends State<EvacuationMapLegend>
           padding: EdgeInsets.all(8.0),
           child: Column(children: [
             Container(
-              height: 295,
+              height: 370,
               width: 250,
               transform: Matrix4.translationValues(0.0, 9.0, 0.0),
               padding: EdgeInsets.all(20.0),
@@ -88,6 +88,18 @@ class _EvacuationMapLegendState extends State<EvacuationMapLegend>
                     Flexible(
                         child: Text(
                             'Tap this button, to show your nearest TSunami safe zone.'))
+                  ]),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(children: [
+                    Icon(Icons.my_location),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Flexible(
+                        child: Text(
+                            'Tap this button, to show your current location.'))
                   ]),
                   SizedBox(
                     height: 20.0,
