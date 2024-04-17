@@ -60,7 +60,6 @@ dependencies:
   another_flushbar: ^1.12.30
   flutter_map_supercluster: ^5.0.0-dev.1
   flutter_phone_direct_caller: ^2.1.1
-  flutter_map_location_marker: ^8.0.5
   maps_launcher: ^2.2.1
   cached_network_image: ^3.3.1
   fl_chart: ^0.66.2
@@ -70,12 +69,10 @@ dependencies:
   location_picker_flutter_map: ^2.1.0
   vibration: ^1.8.4
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: "^0.13.1"
-
 
 flutter_icons:
   android: true

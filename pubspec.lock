@@ -364,7 +364,7 @@ packages:
     source: hosted
     version: "1.0.0"
   flutter_map_location_marker:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_map_location_marker
       sha256: c880c0ce6e6f64ade72f72d4d95b54ea75827818350af5596b301e0cbb350dcd

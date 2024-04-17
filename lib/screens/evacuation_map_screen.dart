@@ -99,6 +99,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
   Widget build(BuildContext context) {
     double lat = -21.178986;
     double lon = -175.198242;
+    final MapController _mapController = MapController();
 
     if (widget.userLocation.currentPosition != null) {
       lat = widget.userLocation.currentPosition!.latitude;
@@ -132,6 +133,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                         child: ClipRRect(
                           borderRadius: const BorderRadius.only(),
                           child: FlutterMap(
+                            mapController: _mapController,
                             options: MapOptions(
                               initialCenter: LatLng(lat, lon),
                               initialZoom: 12,
@@ -146,6 +148,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                     ? _darkModeTileBuilder
                                     : null,
                               ),
+                              /*
                               CurrentLocationLayer(
                                 alignPositionStream:
                                     _alignPositionStreamController.stream,
@@ -165,6 +168,43 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                         )),
                                   ),
                                 ),
+                              ),
+                              */
+                              CircleLayer(circles: [
+                                CircleMarker(
+                                    //radius marker
+                                    point: LatLng(
+                                      widget.userLocation.currentPosition!
+                                          .latitude,
+                                      widget.userLocation.currentPosition!
+                                          .longitude,
+                                    ),
+                                    color: Colors.blue.withOpacity(0.9),
+                                    borderStrokeWidth: 4.0,
+                                    borderColor: Colors.white,
+                                    radius: 20 //radius
+                                    )
+                              ]),
+                              MarkerLayer(
+                                markers: [
+                                  Marker(
+                                      width: 40.0,
+                                      height: 30.0,
+                                      point: LatLng(
+                                          widget.userLocation.currentPosition!
+                                              .latitude,
+                                          widget.userLocation.currentPosition!
+                                              .longitude),
+                                      child: Container(
+                                        child: Text(
+                                          'You here',
+                                          style: TextStyle(
+                                              color: Colors.white, height: 1.0),
+                                          softWrap: true,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      )),
+                                ],
                               ),
                               SuperclusterLayer.immutable(
                                 indexBuilder: IndexBuilders.rootIsolate,
@@ -188,7 +228,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                               Stack(children: [
                                 Positioned(
                                   left: 0,
-                                  top: -305,
+                                  top: -375,
                                   child: EvacuationMapLegend(),
                                 ),
                               ]),
@@ -213,6 +253,26 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                                       model: evm),
                                             ),
                                           );
+                                        }),
+                                  ),
+                                if (widget.userLocation.currentPosition != null)
+                                  Positioned(
+                                    right: 10,
+                                    top: 100,
+                                    child: FloatingActionButton(
+                                        tooltip: 'User Location',
+                                        child: const Icon(
+                                          Icons.my_location,
+                                        ),
+                                        onPressed: () {
+                                          _mapController.move(
+                                              LatLng(
+                                                widget.userLocation
+                                                    .currentPosition!.latitude,
+                                                widget.userLocation
+                                                    .currentPosition!.longitude,
+                                              ),
+                                              13);
                                         }),
                                   ),
                               ]),
