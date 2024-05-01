@@ -13,6 +13,10 @@ class TideSlide extends StatefulWidget {
 }
 
 class _TideSlideState extends State<TideSlide> {
+  // @todo Use app state to get the selected tempreture unit
+  //   this value is also used on the weather_forcast_screen
+  String selectedTempretureUnit = 'c';
+
   @override
   Widget build(BuildContext context) {
     TideModel high = TideModel();
@@ -161,7 +165,7 @@ class _TideSlideState extends State<TideSlide> {
                   ),
                   Text('Sea temperature '),
                   Spacer(),
-                  Text('${widget.seaData.temp.toString()} degC'),
+                  Text('${widget.seaData.temp.toString()} \u00B0${selectedTempretureUnit.toUpperCase()}'),
                 ],
               ),
               SizedBox(

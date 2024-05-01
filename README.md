@@ -24,7 +24,8 @@ Provide instructions on how to install your app. Include any dependencies or spe
 4. Copy google-services.json-default as google-services.json (in ./android/app/src/google-services.json-default)
 5. Copy app_config.dart-default as app_config.dart (in ./lib/config/app_config.dart)
 6. You may also need to run `flutter gen-l10n` to generate internationalisation files
-7. Connect your device/emulator and run `flutter run` to start the app.
+7. Create an app config file `cp .\lib\config\app_config.dart-default .\lib\config\app_config.dart`
+8. Connect your device/emulator and run `flutter run` to start the app.
 
 ## Usage
 
