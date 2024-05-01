@@ -760,12 +760,14 @@ class _ImpactReportFormState extends State<ImpactReportForm> {
         return loaded_data.map((json) => VillageModel.fromJson(json)).toList();
       }
     } catch (e) {
+      /*
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
         content: Text('Error: Unable to load village data.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      */
       print(e);
     }
     return data;

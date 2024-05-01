@@ -107,12 +107,14 @@ class _EventScreen extends State<EventScreen> {
         return loadedItems;
       }
     } catch (e) {
+      /*
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
         content: Text('Unable to load events.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      */
       print(e);
     }
   }

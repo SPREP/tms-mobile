@@ -67,12 +67,14 @@ class _TkMapScreen extends State<TkMapScreen> {
           return data;
         }
       } catch (e) {
+        /*
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         const snackBar = SnackBar(
           content: Text('Error: Unable to load traditional knowledge data.'),
           backgroundColor: Colors.red,
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        */
         print(e);
       }
       return data;

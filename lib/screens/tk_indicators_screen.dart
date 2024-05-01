@@ -74,6 +74,7 @@ class _TkIndicatorsScreenState extends State<TkIndicatorsScreen> {
             .toList();
       }
     } catch (e) {
+      /*
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
         content: Text(
@@ -81,6 +82,7 @@ class _TkIndicatorsScreenState extends State<TkIndicatorsScreen> {
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      */
       print(e);
     }
     return data;

@@ -26,6 +26,7 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
   bool _isInProgress = false;
   bool visibility = false;
   num _rate_field_value = 1;
+  bool _inWaitingPeriod = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +60,8 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
     // Set default value to match Location settings.
     _loadSelectedLocation();
     widget.userLocation.getCurrentPosition();
+    //prevent multiple submission
+    //_getWaitingPeriod();
     super.initState();
   }
 
@@ -281,7 +284,7 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
           _getRateDropdown(),
           const SizedBox(height: 50),
           if (_isInProgress) const CircularProgressIndicator(),
-          if (!_isInProgress)
+          if (!_isInProgress && !_inWaitingPeriod)
             Row(
               children: [
                 const Spacer(),
@@ -306,6 +309,10 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
                           _selectedLocation = null;
                           _isInProgress = false;
                         });
+
+                        //now hide the submit button for 1 hour
+                        _startWaitingPeriod();
+
                         showAlertDialog(context);
                       } else {
                         Flushbar(
@@ -322,6 +329,9 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
                 ),
               ],
             ),
+          if (_inWaitingPeriod)
+            Text(
+                'Please wait for 15 minutes before you allow to submit again.'),
         ],
       ),
     );
@@ -350,5 +360,33 @@ class _FeelEarthquakeFormState extends State<FeelEarthquakeForm> {
         builder: (BuildContext context) {
           return alert;
         });
+  }
+
+  void _startWaitingPeriod() async {
+    _inWaitingPeriod = true;
+    final prefs = await SharedPreferences.getInstance();
+    final now = DateTime.now();
+    await prefs.setString(
+        'feel_earthquake_waiting_timestamp', now.toIso8601String());
+  }
+
+  Future _getWaitingPeriod() async {
+    final prefs = await SharedPreferences.getInstance();
+    final waitingTimestamp =
+        prefs.getString('feel_earthquake_waiting_timestamp');
+
+    if (waitingTimestamp != null) {
+      final timestamp = DateTime.parse(waitingTimestamp);
+      final currentTime = DateTime.now();
+      final waitingDuration = currentTime.difference(timestamp);
+
+      const Duration waitingExpirationDuration = Duration(minutes: 15);
+
+      if (waitingDuration <= waitingExpirationDuration) {
+        _inWaitingPeriod = true;
+      } else {
+        _inWaitingPeriod = false;
+      }
+    }
   }
 }

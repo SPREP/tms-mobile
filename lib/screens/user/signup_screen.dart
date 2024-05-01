@@ -1,4 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/screens/user/login_screen.dart';
@@ -22,15 +23,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     final nameField = TextFormField(
       autofocus: false,
-      validator: (value) => value!.isEmpty ? "Please enter your name" : null,
+      validator: (value) => value!.isEmpty ? "Please enter your username" : null,
       onSaved: (value) => _name = value!,
       decoration: InputDecoration(
-          label: Text("Name"), icon: Icon(Icons.account_circle)),
+          label: Text("Username"), icon: Icon(Icons.account_circle)),
     );
 
     final usernameField = TextFormField(
       autofocus: false,
-      validator: (value) => value!.isEmpty ? "Please enter email" : null,
+      validator: (value) =>
+          EmailValidator.validate(value!) ? null : "Please enter a valid email",
       onSaved: (value) => _username = value!,
       decoration:
           InputDecoration(label: Text("Email"), icon: Icon(Icons.email)),

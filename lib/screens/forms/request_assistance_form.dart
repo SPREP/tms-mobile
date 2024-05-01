@@ -198,7 +198,7 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
             ],
             "assistance_with": [
               waterTank == true ? 'watertank' : '',
-              noHouse == true ? 'waterhouse' : '',
+              noHouse == true ? 'nohouse' : '',
               boat == true ? 'boat' : '',
               windows == true ? 'windows' : '',
               electricity == true ? 'electricity' : '',
@@ -882,12 +882,14 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
         return loaded_data.map((json) => VillageModel.fromJson(json)).toList();
       }
     } catch (e) {
+      /*
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
         content: Text('Error: Unable to load village data.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      */
       print(e);
     }
     return data;
@@ -904,8 +906,9 @@ class _RequestAssistanceForm extends State<RequestAssistanceForm> {
     );
 
     AlertDialog alert = AlertDialog(
-      title: const Text("Impact Report Status"),
-      content: const Text("Your impact report has been received.  Thank you."),
+      title: const Text("Assistance Request Status"),
+      content:
+          const Text("Your assistance request has been received.  Thank you."),
       actions: [
         okButton,
       ],

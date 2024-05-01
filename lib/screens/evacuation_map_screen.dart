@@ -84,15 +84,55 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
             .toList();
       }
     } catch (e) {
+      /*
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
         content: Text('Error: Unable to load evacuation data.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      */
       print(e);
     }
     return data;
+  }
+
+  Widget drawUserLocationCircle() {
+    return CircleLayer(circles: [
+      CircleMarker(
+          //radius marker
+          point: LatLng(
+            widget.userLocation.currentPosition!.latitude,
+            widget.userLocation.currentPosition!.longitude,
+          ),
+          color: Colors.blue.withOpacity(0.9),
+          borderStrokeWidth: 4.0,
+          borderColor: Colors.white,
+          radius: 20 //radius
+          )
+    ]);
+  }
+
+  Widget labelUserLocationCircle() {
+    return MarkerLayer(
+      markers: [
+        Marker(
+            width: 40.0,
+            height: 30.0,
+            point: LatLng(
+              widget.userLocation.currentPosition!.latitude,
+              widget.userLocation.currentPosition!.longitude,
+            ),
+            child: Container(
+              child: Text(
+                'You here',
+                style: TextStyle(color: Colors.white, height: 1.0),
+                softWrap: true,
+                textAlign: TextAlign.center,
+              ),
+            )),
+      ],
+    );
   }
 
   @override
@@ -101,9 +141,11 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
     double lon = -175.198242;
     final MapController _mapController = MapController();
 
+    widget.userLocation.getCurrentPosition();
+
     if (widget.userLocation.currentPosition != null) {
-      lat = widget.userLocation.currentPosition!.latitude;
-      lon = widget.userLocation.currentPosition!.longitude;
+      //lat = widget.userLocation.currentPosition!.latitude;
+      //lon = widget.userLocation.currentPosition!.longitude;
     }
 
     _mapheight = getMapHeight();
@@ -137,6 +179,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                             options: MapOptions(
                               initialCenter: LatLng(lat, lon),
                               initialZoom: 12,
+                              keepAlive: true,
                             ),
                             children: [
                               TileLayer(
@@ -170,42 +213,10 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                 ),
                               ),
                               */
-                              CircleLayer(circles: [
-                                CircleMarker(
-                                    //radius marker
-                                    point: LatLng(
-                                      widget.userLocation.currentPosition!
-                                          .latitude,
-                                      widget.userLocation.currentPosition!
-                                          .longitude,
-                                    ),
-                                    color: Colors.blue.withOpacity(0.9),
-                                    borderStrokeWidth: 4.0,
-                                    borderColor: Colors.white,
-                                    radius: 20 //radius
-                                    )
-                              ]),
-                              MarkerLayer(
-                                markers: [
-                                  Marker(
-                                      width: 40.0,
-                                      height: 30.0,
-                                      point: LatLng(
-                                          widget.userLocation.currentPosition!
-                                              .latitude,
-                                          widget.userLocation.currentPosition!
-                                              .longitude),
-                                      child: Container(
-                                        child: Text(
-                                          'You here',
-                                          style: TextStyle(
-                                              color: Colors.white, height: 1.0),
-                                          softWrap: true,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      )),
-                                ],
-                              ),
+                              if (widget.userLocation.currentPosition != null)
+                                drawUserLocationCircle(),
+                              if (widget.userLocation.currentPosition != null)
+                                labelUserLocationCircle(),
                               SuperclusterLayer.immutable(
                                 indexBuilder: IndexBuilders.rootIsolate,
                                 builder: (context, position, markerCount,
@@ -233,38 +244,43 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                 ),
                               ]),
                               Stack(children: [
-                                if (widget.userLocation.currentPosition != null)
-                                  Positioned(
-                                    right: 10,
-                                    top: 10,
-                                    child: FloatingActionButton(
-                                        tooltip: 'Nearest',
-                                        child: const Icon(
-                                          Icons.near_me,
-                                        ),
-                                        onPressed: () {
-                                          EvacuationModel evm =
-                                              getNearest(snapshot.data);
+                                Positioned(
+                                  right: 10,
+                                  top: 10,
+                                  child: FloatingActionButton(
+                                      tooltip: 'Nearest',
+                                      heroTag: 'nearest',
+                                      child: const Icon(
+                                        Icons.near_me,
+                                      ),
+                                      onPressed: () {
+                                        EvacuationModel evm =
+                                            getNearest(snapshot.data);
 
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EvacuationDetailsScreen(
-                                                      model: evm),
-                                            ),
-                                          );
-                                        }),
-                                  ),
-                                if (widget.userLocation.currentPosition != null)
-                                  Positioned(
-                                    right: 10,
-                                    top: 100,
-                                    child: FloatingActionButton(
-                                        tooltip: 'User Location',
-                                        child: const Icon(
-                                          Icons.my_location,
-                                        ),
-                                        onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                EvacuationDetailsScreen(
+                                                    model: evm),
+                                          ),
+                                        );
+                                      }),
+                                ),
+                                Positioned(
+                                  right: 10,
+                                  top: 100,
+                                  child: FloatingActionButton(
+                                      tooltip: 'User Location',
+                                      heroTag: 'userlocation',
+                                      child: const Icon(
+                                        Icons.my_location,
+                                      ),
+                                      onPressed: () {
+                                        widget.userLocation
+                                            .getCurrentPosition();
+                                        if (widget.userLocation.currentPosition != null) {
+                                          drawUserLocationCircle();
+                                          labelUserLocationCircle();
                                           _mapController.move(
                                               LatLng(
                                                 widget.userLocation
@@ -273,8 +289,10 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                                     .currentPosition!.longitude,
                                               ),
                                               13);
-                                        }),
-                                  ),
+                                        }
+
+                                      }),
+                                ),
                               ]),
                             ],
                           ),
@@ -345,7 +363,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
     double km = 0;
     double currentKm = 0;
     double totalKm = 0;
-
+    widget.userLocation.getCurrentPosition();
     if (widget.userLocation.currentPosition != null) {
       for (var item in data) {
         km = distance.as(
