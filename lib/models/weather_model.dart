@@ -56,6 +56,8 @@ class WeatherModel {
       int hours = DateTime.now().hour;
       dayOrNight = (hours >= 7 && hours <= 20) ? 'day' : 'night';
     }
+
+    dayOrNight = 'day';
   }
 
   void celsiusToFahrenheight() {

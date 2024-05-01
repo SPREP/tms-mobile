@@ -281,13 +281,14 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
         return loadedItem;
       }
     } catch (e) {
+      /*
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
         content: Text('Error: Unable to load .'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+      */
       print(e);
     }
   }

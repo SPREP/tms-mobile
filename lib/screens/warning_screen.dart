@@ -90,13 +90,14 @@ class _WarningScreen extends State<WarningScreen> {
         return loadedItems;
       }
     } catch (e) {
+      /*
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
         content: Text('Error: Unable to load warnings.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+*/
       print(e);
     }
   }
