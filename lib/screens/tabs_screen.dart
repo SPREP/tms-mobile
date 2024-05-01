@@ -96,7 +96,9 @@ class _TabsScreenState extends State<TabsScreen> {
         DropdownButton<Location>(
           borderRadius: BorderRadius.circular(10),
           value: selectedLocation,
-          dropdownColor: Color.fromARGB(255, 33, 123, 187),
+          dropdownColor: dayOrNightStatus == 'day'
+              ? Color.fromARGB(255, 33, 123, 187)
+              : Color.fromARGB(255, 70, 73, 76),
           icon: const Icon(
             Icons.expand_more,
             color: Colors.white,
@@ -224,6 +226,7 @@ class _TabsScreenState extends State<TabsScreen> {
         activePage = WeatherForcastScreen(
           onCurrentWeatherChange: _onCurrentWeatherChange,
         );
+
         activePageTitle = DateFormat("EEE dd MMM yyyy").format(DateTime.now());
 
         // Remove Action items that include Celsius or Fahrenheit selection.

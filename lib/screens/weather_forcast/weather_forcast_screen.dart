@@ -186,7 +186,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
             : 'assets/images/cloudy_night.jpg';
         break;
     }
-    widget.onCurrentWeatherChange(filePath, currentData.dayOrNight);
   }
 
   void changeLocation(Location newLocation) async {
@@ -385,6 +384,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
               currentData = dataModel;
             }
           }
+          widget.onCurrentWeatherChange('', currentData.dayOrNight);
         }
 
         if (listData['3hrs'].length > 0) {
@@ -685,7 +685,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
                   const SizedBox(height: 10),
                   Container(
-                    height: 400,
+                    height: 700,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
