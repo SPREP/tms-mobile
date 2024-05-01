@@ -1,3 +1,4 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,6 +17,8 @@ class WeatherModel {
   String? location;
   String? day;
   String? observedDate;
+  String? windDirectionDegree;
+  String? solarRadiation;
 
   String dayOrNight = 'day';
 
@@ -33,9 +36,28 @@ class WeatherModel {
       this.warning,
       this.location,
       this.day,
-      this.observedDate}) {
-    int hours = DateTime.now().hour;
-    dayOrNight = (hours >= 7 && hours <= 20) ? 'day' : 'night';
+      this.observedDate,
+      this.windDirectionDegree,
+      this.solarRadiation}) {
+    isDayOrNight();
+  }
+
+  void isDayOrNight() {
+    if (this.solarRadiation != '' && this.solarRadiation != null) {
+      //Use solar radiation to determine day or night
+      double solar = double.parse(this.solarRadiation.toString());
+      if (solar > 50) {
+        dayOrNight = 'day';
+      } else if (solar < 50) {
+        dayOrNight = 'night';
+      }
+    } else {
+      //If solar radiation is not available then use the time
+      int hours = DateTime.now().hour;
+      dayOrNight = (hours >= 7 && hours <= 20) ? 'day' : 'night';
+    }
+
+    dayOrNight = 'day';
   }
 
   void celsiusToFahrenheight() {
@@ -61,50 +83,44 @@ class WeatherModel {
     return ((int.parse(value) * 9 / 5) + 32).toStringAsFixed(0);
   }
 
-  Image getIcon(double width, double height) {
+  getIcon() {
     String icon;
 
     switch (iconId) {
       case 1:
-        icon =
-            dayOrNight == 'day' ? 'day_clear.png' : 'night_full_moon_clear.png';
+        icon = dayOrNight == 'day' ? 'sunny' : 'night_clear_sky';
         break;
       case 2:
-        icon = dayOrNight == 'day'
-            ? 'day_partial_cloud.png'
-            : 'night_full_moon_partial_cloud.png';
+        icon =
+            dayOrNight == 'day' ? 'day_partial_cloud' : 'night_partial_cloud';
         break;
       case 3:
-        icon = dayOrNight == 'day' ? 'cloudy.png' : 'cloudy.png';
+        icon = dayOrNight == 'day' ? 'cloudy' : 'cloudy';
+        break;
+
+      case 10:
+        icon = dayOrNight == 'day' ? 'snow' : 'snow';
         break;
       case 4:
-      case 6:
-      case 10:
-        icon =
-            dayOrNight == 'day' ? 'day_sleet.png' : 'night_full_moon_sleet.png';
-        break;
-      case 7:
-        icon = 'rain.png';
-        break;
       case 5:
-        icon =
-            dayOrNight == 'day' ? 'day_rain.png' : 'night_full_moon_rain.png';
+      case 6:
+      case 7:
+        icon = 'rain';
         break;
       case 8:
       case 9:
-        icon = dayOrNight == 'day'
-            ? 'day_rain_thunder.png'
-            : 'night_full_moon_rain_thunder.png';
+        icon = dayOrNight == 'day' ? 'thunder_storm' : 'thunder_storm';
         break;
       default:
-        icon =
-            dayOrNight == 'day' ? 'day_clear.png' : 'night_full_moon_clear.png';
+        icon = '';
+        break;
     }
 
-    return Image.asset(
-      'assets/images/${icon}',
-      width: width,
-      height: height,
+    if (icon == '') return Text(icon);
+
+    return FlareActor(
+      "assets/flare/weather_icons/${icon}.flr",
+      animation: "idle",
     );
   }
 
@@ -148,19 +164,22 @@ class TenDaysForecastModel extends WeatherModel {
 }
 
 class CurrentWeatherModel extends WeatherModel {
-  CurrentWeatherModel({
-    super.iconId,
-    super.currentTemp,
-    super.humidity,
-    super.pressure,
-    super.windDirection,
-    super.windSpeed,
-    super.visibility,
-    super.location,
-    super.minTemp,
-    super.maxTemp,
-    super.observedDate,
-  });
+  CurrentWeatherModel(
+      {super.iconId,
+      super.currentTemp,
+      super.humidity,
+      super.pressure,
+      super.windDirection,
+      super.windSpeed,
+      super.visibility,
+      super.location,
+      super.minTemp,
+      super.maxTemp,
+      super.observedDate,
+      super.windDirectionDegree,
+      super.solarRadiation}) {
+    super.isDayOrNight();
+  }
 }
 
 class ThreeHoursForecastModel extends WeatherModel {
@@ -172,7 +191,9 @@ class ThreeHoursForecastModel extends WeatherModel {
     super.windSpeed,
     super.visibility,
     super.location,
-  });
+  }) {
+    super.isDayOrNight();
+  }
 }
 
 class TwentyFourHoursForecastModel extends WeatherModel {
@@ -185,5 +206,7 @@ class TwentyFourHoursForecastModel extends WeatherModel {
     super.windDirection,
     super.windSpeed,
     super.warning,
-  });
+  }) {
+    super.isDayOrNight();
+  }
 }

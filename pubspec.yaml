@@ -17,7 +17,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 
-version: 1.0.1+5
+version: 1.0.3+12
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
@@ -56,13 +56,18 @@ dependencies:
   firebase_core: 2.27.0
   flutter_tts: ^3.8.1
   firebase_messaging: ^14.7.4
-  email_validator: '^2.1.16'
+  email_validator: ^2.1.17
   another_flushbar: ^1.12.30
   flutter_map_supercluster: ^5.0.0-dev.1
   flutter_phone_direct_caller: ^2.1.1
-  flutter_map_location_marker: ^8.0.5
   maps_launcher: ^2.2.1
   cached_network_image: ^3.3.1
+  fl_chart: ^0.66.2
+  flare_flutter: ^3.0.2
+  async: ^2.11.0
+  native_exif: ^0.5.0
+  location_picker_flutter_map: ^2.1.0
+  vibration: ^1.8.4
 
 
 dev_dependencies:
@@ -98,21 +103,11 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/cloudy.png
-    - assets/images/day_clear.png
-    - assets/images/onboarding1.png
-    - assets/images/onboarding2.png
-    - assets/images/day_partial_cloud.png
-    - assets/images/day_rain_thunder.png
-    - assets/images/day_rain.png
-    - assets/images/day_sleet.png
-    - assets/images/night_full_moon_clear.png
-    - assets/images/night_full_moon_partial_cloud.png
-    - assets/images/night_full_moon_rain_thunder.png
-    - assets/images/night_full_moon_rain.png
-    - assets/images/rain.png
-    - assets/images/app_icon.png
-    - assets/images/bird_icon.png
+    - assets/
+    - assets/images/
+    - assets/flare/weather_icons/
+    - assets/images/earthquake/
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

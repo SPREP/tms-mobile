@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:macres/screens/evacuation_map_screen.dart';
+import 'package:macres/screens/emergency_alert_screen.dart';
 import 'package:macres/screens/event_report_screen.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
 import 'package:macres/screens/national_number_screen.dart';
-import 'package:macres/screens/user/islogin_screen.dart';
+import 'package:macres/screens/tk_front_screen.dart';
 
 class ReportScreen extends StatefulWidget {
   const ReportScreen({super.key});
@@ -18,7 +18,7 @@ class _ReportScreenState extends State<ReportScreen> {
     return Material(
       child: SingleChildScrollView(
         child: Container(
-          color: Theme.of(context).primaryColor.withOpacity(0.1),
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -36,7 +36,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.all(10.0),
                 child: options(),
               ),
             ],
@@ -50,7 +50,6 @@ class _ReportScreenState extends State<ReportScreen> {
     double width = MediaQuery.of(context).size.width;
     double boxWidth = 90;
     double fontSize = 12;
-    double boxHeight = 80;
 
     if (width <= 300) {
       boxWidth = 100;
@@ -58,13 +57,13 @@ class _ReportScreenState extends State<ReportScreen> {
 
     return SizedBox(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('Select a report you would like to submit to us.'),
           const SizedBox(
-            height: 20,
+            height: 15,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
@@ -72,13 +71,11 @@ class _ReportScreenState extends State<ReportScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const EventReportScreen(),
+                      builder: (context) => EventReportScreen(),
                     ),
                   );
                 },
                 child: Container(
-                  height: boxHeight,
-                  width: boxWidth,
                   child: Column(children: [
                     Container(
                       width: 40,
@@ -105,20 +102,19 @@ class _ReportScreenState extends State<ReportScreen> {
                   ]),
                 ),
               ),
-              Spacer(),
+              SizedBox(
+                width: 10.0,
+              ),
               InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          const FeelEarthquakeForm(eventId: 0),
+                      builder: (context) => FeelEarthquakeForm(eventId: 0),
                     ),
                   );
                 },
                 child: Container(
-                  height: boxHeight,
-                  width: boxWidth,
                   child: Column(children: [
                     Container(
                       width: 40,
@@ -145,116 +141,82 @@ class _ReportScreenState extends State<ReportScreen> {
                   ]),
                 ),
               ),
-              Spacer(),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          new IsLogin(next: 'assistance', eventId: 0),
-                      //const RequestAssistanceForm(eventId: 0),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: boxHeight,
-                  width: boxWidth,
-                  child: Column(children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        border: Border.all(
-                            color: Color.fromARGB(255, 209, 207, 207)),
-                      ),
-                      child: const Icon(
-                        Icons.donut_large_outlined,
-                        size: 30,
-                        color: Colors.orange,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Text(
-                      'Assistance Request',
-                      style: TextStyle(fontSize: fontSize),
-                      textAlign: TextAlign.center,
-                    ),
-                  ]),
-                ),
-              ),
-              Spacer(),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          new IsLogin(next: 'impact', eventId: 0),
-                      //const ImpactReportForm(eventId: 0),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: boxHeight,
-                  width: boxWidth,
-                  child: Column(children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        border: Border.all(
-                            color: Color.fromARGB(255, 209, 207, 207)),
-                      ),
-                      child: const Icon(
-                        Icons.arrow_circle_up_outlined,
-                        size: 30,
-                        color: Colors.green,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Text(
-                      'Impact Report',
-                      style: TextStyle(fontSize: fontSize),
-                      textAlign: TextAlign.center,
-                    ),
-                  ]),
-                ),
-              ),
             ],
+          ),
+          const SizedBox(
+            height: 20.0,
           ),
           Divider(),
           const SizedBox(
-            height: 20,
+            height: 20.0,
           ),
           const Text('Other places'),
           const SizedBox(
             height: 20,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              /*
               InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const NationalNumberScreen(),
+                      builder: (context) => const EmergencyAlertScreen(),
                     ),
                   );
                 },
                 child: Container(
-                  height: boxHeight,
-                  width: 100,
+                  width: 150.0,
+                  child: Column(children: [
+                    Container(
+                      width: 150.0,
+                      height: 50.0,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(255, 110, 110, 110)
+                                .withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 2), // changes position of shadow
+                          ),
+                        ],
+                        shape: BoxShape.circle,
+                        color: Colors.green,
+                        border: Border.all(
+                            color: Color.fromARGB(255, 209, 207, 207),
+                            width: 2.0),
+                      ),
+                      child: Icon(
+                        Icons.emergency,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Text(
+                      'Emergency Alert',
+                      style: TextStyle(fontSize: fontSize),
+                    ),
+                  ]),
+                ),
+              ),
+              */
+
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NationalNumberScreen(),
+                    ),
+                  );
+                },
+                child: Container(
                   child: Column(children: [
                     Container(
                       width: 50,
@@ -281,48 +243,46 @@ class _ReportScreenState extends State<ReportScreen> {
                   ]),
                 ),
               ),
-              SizedBox(
-                width: 20,
-              ),
               InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const EvacuationMapScreen(),
+                      builder: (context) => const TkFrontScreen(),
                     ),
                   );
                 },
                 child: Container(
-                  height: boxHeight,
-                  width: 100,
                   child: Column(children: [
                     Container(
-                      width: 50,
-                      height: 50,
+                      width: 50.0,
+                      height: 50.0,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
                         border: Border.all(
                             color: Color.fromARGB(255, 209, 207, 207)),
                       ),
-                      child: const Icon(
-                        Icons.directions,
-                        size: 30,
-                        color: Color.fromARGB(255, 26, 115, 32),
+                      child: ImageIcon(
+                        AssetImage('assets/images/bird_icon.png'),
+                        size: 10.0,
+                        color: Colors.black,
                       ),
                     ),
                     SizedBox(
                       height: 5.0,
                     ),
                     Text(
-                      'Evacuation Map',
+                      'Traditional Knowledge',
                       style: TextStyle(fontSize: fontSize),
                     ),
                   ]),
                 ),
               ),
             ],
+          ),
+          SizedBox(
+            height: 10.0,
           ),
         ],
       ),

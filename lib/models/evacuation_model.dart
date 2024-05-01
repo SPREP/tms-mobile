@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EvacuationModel {
-  Widget? body;
+  String? body;
   String? title;
   String? image_large;
   String? image_thumbnail;
@@ -9,9 +9,11 @@ class EvacuationModel {
   double? lon;
   num? id;
 
+  double? nearestKm;
+
   EvacuationModel(
       {this.body,
-      required this.title,
+      this.title,
       this.lat = 0,
       this.lon = 0,
       this.id,

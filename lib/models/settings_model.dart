@@ -29,6 +29,16 @@ const locationLabel = {
   Location.eua: "'Eua",
 };
 
+//Map the main region to it's Drupal taxonomy term ID
+const locationIds = {
+  Location.tongatapu: 14,
+  Location.haapai: 16,
+  Location.vavau: 15,
+  Location.niuafoou: 18,
+  Location.niuatoputapu: 19,
+  Location.eua: 17,
+};
+
 const locationColor = {
   Location.tongatapu: Color.fromARGB(255, 130, 155, 118),
   Location.haapai: Color.fromARGB(255, 113, 138, 156),

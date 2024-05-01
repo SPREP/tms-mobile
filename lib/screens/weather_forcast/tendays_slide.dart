@@ -36,7 +36,7 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
                 left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Color.fromARGB(255, 173, 171, 171)),
+                bottom: BorderSide(color: Color.fromARGB(255, 220, 218, 218)),
               ),
             ),
             child: Row(
@@ -48,7 +48,7 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
                     Text(
                       item.day.toString(),
                       style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                          color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                     Text(
                       item.getIconDefinition(),
@@ -58,7 +58,12 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
                   ],
                 ),
                 Spacer(),
-                new Center(child: item.getIcon(25.0, 25.0)),
+                new Center(
+                    child: Container(
+                  height: 30.0,
+                  width: 30.0,
+                  child: item.getIcon(),
+                )),
                 SizedBox(
                   width: 30.0,
                 ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:macres/models/user_model.dart';
@@ -82,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
           if (response['status_code'] == 200) {
             UserModel user = response['user'];
             Provider.of<UserProvider>(context, listen: false).setUser(user);
+            setState(() {});
             Flushbar(
               title: "Login Success",
               message: "You have successfully logged in",

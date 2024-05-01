@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:macres/providers/dark_theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -71,11 +72,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
-    final themeChange = Provider.of<DarkThemeProvider>(context);
+    final themeChange = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: const Row(children: [
           Icon(Icons.settings),
           SizedBox(width: 10),
@@ -83,14 +83,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ]),
       ),
       body: Padding(
-        padding:
-            const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text("${localizations.onBoardingLanguage}:"),
             Consumer<LocaleProvider>(
               builder: (context, localeProvider, child) => Row(
                 children: [
-                  Text("${localizations.onBoardingLanguage}:"),
                   Radio(
                     value: Language.en,
                     groupValue: _selectedLanguage,
@@ -127,9 +127,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             const SizedBox(height: 20),
+            Text("Location:"),
+            const SizedBox(height: 10),
             Form(
               key: userLocationKey,
               child: DropdownButtonFormField(
+                style: TextStyle(color: Theme.of(context).hintColor),
                 decoration: const InputDecoration(border: OutlineInputBorder()),
                 value: _selectedLocation,
                 items: Location.values.map((value) {
@@ -149,7 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               height: 20,
             ),
             const Text('Dark Theme:'),
-            Switch(
+            CupertinoSwitch(
                 value: themeChange.darkTheme,
                 activeColor: Colors.green,
                 onChanged: (bool value) {

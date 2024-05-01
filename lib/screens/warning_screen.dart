@@ -2,29 +2,36 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
-import 'package:macres/models/notification_model.dart';
-import 'package:macres/widgets/notification_widget.dart';
-import 'package:macres/models/settings_model.dart';
+import 'package:macres/models/warning_model.dart';
+import 'package:macres/widgets/warning_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({super.key});
+class WarningScreen extends StatefulWidget {
+  const WarningScreen({super.key});
 
   @override
-  State<NotificationScreen> createState() => _NotificationScreen();
+  State<WarningScreen> createState() => _WarningScreen();
 }
 
-class _NotificationScreen extends State<NotificationScreen> {
-  List<NotificationModel> apiData = [];
+class _WarningScreen extends State<WarningScreen> {
+  List<WarningModel> apiData = [];
   bool isLoading = false;
 
   @override
   void initState() {
-    super.initState();
+    _clearCounter();
     setState(() {
       isLoading = true;
       getEvents();
     });
+    super.initState();
+  }
+
+  void _clearCounter() async {
+    //save values
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('total_new_warnings', 0);
+    setState(() {});
   }
 
   getEvents() async {
@@ -39,7 +46,7 @@ class _NotificationScreen extends State<NotificationScreen> {
       lng = 'en';
     }
 
-    String endpoint = '/notification/$lng?_format=json';
+    String endpoint = '/warning/$lng?_format=json';
 
     final basicAuth =
         "Basic ${base64.encode(utf8.encode('$username:$password'))}";
@@ -62,10 +69,10 @@ class _NotificationScreen extends State<NotificationScreen> {
         }
 
         final Map<String, dynamic> listData = jsonDecode(response.body);
-        final List<NotificationModel> loadedItems = [];
+        final List<WarningModel> loadedItems = [];
 
         for (final item in listData.entries) {
-          loadedItems.add(NotificationModel(
+          loadedItems.add(WarningModel(
               id: int.parse(item.value['id']),
               date: item.value['date'],
               time: item.value['time'],
@@ -83,13 +90,14 @@ class _NotificationScreen extends State<NotificationScreen> {
         return loadedItems;
       }
     } catch (e) {
+      /*
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
-        content: Text('Error: Unable to load notification.'),
+        content: Text('Error: Unable to load warnings.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+*/
       print(e);
     }
   }
@@ -98,18 +106,18 @@ class _NotificationScreen extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.only(top: 2, bottom: 2),
         child: isLoading
             ? const Center(
                 child: CircularProgressIndicator(),
               )
             : apiData.isEmpty
                 ? const Center(
-                    child: Text('No notification at this time'),
+                    child: Text('No warnings at this time'),
                   )
                 : Column(
-                    children: apiData.map<Widget>((notificationObject) {
-                    return NotificationWidget(notification: notificationObject);
+                    children: apiData.map<Widget>((warningObject) {
+                    return WarningWidget(warning: warningObject);
                   }).toList()),
       ),
     );

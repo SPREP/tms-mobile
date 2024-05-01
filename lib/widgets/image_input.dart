@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class ImageInput extends StatefulWidget {
-  const ImageInput({super.key, required this.onPickImage});
+  const ImageInput(
+      {super.key, this.onPickImage, this.onChooseImage, this.onTakePhoto});
 
-  final void Function(List<File> selectedImages) onPickImage;
+  final void Function(List<File> selectedImages)? onPickImage;
+  final void Function(File selectedImage)? onChooseImage;
+  final void Function(File takePhoto)? onTakePhoto;
 
   @override
   State<ImageInput> createState() => _ImageInputState();
@@ -14,83 +18,160 @@ class ImageInput extends StatefulWidget {
 class _ImageInputState extends State<ImageInput> {
   List<File> selectedImages = [];
   List<File> selectedVideos = [];
+  var selectedPhoto;
 
   final imagePicker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
+    //We find the size of the screen to better format the content
+    final screenWidth = MediaQuery.of(context).size.width;
+    var isSmallDevice = false;
+    if (screenWidth <= 350.0) isSmallDevice = true;
+
     return Column(
       children: [
         Container(
             decoration: BoxDecoration(
               border: Border.all(
-                width: 1,
                 color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
               ),
             ),
-            height: 50,
-            width: double.infinity,
+            height: isSmallDevice ? 100 : 50,
             alignment: Alignment.topLeft,
             child: Row(
               children: [
-                TextButton.icon(
-                  onPressed: _getImages,
-                  icon: const Icon(Icons.camera),
-                  label: const Text('Add Photos'),
-                ),
-                const Spacer(),
-                /*
-                TextButton.icon(
-                  onPressed: _getImages,
-                  icon: const Icon(Icons.video_camera_back),
-                  label: const Text('Add Videos'),
-                ),
-                */
+                if (widget.onPickImage != null)
+                  TextButton.icon(
+                    onPressed: _getImages,
+                    icon: const Icon(Icons.camera),
+                    label: const Text(
+                      'Choose Photos',
+                      softWrap: true,
+                    ),
+                  ),
+                if (isSmallDevice)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.onChooseImage != null)
+                        TextButton.icon(
+                          onPressed: _getImage,
+                          icon: const Icon(Icons.camera),
+                          label: const Text(
+                            'Choose Photo',
+                            softWrap: true,
+                          ),
+                        ),
+                      if (widget.onPickImage == null) Spacer(),
+                      if (widget.onTakePhoto != null)
+                        TextButton.icon(
+                          onPressed: _takePhoto,
+                          icon: const Icon(Icons.photo_camera),
+                          label: const Text(
+                            'Take Photo',
+                            softWrap: true,
+                          ),
+                        ),
+                    ],
+                  ),
+                if (widget.onChooseImage != null && !isSmallDevice)
+                  TextButton.icon(
+                    onPressed: _getImage,
+                    icon: const Icon(Icons.camera),
+                    label: const Text(
+                      'Choose Photo',
+                      softWrap: true,
+                    ),
+                  ),
+                if (widget.onPickImage == null) Spacer(),
+                if (widget.onTakePhoto != null && !isSmallDevice)
+                  TextButton.icon(
+                    onPressed: _takePhoto,
+                    icon: const Icon(Icons.photo_camera),
+                    label: const Text(
+                      'Take Photo',
+                      softWrap: true,
+                    ),
+                  ),
               ],
             )),
         const SizedBox(
           height: 20,
         ),
-        Container(
-          color: Theme.of(context).primaryColor,
-          height: 200,
-          width: double.infinity,
-          child: GridView.builder(
-              itemCount: selectedImages.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 3,
-                mainAxisSpacing: 3,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                return Stack(
-                  children: [
-                    Positioned(
-                      width: 300,
-                      height: 300,
-                      child: Image.file(
-                        File(selectedImages[index].path),
-                        fit: BoxFit.cover,
+        if ((widget.onChooseImage != null || widget.onTakePhoto != null) &&
+            selectedPhoto != null)
+          Container(
+            height: 300,
+            width: 300,
+            child: Stack(
+              children: [
+                Positioned(
+                  child: Image.file(
+                    File(selectedPhoto.path),
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                Positioned(
+                    top: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedPhoto = null;
+                        });
+                      },
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
                       ),
-                    ),
-                    Positioned(
-                        top: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedImages.removeAt(index);
-                            });
-                          },
-                          child: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                        ))
-                  ],
-                );
-              }),
-        ),
+                    ))
+              ],
+            ),
+          ),
+        if (widget.onPickImage != null)
+          Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            height: 150,
+            width: 300,
+            child: GridView.builder(
+                itemCount: selectedImages.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 3,
+                  mainAxisSpacing: 3,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Positioned(
+                        child: Image.file(
+                          File(selectedImages[index].path),
+                          fit: BoxFit.fill,
+                          alignment: Alignment.center,
+                          height: double.infinity,
+                          width: double.infinity,
+                        ),
+                      ),
+                      Positioned(
+                          top: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedImages.removeAt(index);
+                              });
+                            },
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ))
+                    ],
+                  );
+                }),
+          ),
       ],
     );
   }
@@ -120,10 +201,28 @@ class _ImageInputState extends State<ImageInput> {
       for (var i = 0; i < xfilePick.length; i++) {
         selectedImages.add(File(xfilePick[i].path));
       }
-
       setState(() {});
+      widget.onPickImage!(selectedImages);
+    }
+  }
 
-      widget.onPickImage(selectedImages);
+  Future _getImage() async {
+    final pickedImage = await imagePicker.pickImage(
+        source: ImageSource.gallery, requestFullMetadata: true);
+    if (pickedImage != null) {
+      setState(() {});
+      selectedPhoto = pickedImage;
+      widget.onChooseImage!(File(pickedImage.path));
+    }
+  }
+
+  Future _takePhoto() async {
+    final photo = await imagePicker.pickImage(
+        source: ImageSource.camera, requestFullMetadata: true);
+    if (photo != null) {
+      setState(() {});
+      selectedPhoto = photo;
+      widget.onTakePhoto!(File(photo.path));
     }
   }
 }

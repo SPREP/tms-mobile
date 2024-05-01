@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
-import 'package:macres/models/user_model.dart';
 import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/providers/user_provider.dart';
 import 'package:macres/screens/about_screen.dart';
-import 'package:macres/screens/help_screen.dart';
+import 'package:macres/screens/contact_screen.dart';
 import 'package:macres/screens/national_number_screen.dart';
 import 'package:macres/screens/settings_screen.dart';
 import 'package:macres/screens/tabs_screen.dart';
 import 'package:macres/screens/user/login_screen.dart';
 import 'package:macres/screens/user/profile_screen.dart';
 import 'package:macres/screens/user/signup_screen.dart';
-import 'package:macres/util/user_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,8 +23,6 @@ class MainDrawerWidget extends StatefulWidget {
 class _MainDrawerWidgetState extends State<MainDrawerWidget> {
   @override
   Widget build(BuildContext context) {
-    Future<UserModel> getUserData() => UserPreferences().getUser();
-
     Consumer<AuthProvider> authConsumer =
         Consumer<AuthProvider>(builder: (context, authProvider, child) {
       return Column(
@@ -61,20 +57,13 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
       child: Column(
         children: [
           DrawerHeader(
-            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).colorScheme.primaryContainer,
-                  Theme.of(context)
-                      .colorScheme
-                      .primaryContainer
-                      .withOpacity(0.8),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onPrimaryContainer
+                  .withOpacity(0.7),
             ),
+            padding: const EdgeInsets.all(20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -114,18 +103,9 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
                   width: 20,
                 ),
                 // Login/Logout buttons.
-                FutureBuilder(
-                  future:
-                      getUserData(), // Replace _yourFutureFunction with the actual function that returns a Future
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      // Show a loading indicator while waiting for the future to complete
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      // Show an error message if the future throws an error
-                      return Text('Error: ${snapshot.error}');
-                    } else if (snapshot.data?.token == null) {
-                      // Render the UI based on the data from the future
+                Consumer2<UserProvider, AuthProvider>(
+                  builder: (context, userProvider, authProvider, child) {
+                    if (authProvider.loggedInStatus != Status.LoggedIn) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -171,11 +151,14 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.home, size: 26),
+            leading: Icon(
+              Icons.home,
+              size: 26,
+            ),
             title: Text(
               'Home',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 18,
+                    fontSize: 17,
                   ),
             ),
             onTap: () => Navigator.of(context).pushReplacement(
@@ -187,18 +170,20 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.phone_outlined, size: 26),
+            leading: Icon(
+              Icons.phone_outlined,
+              size: 26,
+            ),
             title: Text(
               'National Numbers',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 18,
+                    fontSize: 17,
                   ),
             ),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => const NationalNumberScreen()),
+                MaterialPageRoute(builder: (context) => NationalNumberScreen()),
               );
             },
           ),
@@ -208,11 +193,14 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.settings, size: 26),
+            leading: Icon(
+              Icons.settings,
+              size: 26,
+            ),
             title: Text(
               'Settings',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 18,
+                    fontSize: 17,
                   ),
             ),
             onTap: () {
@@ -227,17 +215,20 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.help, size: 26),
+            leading: Icon(
+              Icons.help,
+              size: 26,
+            ),
             title: Text(
-              'Help',
+              'Contact',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 18,
+                    fontSize: 17,
                   ),
             ),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const HelpScreen()),
+                MaterialPageRoute(builder: (context) => const ContactScreen()),
               );
             },
           ),
@@ -246,11 +237,14 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               Icons.arrow_forward_ios,
               size: 15,
             ),
-            leading: Icon(Icons.info, size: 26),
+            leading: Icon(
+              Icons.info,
+              size: 26,
+            ),
             title: Text(
               'About',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 18,
+                    fontSize: 17,
                   ),
             ),
             onTap: () {

@@ -9,68 +9,71 @@ class EventWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double mWidth = MediaQuery.of(context).size.width * 0.8;
+    double mWidth = MediaQuery.of(context).size.width * 0.7;
 
-    return Column(
-      children: [
-        InkWell(
-          child: Card(
-            clipBehavior: Clip.antiAlias,
-            child: Row(
-              children: [
-                Container(
-                  color: event.getColor(),
-                  padding: const EdgeInsets.all(10),
-                  height: 105,
-                  child: const Text(''),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: mWidth,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        eventTypeLabel[event.type].toString(),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      if (event.name != null && event.name != "")
-                        Text("Name: ${event.name.toString()}"),
-                      if (event.time != null)
-                        Text("Time: ${event.time.toString()}"),
-                      if (event.date != null)
-                        Text("Date: ${event.date.toString()}"),
-                      if (event.magnitude != null && event.magnitude != 0.0)
-                        Text("Magnitude: ${event.magnitude.toString()}"),
-                      if (event.category != null && event.category != 0)
-                        Text("Category: ${event.category.toString()}"),
-                      if (event.location != null)
-                        Text("Location: ${event.location.toString()}"),
-                      if (event.evacuate != null)
-                        Text("Evacuation: ${event.evacuate}"),
-                      if (event.km != null)
-                        Text("Kilometer: ${event.km.toString()}"),
-                      if (event.depth != null)
-                        Text("Depth: ${event.depth.toString()}"),
-                    ],
-                  ),
-                ),
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 15,
-                ),
-              ],
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Color.fromARGB(255, 222, 223, 223)),
+      ),
+      margin: EdgeInsets.only(top: 3.0, bottom: 3.0),
+      child: InkWell(
+        child: Row(
+          children: [
+            Container(
+              width: 50.0,
+              height: 120.0,
+              child: event.getIcon(
+                  40.0,
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : const Color.fromARGB(255, 86, 85, 85)),
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
             ),
-          ),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => EventDetailsScreen(eventModel: event),
+            Container(
+              padding: const EdgeInsets.all(10),
+              width: mWidth,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    eventTypeLabel[event.type].toString(),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  if (event.name != null && event.name != "")
+                    Text("Name: ${event.name.toString()}"),
+                  if (event.time != null)
+                    Text("Time: ${event.time.toString()}"),
+                  if (event.date != null)
+                    Text("Date: ${event.date.toString()}"),
+                  if (event.magnitude != null && event.magnitude != 0.0)
+                    Text("Magnitude: ${event.magnitude.toString()}"),
+                  if (event.category != null && event.category != 0)
+                    Text("Category: ${event.category.toString()}"),
+                  if (event.location != '')
+                    Text("Location: ${event.location.toString()}"),
+                  if (event.evacuate != null)
+                    Text("Evacuation: ${event.evacuate}"),
+                  if (event.km != null)
+                    Text("Kilometer: ${event.km.toString()}"),
+                  if (event.depth != null)
+                    Text("Depth: ${event.depth.toString()}"),
+                ],
               ),
-            );
-          },
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 15,
+            ),
+          ],
         ),
-      ],
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => EventDetailsScreen(eventModel: event),
+            ),
+          );
+        },
+      ),
     );
   }
 }

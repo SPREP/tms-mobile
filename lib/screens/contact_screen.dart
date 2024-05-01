@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HelpScreen extends StatelessWidget {
-  const HelpScreen({super.key});
+class ContactScreen extends StatelessWidget {
+  const ContactScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Get Help'),
+        title: const Text('Contact Info'),
       ),
       body: const Padding(
         padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
@@ -31,7 +31,7 @@ class HelpScreen extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Text('Ship Trip Report: 7400093'),
+          Text('Ship Trip Report: 7400063'),
           SizedBox(
             height: 10,
           ),

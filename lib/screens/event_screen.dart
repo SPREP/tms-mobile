@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:macres/config/app_config.dart';
 import 'package:macres/models/event_model.dart';
-import 'package:macres/models/settings_model.dart';
 import 'package:macres/widgets/event_widget.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({super.key});
@@ -19,17 +19,25 @@ class _EventScreen extends State<EventScreen> {
 
   @override
   void initState() {
-    super.initState();
+    _clearCounter();
     setState(() {
       isLoading = true;
       getEvents();
     });
+    super.initState();
+  }
+
+  void _clearCounter() async {
+    //save values
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('total_new_events', 0);
+    setState(() {});
   }
 
   getEvents() async {
-    var username = AppConfig.userName;
-    var password = AppConfig.password;
-    var host = AppConfig.baseUrl;
+    String username = AppConfig.userName;
+    String password = AppConfig.password;
+    String host = AppConfig.baseUrl;
     String endpoint = '/event?_format=json';
 
     final basicAuth =
@@ -83,7 +91,11 @@ class _EventScreen extends State<EventScreen> {
             lon: lon,
             category: int.parse(item.value['field_category'] ?? '0'),
             name: item.value['field_name'] ?? '',
-            feel: item.value['feel'] ?? [],
+            feel: item.value['feel'] != null
+                ? Feel.fromJson(item.value['feel'])
+                : null,
+            location: item.value['field_region'] ?? '',
+            body: item.value['body'] ?? '',
           ));
         }
 
@@ -95,12 +107,14 @@ class _EventScreen extends State<EventScreen> {
         return loadedItems;
       }
     } catch (e) {
+      /*
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       const snackBar = SnackBar(
         content: Text('Unable to load events.'),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      */
       print(e);
     }
   }
@@ -118,7 +132,7 @@ class _EventScreen extends State<EventScreen> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.all(0.0),
         child: isLoading
             ? const Center(
                 child: CircularProgressIndicator(),
