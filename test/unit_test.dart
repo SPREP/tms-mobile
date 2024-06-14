@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:macres/main.dart';
+import 'package:macres/models/weather_model.dart';
 
 void main() {
-  test('run unit test', () {
-    expect(true, true);
+  test('Test fahrenheight conversion function', () {
+    WeatherModel wm = WeatherModel();
+    expect(wm.toFahrenheight('7'), '45');
   });
 }
