@@ -4,6 +4,7 @@ class AppConfig {
   static const String liveBaseURL = "$prodURL/api/v1";
 
   static const String baseUrl = liveBaseURL;
+  static const String activeURL = prodURL;
 
   //user endpoints
   static const String loginEndpoint = "$baseUrl/user/login?_format=json";
