@@ -186,10 +186,12 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                 urlTemplate:
                                     'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                                 userAgentPackageName: 'com.example.app',
+                                /*
                                 tileBuilder: (Theme.of(context).brightness ==
                                         Brightness.dark)
                                     ? _darkModeTileBuilder
                                     : null,
+                                 */
                               ),
                               /*
                               CurrentLocationLayer(
