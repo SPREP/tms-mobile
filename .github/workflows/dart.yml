@@ -29,7 +29,7 @@ jobs:
         run: flutter pub get
 
       - name: Copy config file
-        run: cp config/app_config.dart-default config/app_config.dart
+        run: cp lib/config/app_config.dart-default lib/config/app_config.dart
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
