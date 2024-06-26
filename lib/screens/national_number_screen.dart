@@ -81,7 +81,7 @@ class _NationalNumberScreenState extends State<NationalNumberScreen> {
                 });
               },
               child: Icon(
-                visibility ? Icons.visibility : Icons.visibility_off,
+                visibility ? Icons.search : Icons.search_off_rounded,
                 color: Colors.white,
               ),
             ),

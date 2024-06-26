@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:humanitarian_icons/humanitarian_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:macres/main.dart';
 import 'package:macres/models/settings_model.dart';
@@ -87,7 +88,7 @@ class _TabsScreenState extends State<TabsScreen> {
                 });
               },
               child: Icon(
-                visibility ? Icons.visibility : Icons.visibility_off,
+                visibility ? Icons.search : Icons.search_off_rounded,
                 color: Colors.white,
               ),
             ),
@@ -107,7 +108,7 @@ class _TabsScreenState extends State<TabsScreen> {
               });
             },
             child: Icon(
-              visibility ? Icons.visibility : Icons.visibility_off,
+              visibility ? Icons.search : Icons.search_off_rounded,
               color: Colors.white,
             ),
           ),
