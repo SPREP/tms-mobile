@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macres/config/app_config.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -19,6 +20,10 @@ class AboutScreen extends StatelessWidget {
               Text(
                 "About",
                 style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                AppConfig.appName,
+                style: TextStyle(fontSize: 20.0),
               ),
               Text(
                 'This App is developed and maintained by the Tonga Meteorological Service.',
