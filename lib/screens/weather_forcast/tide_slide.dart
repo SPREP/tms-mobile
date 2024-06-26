@@ -365,7 +365,7 @@ class _TideSlideState extends State<TideSlide> {
                   ),
                   Text('Sea temperature '),
                   Spacer(),
-                  Text('${widget.seaData.temp.toString()} degC'),
+                  Text('${widget.seaData.temp.toString()} \u00B0C'),
                 ],
               ),
               SizedBox(
