@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -108,7 +107,7 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
           color: Colors.blue.withOpacity(0.9),
           borderStrokeWidth: 4.0,
           borderColor: Colors.white,
-          radius: 20 //radius
+          radius: 30 //radius
           )
     ]);
   }
@@ -117,15 +116,15 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
     return MarkerLayer(
       markers: [
         Marker(
-            width: 40.0,
-            height: 30.0,
+            width: 50.0,
+            height: 50.0,
             point: LatLng(
               widget.userLocation.currentPosition!.latitude,
               widget.userLocation.currentPosition!.longitude,
             ),
             child: Container(
               child: Text(
-                'You here',
+                'You Are Here',
                 style: TextStyle(color: Colors.white, height: 1.0),
                 softWrap: true,
                 textAlign: TextAlign.center,
@@ -278,7 +277,9 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                       onPressed: () {
                                         widget.userLocation
                                             .getCurrentPosition();
-                                        if (widget.userLocation.currentPosition != null) {
+                                        if (widget
+                                                .userLocation.currentPosition !=
+                                            null) {
                                           drawUserLocationCircle();
                                           labelUserLocationCircle();
                                           _mapController.move(
@@ -290,7 +291,6 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                               ),
                                               13);
                                         }
-
                                       }),
                                 ),
                               ]),
