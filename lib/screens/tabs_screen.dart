@@ -346,7 +346,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
       if (_selectedPageIndex == 2) {
         activePage = EvacuationMapScreen();
-        activePageTitle = 'Evacuation Map';
+        activePageTitle = 'Tsunami Evacuation Map';
       }
 
       if (_selectedPageIndex == 4) {
