@@ -1,4 +1,5 @@
 class AppConfig {
+  static const String appName = "Tonga Joint Early Warning and Response";
   static const String prodURL = "http://app.met.gov.to";
 
   static const String liveBaseURL = "$prodURL/api/v1";
