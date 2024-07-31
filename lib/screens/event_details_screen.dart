@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:humanitarian_icons/humanitarian_icons.dart';
 import 'package:macres/models/event_model.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -11,6 +10,7 @@ import 'package:macres/screens/forms/request_assistance_form.dart';
 import 'package:macres/screens/user/islogin_screen.dart';
 import 'package:macres/widgets/big_map_widget.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   const EventDetailsScreen({super.key, required this.eventModel});
@@ -53,6 +53,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -158,7 +160,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         width: 10.0,
                       ),
                       Text(
-                        "${eventTypeLabel[widget.eventModel.type]} ${widget.eventModel.name}",
+                        "${widget.eventModel.getLabel(context)}",
                         style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -271,7 +273,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                       eventId: widget.eventModel.id)),
                             );
                           },
-                          label: const Text('Did you feel it?')),
+                          label: Text('${localizations.btnDidyoufeelit}?')),
                     ),
                   const SizedBox(height: 20),
                   SizedBox(
@@ -291,7 +293,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                               ),
                             );
                           },
-                          label: const Text('Create Impact Report'))),
+                          label:
+                              Text('${localizations.btnCreateimpactreport}'))),
                   const SizedBox(height: 20),
                   SizedBox(
                       width: 300.0,
@@ -310,7 +313,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                               ),
                             );
                           },
-                          label: const Text('Request Assistance'))),
+                          label:
+                              Text('${localizations.btnRequestassistance}'))),
                 ],
               ),
             ),
@@ -384,7 +388,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
   BarTouchData get barTouchData => BarTouchData(
         enabled: false,
         touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.transparent,
           tooltipPadding: EdgeInsets.zero,
           tooltipMargin: 8,
           getTooltipItem: (
@@ -395,9 +398,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           ) {
             return BarTooltipItem(
               rod.toY.round().toString(),
-              const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              TextStyle(
+                  fontWeight: FontWeight.bold, backgroundColor: Colors.white),
             );
           },
         ),

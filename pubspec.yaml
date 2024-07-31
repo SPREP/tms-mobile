@@ -45,7 +45,7 @@ dependencies:
   intl: any
   humanitarian_icons: ^1.0.2
   url_launcher: ^6.1.11
-  google_fonts: ^5.1.0
+  google_fonts: ^6.2.1
   weather_icons: ^3.0.0
   flutter_map: ^6.1.0
   simple_ripple_animation: ^0.0.7
@@ -53,20 +53,20 @@ dependencies:
   http: ^1.1.0
   path: ^1.8.3
   geolocator: ^10.0.0
-  firebase_core: 2.27.0
-  flutter_tts: ^3.8.1
-  firebase_messaging: ^14.7.4
-  email_validator: ^2.1.17
+  firebase_core: ^3.2.0
+  flutter_tts: ^4.0.2
+  firebase_messaging: ^15.0.3
+  email_validator: ^3.0.0
   another_flushbar: ^1.12.30
   flutter_map_supercluster: ^5.0.0-dev.1
   flutter_phone_direct_caller: ^2.1.1
   maps_launcher: ^2.2.1
   cached_network_image: ^3.3.1
-  fl_chart: ^0.66.2
+  fl_chart: ^0.68.0
   flare_flutter: ^3.0.2
   async: ^2.11.0
-  native_exif: ^0.5.0
-  location_picker_flutter_map: ^2.1.0
+  native_exif: ^0.6.0
+  location_picker_flutter_map: ^3.0.1
   vibration: ^1.8.4
 
 

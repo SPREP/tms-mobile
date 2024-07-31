@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:macres/widgets/weather_property_widget.dart';
 import 'package:weather_icons/weather_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ThreeHoursSlide extends StatefulWidget {
   const ThreeHoursSlide({super.key, required this.currentData});
@@ -14,15 +15,19 @@ class ThreeHoursSlide extends StatefulWidget {
 class _ThreeHoursSlideState extends State<ThreeHoursSlide> {
   @override
   Widget build(BuildContext context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
     return Column(
       children: [
-        const Row(
+        Row(
           children: [
             SizedBox(
               width: 30,
             ),
             Spacer(),
-            Text('3-HOURS FORECAST'),
+            Text(
+              localizations.threeHoursTitle,
+            ),
             Spacer(),
             SizedBox(
               width: 30,
@@ -43,7 +48,7 @@ class _ThreeHoursSlideState extends State<ThreeHoursSlide> {
           Column(
             children: [
               Text(
-                '${widget.currentData.caption}',
+                '${widget.currentData.getIconDefinition(context)}',
                 style: const TextStyle(
                   fontSize: 16,
                 ),
@@ -65,7 +70,7 @@ class _ThreeHoursSlideState extends State<ThreeHoursSlide> {
             children: [
               Spacer(),
               WeatherProperty(
-                title: 'Visibility',
+                title: localizations.weatherCurrentConditionVisibility,
                 value: widget.currentData.visibility,
                 unit: 'm',
                 icon: Icon(
@@ -76,7 +81,7 @@ class _ThreeHoursSlideState extends State<ThreeHoursSlide> {
               ),
               Spacer(),
               WeatherProperty(
-                title: 'Wind Direction',
+                title: localizations.weatherCurrentConditionWindDirection,
                 value: widget.currentData.windDirection.toString(),
                 unit: '',
                 icon: Icon(
@@ -87,7 +92,7 @@ class _ThreeHoursSlideState extends State<ThreeHoursSlide> {
               ),
               Spacer(),
               WeatherProperty(
-                title: 'Wind Speed',
+                title: localizations.weatherCurrentConditionWindSpeed,
                 value: widget.currentData.windSpeed.toString(),
                 unit: 'km/h',
                 icon: Icon(

@@ -1,7 +1,7 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:macres/widgets/weather_property_widget.dart';
 import 'package:weather_icons/weather_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TwentyFourHoursSlide extends StatefulWidget {
   const TwentyFourHoursSlide({super.key, required this.currentData});
@@ -20,15 +20,17 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
     var isSmallDevice = false;
     if (screenWidth <= 350.0) isSmallDevice = true;
 
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
     return Column(
       children: [
-        const Row(
+        Row(
           children: [
             SizedBox(
               width: 30,
             ),
             Spacer(),
-            Text('24-HOURS FORECAST'),
+            Text(localizations.twelveHoursTitle),
             Spacer(),
             SizedBox(
               width: 30,
@@ -40,15 +42,15 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
         ),
         Padding(
           padding: EdgeInsets.only(left: 30, right: 30),
-          child: Text(widget.currentData.warning.toString()),
+          //  child: Text(widget.currentData.warning.toString()),
         ),
         const SizedBox(
-          height: 20,
+          height: 10,
         ),
         Column(
           children: [
             Text(
-              '${widget.currentData.caption}',
+              '${widget.currentData.getIconDefinition(context)}',
               style: const TextStyle(
                 fontSize: 16,
               ),
@@ -66,8 +68,10 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
         if (!isSmallDevice)
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             WeatherProperty(
-              title: 'Max: ${widget.currentData.maxTemp}\u00B0',
-              value: 'Min: ${widget.currentData.minTemp}\u00B0',
+              title:
+                  '${localizations.max}: ${widget.currentData.maxTemp}\u00B0',
+              value:
+                  '${localizations.min}: ${widget.currentData.minTemp}\u00B0',
               unit: '',
               icon: Icon(
                 WeatherIcons.thermometer,
@@ -76,7 +80,7 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
               ),
             ),
             WeatherProperty(
-              title: 'Wind Direction',
+              title: localizations.weatherCurrentConditionWindDirection,
               value: widget.currentData.windDirection.toString(),
               unit: '',
               icon: Icon(
@@ -86,7 +90,7 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
               ),
             ),
             WeatherProperty(
-              title: 'Wind Speed',
+              title: localizations.weatherCurrentConditionWindSpeed,
               value: widget.currentData.windSpeed.toString(),
               unit: 'km/h',
               icon: Icon(
@@ -99,8 +103,10 @@ class _TwentyFourHoursSlideState extends State<TwentyFourHoursSlide> {
         if (isSmallDevice)
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             WeatherProperty(
-              title: 'Max: ${widget.currentData.maxTemp}\u00B0',
-              value: 'Min: ${widget.currentData.minTemp}\u00B0',
+              title:
+                  '${localizations.max}: ${widget.currentData.maxTemp}\u00B0',
+              value:
+                  '${localizations.min}: ${widget.currentData.minTemp}\u00B0',
               unit: '',
               icon: Icon(
                 WeatherIcons.thermometer,

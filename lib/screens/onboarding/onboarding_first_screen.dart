@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macres/config/app_config.dart';
 import 'package:macres/providers/locale_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -64,7 +65,7 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                   children: [
                     Text(
                       // localizations.onBoardingSubtitle,
-                      "Tonga Joint Early Warning and Response",
+                      AppConfig.appName,
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

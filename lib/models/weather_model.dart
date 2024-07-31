@@ -1,6 +1,7 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WeatherModel {
   num? iconId;
@@ -19,6 +20,7 @@ class WeatherModel {
   String? observedDate;
   String? windDirectionDegree;
   String? solarRadiation;
+  String? station;
 
   String dayOrNight = 'day';
 
@@ -38,7 +40,8 @@ class WeatherModel {
       this.day,
       this.observedDate,
       this.windDirectionDegree,
-      this.solarRadiation}) {
+      this.solarRadiation,
+      this.station}) {
     isDayOrNight();
   }
 
@@ -124,28 +127,30 @@ class WeatherModel {
     );
   }
 
-  String getIconDefinition() {
+  String getIconDefinition(context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
     switch (iconId) {
       case 1:
-        return 'Fine Weather';
+        return localizations.weatherConditionfineweather;
       case 2:
-        return 'Partly Cloudy';
+        return localizations.weatherConditionpartlycloudy;
       case 3:
-        return 'Cloudy';
+        return localizations.weatherConditioncloudy;
       case 4:
-        return 'Cloudy periods with showers';
+        return localizations.weatherConditioncloudyperiodswithshowers;
       case 5:
-        return 'Light Rain';
+        return localizations.weatherConditionlightrain;
       case 6:
-        return 'Moderate Rain';
+        return localizations.weatherConditionmoderaterain;
       case 7:
-        return 'Heavy Rain';
+        return localizations.weatherConditionheadyrain;
       case 8:
-        return 'Partly cloudy with thunderstorm';
+        return localizations.weatherConditionpartycloudywiththunderstorm;
       case 9:
-        return 'Thunderstorm';
+        return localizations.weatherConditionthunderstorm;
       case 10:
-        return 'Squally Showers';
+        return localizations.weatherConditioncloudyperiodswithshowers;
     }
     return '';
   }
@@ -160,6 +165,28 @@ class TenDaysForecastModel extends WeatherModel {
     super.location,
   }) {
     dayOrNight = 'day';
+  }
+
+  String getDay(context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
+    switch (super.day) {
+      case 'Monday':
+        return localizations.dayMonday;
+      case 'Tuesday':
+        return localizations.dayTuesday;
+      case 'Wednesday':
+        return localizations.dayWednesday;
+      case 'Thursday':
+        return localizations.dayThursday;
+      case 'Friday':
+        return localizations.dayFriday;
+      case 'Saturday':
+        return localizations.daySaturday;
+      case 'Sunday':
+        return localizations.daySunday;
+    }
+    return "Monday";
   }
 }
 
@@ -177,7 +204,8 @@ class CurrentWeatherModel extends WeatherModel {
       super.maxTemp,
       super.observedDate,
       super.windDirectionDegree,
-      super.solarRadiation}) {
+      super.solarRadiation,
+      super.station}) {
     super.isDayOrNight();
   }
 }
