@@ -18,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_icons/weather_icons.dart';
 import 'package:macres/models/settings_model.dart';
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 
 class WeatherForcastScreen extends StatefulWidget {
@@ -391,7 +392,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                 visibility: item[7],
                 observedDate: item[8],
                 windDirectionDegree: item[9],
-                solarRadiation: item[10]);
+                solarRadiation: item[10],
+                station: item[11]);
 
             currentWeatherData.add(dataModel);
             if (convertToLocation(item[0]) == selectedLocation) {
@@ -450,6 +452,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : Consumer<WeatherLocationProvider>(
@@ -493,7 +497,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                         Container(
                           padding: EdgeInsets.all(20.0),
                           child: Column(children: [
-                            Text('CURRENT WEATHER CONDITIONS'),
+                            Text(
+                                '${localizations.weatherCurrentConditionTitle}'),
                             SizedBox(
                               height: 20.0,
                             ),
@@ -554,7 +559,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                       ]),
                                       Text(
                                         currentData
-                                            .getIconDefinition()
+                                            .getIconDefinition(context)
                                             .toString(),
                                         style: TextStyle(fontSize: 19),
                                       ),
@@ -577,7 +582,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             WeatherProperty(
-                              title: 'Humidity',
+                              title:
+                                  '${localizations.weatherCurrentConditionHumidity}',
                               value: currentData.humidity,
                               unit: '%',
                               icon: Icon(
@@ -587,7 +593,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                               ),
                             ),
                             WeatherProperty(
-                              title: 'Pressure',
+                              title:
+                                  '${localizations.weatherCurrentConditionPressure}',
                               value: currentData.pressure,
                               unit: 'mb',
                               icon: Icon(
@@ -597,7 +604,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                               ),
                             ),
                             WeatherProperty(
-                                title: 'Wind Speed',
+                                title:
+                                    '${localizations.weatherCurrentConditionWindSpeed}',
                                 value: currentData.windSpeed,
                                 unit: 'km/h',
                                 icon: Icon(
@@ -613,7 +621,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             WeatherProperty(
-                              title: 'Wind Direction',
+                              title:
+                                  '${localizations.weatherCurrentConditionWindDirection}',
                               value: currentData.windDirection,
                               unit: '',
                               icon: Container(
@@ -627,7 +636,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                               ),
                             ),
                             WeatherProperty(
-                              title: 'Visibility',
+                              title:
+                                  '${localizations.weatherCurrentConditionVisibility}',
                               value: currentData.visibility,
                               unit: 'km',
                               icon: Icon(
@@ -637,7 +647,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                               ),
                             ),
                             WeatherProperty(
-                              title: 'Solar Radiation',
+                              title:
+                                  '${localizations.weatherCurrentConditionSolarRadiation}',
                               value: currentData.solarRadiation,
                               unit: 'W/m\u00b2',
                               icon: Icon(
@@ -657,7 +668,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                'Current conditions at ${currentData.getObservedTime()}',
+                                '${localizations.weatherCurrentConditionFooter} ${currentData.station} ${currentData.getObservedTime()}',
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.white70,
@@ -727,7 +738,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                   // 10 Days widget
                   const SizedBox(height: 10),
                   Container(
-                    height: 600,
+                    height: 650,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,

@@ -1,8 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:macres/screens/weather_forcast/weather_forcast_screen.dart';
+import 'package:path/path.dart';
 import 'package:weather_icons/weather_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum EventType {
   earthquake,
@@ -20,17 +21,6 @@ extension EventTypeExtension on EventType {
     return EventType.values.firstWhereOrNull((e) => e.name == name);
   }
 }
-
-const eventTypeLabel = {
-  EventType.earthquake: 'Earthquake',
-  EventType.cyclone: 'Cyclone',
-  EventType.tornado: 'Tornado',
-  EventType.volcano: 'Volcano Eruption',
-  EventType.tsunami: 'TSunami',
-  EventType.fire: 'Fire',
-  EventType.flood: 'Flood',
-  EventType.bushfile: 'Bush Fire',
-};
 
 class EventModel {
   String? body;
@@ -67,6 +57,31 @@ class EventModel {
       this.id,
       this.name,
       this.feel});
+
+  String getLabel(context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
+    switch (type) {
+      case EventType.bushfile:
+        return localizations.eventBushFire;
+      case EventType.earthquake:
+        return localizations.eventEarthquake;
+      case EventType.cyclone:
+        return localizations.eventCyclone;
+      case EventType.fire:
+        return localizations.eventFire;
+      case EventType.flood:
+        return localizations.eventFlood;
+      case EventType.tornado:
+        return localizations.eventTornado;
+      case EventType.volcano:
+        return localizations.eventVolcano;
+      case EventType.tsunami:
+        return localizations.eventTsunami;
+      default:
+        return 'Unknown';
+    }
+  }
 
   Icon getIcon(double size, Color colour) {
     switch (type) {

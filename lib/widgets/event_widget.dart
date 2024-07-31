@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:macres/models/event_model.dart';
-import 'package:macres/models/settings_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:macres/screens/event_details_screen.dart';
 
 class EventWidget extends StatelessWidget {
@@ -10,6 +10,7 @@ class EventWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double mWidth = MediaQuery.of(context).size.width * 0.7;
+    AppLocalizations localizations = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -36,27 +37,30 @@ class EventWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    eventTypeLabel[event.type].toString(),
+                    event.getLabel(context),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   if (event.name != null && event.name != "")
-                    Text("Name: ${event.name.toString()}"),
+                    Text("${localizations.name}: ${event.name.toString()}"),
                   if (event.time != null)
-                    Text("Time: ${event.time.toString()}"),
+                    Text("${localizations.time}: ${event.time.toString()}"),
                   if (event.date != null)
-                    Text("Date: ${event.date.toString()}"),
+                    Text("${localizations.date}: ${event.date.toString()}"),
                   if (event.magnitude != null && event.magnitude != 0.0)
-                    Text("Magnitude: ${event.magnitude.toString()}"),
+                    Text(
+                        "${localizations.magnitude}: ${event.magnitude.toString()}"),
                   if (event.category != null && event.category != 0)
-                    Text("Category: ${event.category.toString()}"),
+                    Text(
+                        "${localizations.category}: ${event.category.toString()}"),
                   if (event.location != '')
-                    Text("Location: ${event.location.toString()}"),
+                    Text(
+                        "${localizations.location}: ${event.location.toString()}"),
                   if (event.evacuate != null)
-                    Text("Evacuation: ${event.evacuate}"),
+                    Text("${localizations.evacuation}: ${event.evacuate}"),
                   if (event.km != null)
-                    Text("Kilometer: ${event.km.toString()}"),
+                    Text("${localizations.kilometer}: ${event.km.toString()}"),
                   if (event.depth != null)
-                    Text("Depth: ${event.depth.toString()}"),
+                    Text("${localizations.depth}: ${event.depth.toString()}"),
                 ],
               ),
             ),

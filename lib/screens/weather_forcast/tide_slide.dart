@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:macres/models/tide_model.dart';
 import 'package:weather_icons/weather_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TideSlide extends StatefulWidget {
   TideSlide({super.key, required this.seaData, required this.tideData});
@@ -219,9 +218,11 @@ class _TideSlideState extends State<TideSlide> {
     TideModel high = TideModel();
     TideModel low = TideModel();
 
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
     //Use for label if the time is in tomorrow
-    String high_tomorrow_morning = 'today';
-    String low_tomorrow_morning = 'today';
+    String high_tomorrow_morning = localizations.today;
+    String low_tomorrow_morning = localizations.today;
 
     for (TideModel item in widget.tideData) {
       //compare current time to the time we got from API
@@ -233,7 +234,7 @@ class _TideSlideState extends State<TideSlide> {
           high.id == null) {
         high = item;
         if (!DateUtils.isSameDay(dt1, dt2)) {
-          high_tomorrow_morning = 'tomorrow';
+          high_tomorrow_morning = localizations.tomorrow;
         }
         continue;
       }
@@ -242,7 +243,7 @@ class _TideSlideState extends State<TideSlide> {
           low.id == null) {
         low = item;
         if (!DateUtils.isSameDay(dt1, dt2)) {
-          low_tomorrow_morning = 'tomorrow';
+          low_tomorrow_morning = localizations.tomorrow;
         }
         continue;
       }
@@ -258,7 +259,7 @@ class _TideSlideState extends State<TideSlide> {
                 width: 30,
               ),
               Spacer(),
-              Text('TIDE INFORMATION'),
+              Text(localizations.tideTitle),
               Spacer(),
               SizedBox(
                 width: 30,
@@ -291,7 +292,7 @@ class _TideSlideState extends State<TideSlide> {
               ),
               Expanded(
                 child: Text(
-                    'Next HIGH TIDE of ${high.level} is at ${high.time} ${high_tomorrow_morning}.'),
+                    '${localizations.tideNextHighTide} ${high.level} ${localizations.at} ${high.time} ${high_tomorrow_morning}.'),
               ),
             ]),
           const SizedBox(height: 20.0),
@@ -319,7 +320,7 @@ class _TideSlideState extends State<TideSlide> {
                 ),
                 Expanded(
                   child: Text(
-                      'Next LOW TIDE of ${low.level} is at ${low.time} ${low_tomorrow_morning}.'),
+                      '${localizations.tideNextLowTide} ${low.level} ${localizations.at} ${low.time} ${low_tomorrow_morning}.'),
                 ),
               ],
             ),
@@ -335,7 +336,7 @@ class _TideSlideState extends State<TideSlide> {
                 width: 30,
               ),
               Spacer(),
-              Text('SEA INFORMATION'),
+              Text('${localizations.seaTitle}'),
               Spacer(),
               SizedBox(
                 width: 30,
@@ -363,7 +364,7 @@ class _TideSlideState extends State<TideSlide> {
                   SizedBox(
                     width: 5,
                   ),
-                  Text('Sea temperature '),
+                  Text('${localizations.seaTemperature}'),
                   Spacer(),
                   Text('${widget.seaData.temp.toString()} \u00B0C'),
                 ],
@@ -381,7 +382,7 @@ class _TideSlideState extends State<TideSlide> {
                   SizedBox(
                     width: 5,
                   ),
-                  Text('Sea level '),
+                  Text('${localizations.seaLevel}'),
                   Spacer(),
                   Text('${widget.seaData.level.toString()} mm'),
                 ],
@@ -393,7 +394,7 @@ class _TideSlideState extends State<TideSlide> {
                 children: [
                   Spacer(),
                   Text(
-                    'Current condition at ${widget.seaData.getObservedTime()}',
+                    '${localizations.seaFooter} ${widget.seaData.getObservedTime()}',
                     style: TextStyle(
                       color: Color.fromARGB(255, 219, 218, 218),
                       fontSize: 12,

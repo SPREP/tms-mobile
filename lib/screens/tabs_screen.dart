@@ -452,19 +452,22 @@ class _TabsScreenState extends State<TabsScreen> {
 
   void openEventReportOverlay() {
     showModalBottomSheet(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        isScrollControlled: true,
-        isDismissible: true,
-        context: context,
-        elevation: 10.0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
-          ),
-          side: BorderSide(color: Colors.white, width: 1.0),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      isScrollControlled: true,
+      isDismissible: true,
+      context: context,
+      elevation: 10.0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
         ),
-        clipBehavior: Clip.hardEdge,
-        builder: (context) => DraggableScrollableSheet(
-            expand: false, builder: (_, controller) => const ReportScreen()));
+        side: BorderSide(color: Colors.white, width: 1.0),
+      ),
+      clipBehavior: Clip.hardEdge,
+      builder: (BuildContext context) => DraggableScrollableSheet(
+        expand: false,
+        builder: (_, controller) => const ReportScreen(),
+      ),
+    );
   }
 }

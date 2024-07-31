@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TenDaysSlide extends StatefulWidget {
   const TenDaysSlide({super.key, required this.currentData});
@@ -12,15 +13,17 @@ class TenDaysSlide extends StatefulWidget {
 class _TenDaysSlideState extends State<TenDaysSlide> {
   @override
   Widget build(BuildContext context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
     return Column(
       children: [
-        const Row(
+        Row(
           children: [
             SizedBox(
               width: 30,
             ),
             Spacer(),
-            Text('10-DAYS FORECAST'),
+            Text(localizations.tenDaysTitle),
             Spacer(),
             SizedBox(
               width: 30,
@@ -46,12 +49,12 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      item.day.toString(),
+                      item.getDay(context),
                       style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                     Text(
-                      item.getIconDefinition(),
+                      item.getIconDefinition(context),
                       style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.normal),
                     ),
