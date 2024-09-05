@@ -4,6 +4,7 @@ import 'package:macres/screens/event_report_screen.dart';
 import 'package:macres/screens/forms/feel_earthquake_form.dart';
 import 'package:macres/screens/national_number_screen.dart';
 import 'package:macres/screens/tk_front_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReportScreen extends StatefulWidget {
   const ReportScreen({super.key});
@@ -13,8 +14,12 @@ class ReportScreen extends StatefulWidget {
 }
 
 class _ReportScreenState extends State<ReportScreen> {
+  late AppLocalizations localizations;
+
   @override
   Widget build(BuildContext context) {
+    this.localizations = AppLocalizations.of(context)!;
+
     return Material(
       child: SingleChildScrollView(
         child: Container(
@@ -96,7 +101,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       height: 5.0,
                     ),
                     Text(
-                      'Event Report',
+                      this.localizations.eventReport,
                       style: TextStyle(fontSize: fontSize),
                     ),
                   ]),
@@ -135,7 +140,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       height: 5.0,
                     ),
                     Text(
-                      'Earthquake Felt',
+                      this.localizations.earthquakeFelt,
                       style: TextStyle(fontSize: fontSize),
                     ),
                   ]),
@@ -150,7 +155,7 @@ class _ReportScreenState extends State<ReportScreen> {
           const SizedBox(
             height: 20.0,
           ),
-          const Text('Other places'),
+          Text(this.localizations.otherPlaces),
           const SizedBox(
             height: 20,
           ),
@@ -237,7 +242,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       height: 5.0,
                     ),
                     Text(
-                      'National Number',
+                      this.localizations.nationalNumber,
                       style: TextStyle(fontSize: fontSize),
                     ),
                   ]),
@@ -273,7 +278,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       height: 5.0,
                     ),
                     Text(
-                      'Traditional Knowledge',
+                      this.localizations.traditionalKnowledge,
                       style: TextStyle(fontSize: fontSize),
                     ),
                   ]),

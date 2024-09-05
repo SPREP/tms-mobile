@@ -95,6 +95,31 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> delete() async {
+    Future<UserModel> getUser() => UserPreferences().getUser();
+    final user = await getUser();
+
+    //Get CSRF token
+    final csrfToken = await getCsrfToken();
+
+    Response response = await post(
+      Uri.parse(AppConfig.deleteEndpoint),
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': user.token.toString(),
+        'X-CSRF-Token': csrfToken,
+      },
+    );
+
+    if (response.statusCode == 201) {
+      _loggedInStatus = Status.LoggedOut;
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future getCsrfToken() async {
     Future<UserModel> getUser() => UserPreferences().getUser();
     final user = await getUser();

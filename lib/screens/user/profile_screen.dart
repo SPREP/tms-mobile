@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/providers/user_provider.dart';
+import 'package:macres/screens/user/account_deletion_confirm_screen.dart';
 import 'package:macres/util/get_image_url.dart';
 import 'package:macres/util/upload_file.dart';
 import 'package:provider/provider.dart';
@@ -143,6 +144,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                   ),
                   SizedBox(height: 5.0),
+                  SizedBox(
+                    height: 45,
+                    width: 200,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AccountDeletion(),
+                          ),
+                        );
+                      },
+                      child: Text("Delete my account"),
+                    ),
+                  ),
                 ],
               ),
             ),

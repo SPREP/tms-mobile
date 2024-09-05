@@ -226,11 +226,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     Column(
                       children: [
                         Text(
-                          'Reported from Community',
+                          '${localizations.eventReportFromCommunity}',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'Click on the button below [Did you feel it?] to report to us.',
+                          '${localizations.eventReportFromCommunityInfo}',
                           style: TextStyle(fontSize: 12.0),
                         ),
                         SizedBox(

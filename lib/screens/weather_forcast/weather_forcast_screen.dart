@@ -413,7 +413,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
               currentTemp: item[3],
               windDirection: item[4],
               windSpeed: item[5],
-              visibility: item[6],
+              // visibility: item[6],
             ));
           }
         }
