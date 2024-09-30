@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class TenDaysSlide extends StatefulWidget {
   const TenDaysSlide({super.key, required this.currentData});
@@ -11,6 +12,16 @@ class TenDaysSlide extends StatefulWidget {
 }
 
 class _TenDaysSlideState extends State<TenDaysSlide> {
+  _launch10daysUrl() async {
+    const url =
+        'https://met.gov.to/forecast/10_Days_Outlook/10_Days_Temp_Outlook.pdf';
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
@@ -33,6 +44,11 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
         const SizedBox(
           height: 10,
         ),
+        ElevatedButton(
+          onPressed: _launch10daysUrl,
+          child: Text('View 10 Days Forecast'),
+        ),
+/*
         for (final item in widget.currentData)
           Container(
             padding: const EdgeInsets.only(
@@ -81,6 +97,7 @@ class _TenDaysSlideState extends State<TenDaysSlide> {
               ],
             ),
           ),
+          */
       ],
     );
   }

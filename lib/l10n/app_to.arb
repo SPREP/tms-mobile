@@ -75,5 +75,20 @@
     "name": "Hingoa",
     "btnDidyoufeelit": "Na'ake ongo'i e mofuike",
     "btnCreateimpactreport": "Lipooti mai ngaahi maumau",
-    "btnRequestassistance": "Fiema'u Tokoni" 
+    "btnRequestassistance": "Fiema'u Tokoni",
+    "eventReportFromCommunity": "Lipooti mei he komuiniti",
+    "eventReportFromCommunityInfo": "Lomi he button 'i lalo [Na'ake ongo'i e mofuike?] ke lipooti mai nake ongo'i.",
+    "pageTitleEvents": "Me'a ne hoko",
+    "pageTitleEvacuation": "Mape Hola Sunami",
+    "pageTitleWarning": "Fakatokanga",
+    "tabLabelHome": "Kamata",
+    "tabLabelEvents": "'Iveni",
+    "tabLabelEvacuation": "Mape Hola",
+    "tabLabelWarning": "FK tokanga",
+    "tabLabelMore": "Hokoatu",
+    "eventReport": "Lipooti mai",
+    "earthquakeFelt": "Ongo'i Mofuike",
+    "otherPlaces": "Feitu'u kehe",
+    "nationalNumber": "Fika Telefoni",
+    "traditionalKnowledge": "'Ilo he kuohili"
 }

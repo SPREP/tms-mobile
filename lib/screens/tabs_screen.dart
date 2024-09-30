@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:humanitarian_icons/humanitarian_icons.dart';
 import 'package:intl/intl.dart';
-import 'package:macres/main.dart';
 import 'package:macres/models/settings_model.dart';
-import 'package:macres/providers/event_counter_provider.dart';
 import 'package:macres/providers/weather_location.dart';
 import 'package:macres/screens/evacuation_map_screen.dart';
 import 'package:macres/screens/event_screen.dart';
@@ -14,6 +11,7 @@ import 'package:macres/widgets/main_drawer_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:macres/util/magnifier.dart' as Mag;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -34,6 +32,7 @@ class _TabsScreenState extends State<TabsScreen> {
   String dayOrNightStatus = 'day';
   Location selectedLocation = Location.tongatapu;
   bool visibility = false;
+  late AppLocalizations localizations;
 
   String _onCurrentWeatherChange(String filepath, String dayOrNight) {
     setState(() {
@@ -169,6 +168,8 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    this.localizations = AppLocalizations.of(context)!;
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
@@ -235,10 +236,10 @@ class _TabsScreenState extends State<TabsScreen> {
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home_filled),
-                  label: 'Home',
+                  label: this.localizations.tabLabelHome,
                 ),
                 BottomNavigationBarItem(
-                    label: 'Events',
+                    label: this.localizations.tabLabelEvents,
                     icon: _totalNewEvents < 1
                         ? Icon(Icons.event)
                         : Stack(
@@ -271,10 +272,10 @@ class _TabsScreenState extends State<TabsScreen> {
                           )),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.directions),
-                  label: 'Evacuation',
+                  label: this.localizations.tabLabelEvacuation,
                 ),
                 BottomNavigationBarItem(
-                  label: 'Warnings',
+                  label: this.localizations.tabLabelWarning,
                   icon: _totalNewWarnings < 1
                       ? Icon(Icons.warning)
                       : Stack(
@@ -308,7 +309,7 @@ class _TabsScreenState extends State<TabsScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.add_circle_outline),
-                  label: 'More',
+                  label: this.localizations.tabLabelMore,
                 ),
               ],
               currentIndex: _selectedPageIndex,
@@ -337,17 +338,17 @@ class _TabsScreenState extends State<TabsScreen> {
 
       if (_selectedPageIndex == 1) {
         activePage = const EventScreen();
-        activePageTitle = 'Events';
+        activePageTitle = this.localizations.pageTitleEvents;
       }
 
       if (_selectedPageIndex == 3) {
         activePage = const WarningScreen();
-        activePageTitle = 'Warnings';
+        activePageTitle = this.localizations.pageTitleWarning;
       }
 
       if (_selectedPageIndex == 2) {
         activePage = EvacuationMapScreen();
-        activePageTitle = 'Tsunami Evacuation Map';
+        activePageTitle = this.localizations.pageTitleEvacuation;
       }
 
       if (_selectedPageIndex == 4) {

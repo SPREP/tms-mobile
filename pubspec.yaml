@@ -17,7 +17,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 
-version: 1.0.3+12
+version: 1.0.6+18
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
@@ -53,21 +53,21 @@ dependencies:
   http: ^1.1.0
   path: ^1.8.3
   geolocator: ^10.0.0
-  firebase_core: ^3.2.0
+  firebase_core: ^3.4.0
   flutter_tts: ^4.0.2
-  firebase_messaging: ^15.0.3
+  firebase_messaging: ^15.1.0
   email_validator: ^3.0.0
   another_flushbar: ^1.12.30
   flutter_map_supercluster: ^5.0.0-dev.1
   flutter_phone_direct_caller: ^2.1.1
   maps_launcher: ^2.2.1
   cached_network_image: ^3.3.1
-  fl_chart: ^0.68.0
+  fl_chart: ^0.69.0
   flare_flutter: ^3.0.2
   async: ^2.11.0
   native_exif: ^0.6.0
   location_picker_flutter_map: ^3.0.1
-  vibration: ^1.8.4
+  vibration: ^2.0.0
 
 
 dev_dependencies:
@@ -78,7 +78,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/app_icon.png"
+  image_path: "assets/images/mob_logo.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   remove_alpha_ios: true
 

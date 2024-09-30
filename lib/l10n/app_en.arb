@@ -106,5 +106,20 @@
     "name": "Name",
     "btnDidyoufeelit": "Did you feel it",
     "btnCreateimpactreport": "Create Impact Report",
-    "btnRequestassistance": "Request Assistance" 
+    "btnRequestassistance": "Request Assistance",
+    "eventReportFromCommunity": "Reported from Community",
+    "eventReportFromCommunityInfo": "Click on the button below [Did you feel it?] to report to use.",
+    "pageTitleEvents": "Events",
+    "pageTitleEvacuation": "Evacuation",
+    "pageTitleWarning": "Warnings",
+    "tabLabelHome": "Home",
+    "tabLabelEvents": "Events",
+    "tabLabelEvacuation": "Evacuation",
+    "tabLabelWarning": "Warnings",
+    "tabLabelMore": "More",
+    "eventReport": "Event Report",
+    "earthquakeFelt": "Earthquake Felt",
+    "otherPlaces": "Other places",
+    "nationalNumber": "National Number",
+    "traditionalKnowledge": "Traditional Knowledge"
 }

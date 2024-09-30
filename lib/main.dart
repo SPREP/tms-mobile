@@ -134,6 +134,7 @@ class _AppState extends State<App> {
           title: 'Tonga Weather App',
           theme: Styles.themeData(ThemeProvider.darkTheme, context),
           darkTheme: ThemeData.dark(),
+          debugShowCheckedModeBanner: false,
           home: widget.showOnboarding
               ? const OnboardingPage()
               : const TabsScreen(),
