@@ -88,6 +88,7 @@ class Styles {
             isDarkTheme ? const Color.fromARGB(255, 94, 94, 94) : Colors.white,
         padding: EdgeInsets.all(2.0),
         labelPadding: EdgeInsets.only(left: 1.0, right: 5.0),
+        labelStyle: TextStyle(color: isDarkTheme ? Colors.white : mainColor),
         side: BorderSide(color: isDarkTheme ? Colors.white : mainColor),
         iconTheme: IconThemeData().copyWith(
             color: isDarkTheme

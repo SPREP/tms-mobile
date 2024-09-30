@@ -44,18 +44,9 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
               Container(
                 width: 130.0,
                 height: 130.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.primary,
-                  border: Border.all(
-                    color: Color.fromARGB(255, 225, 223, 223),
-                    width: 9.0,
-                  ),
-                ),
-                child: Icon(
-                  WeatherIcons.day_cloudy_gusts,
-                  size: 70.0,
-                  color: Colors.white,
+                child: Image.asset(
+                  "assets/images/mob_logo.png",
+                  fit: BoxFit.cover,
                 ),
               ),
               Container(
@@ -167,6 +158,31 @@ class _OnboardingFirstScreen extends State<OnboardingFirstScreen> {
                     ),
                   ],
                 ),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 100.0,
+                    height: 100.0,
+                    child: Image.asset(
+                      "assets/images/coa_tonga.png",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 30.0,
+                  ),
+                  Container(
+                    width: 110.0,
+                    height: 110.0,
+                    child: Image.asset(
+                      "assets/images/met_logo.jpg",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

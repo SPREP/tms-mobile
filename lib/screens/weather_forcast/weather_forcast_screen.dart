@@ -628,8 +628,11 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                               icon: Container(
                                 height: 38.0,
                                 child: WindIcon(
-                                  degree: num.parse(
-                                      currentData.windDirectionDegree!),
+                                  degree:
+                                      currentData.windDirectionDegree != null
+                                          ? num.parse(
+                                              currentData.windDirectionDegree!)
+                                          : 0,
                                   color: Colors.white,
                                   size: 35,
                                 ),
@@ -738,7 +741,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                   // 10 Days widget
                   const SizedBox(height: 10),
                   Container(
-                    height: 650,
+                    // height: 650,
+                    height: 150,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
