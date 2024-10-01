@@ -168,6 +168,7 @@ class _TkMapScreen extends State<TkMapScreen> {
                             options: MapOptions(
                               initialCenter: LatLng(-21.178986, -175.198242),
                               initialZoom: 8,
+                              keepAlive: true,
                             ),
                             children: [
                               TileLayer(

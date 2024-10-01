@@ -185,12 +185,10 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                 urlTemplate:
                                     'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                                 userAgentPackageName: 'com.example.app',
-                                /*
                                 tileBuilder: (Theme.of(context).brightness ==
                                         Brightness.dark)
                                     ? _darkModeTileBuilder
                                     : null,
-                                    */
                               ),
                               /*
                               CurrentLocationLayer(
@@ -237,13 +235,6 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                 ),
                                 initialMarkers: getMarkers(snapshot.data),
                               ),
-                              Stack(children: [
-                                Positioned(
-                                  left: 0,
-                                  top: -375,
-                                  child: EvacuationMapLegend(),
-                                ),
-                              ]),
                               Stack(children: [
                                 Positioned(
                                   right: 10,
@@ -294,6 +285,13 @@ class _EvacuationMapScreen extends State<EvacuationMapScreen> {
                                               13);
                                         }
                                       }),
+                                ),
+                              ]),
+                              Stack(children: [
+                                Positioned(
+                                  left: 0,
+                                  top: -375,
+                                  child: EvacuationMapLegend(),
                                 ),
                               ]),
                             ],
