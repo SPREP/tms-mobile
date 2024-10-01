@@ -48,8 +48,7 @@ class _EvacuationMapLegendState extends State<EvacuationMapLegend>
               padding: EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border.all(
-                    color: Theme.of(context).appBarTheme.backgroundColor!),
+                border: Border.all(color: Colors.white),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -133,7 +132,7 @@ class _EvacuationMapLegendState extends State<EvacuationMapLegend>
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(10.0),
                         bottomRight: Radius.circular(10.0)),
-                    color: Theme.of(context).appBarTheme.backgroundColor),
+                    color: Colors.black26),
                 child: Row(children: [
                   Icon(
                     pos ? Icons.expand_less : Icons.expand_more,
