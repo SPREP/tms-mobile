@@ -60,10 +60,9 @@ Future main() async {
   final prefs = await SharedPreferences.getInstance();
   bool showOnboarding = prefs.getBool('showOnboarding') ?? true;
 
-  //if (showOnboarding == true) {
-  prefs.setBool('showOnboarding', true);
-  //}
-  showOnboarding = true;
+  if (showOnboarding == true) {
+    prefs.setBool('showOnboarding', true);
+  }
 
   await Firebase.initializeApp(
     name: 'macres',

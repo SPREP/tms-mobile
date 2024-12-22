@@ -123,7 +123,7 @@ class WeatherModel {
 
     return FlareActor(
       "assets/flare/weather_icons/${icon}.flr",
-      animation: "idle",
+      animation: "activate",
     );
   }
 
