@@ -2,11 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:macres/config/app_config.dart';
+import 'package:macres/models/sun_model.dart';
 import 'package:macres/models/warning_model.dart';
 import 'package:macres/models/sea_model.dart';
 import 'package:macres/models/tide_model.dart';
 import 'package:macres/models/weather_model.dart';
 import 'package:macres/providers/weather_location.dart';
+import 'package:macres/screens/weather_forcast/radar_slide.dart';
+import 'package:macres/screens/weather_forcast/sun_slide.dart';
 import 'package:macres/screens/weather_forcast/three_hrs_slide.dart';
 import 'package:macres/screens/weather_forcast/tendays_slide.dart';
 import 'package:macres/screens/weather_forcast/tide_slide.dart';
@@ -48,6 +51,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
       TwentyFourHoursForecastModel();
   List<TideModel> currentTideData = [];
   SeaModel currentSeaData = SeaModel();
+  List<SunModel> currentSunData = [];
 
   List<CurrentWeatherModel> currentWeatherData = [];
   List<TwentyFourHoursForecastModel> twentyFourHoursData = [];
@@ -55,6 +59,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   List<TenDaysForecastModel> tenDaysData = [];
   List<TideModel> tideData = [];
   List<SeaModel> seaData = [];
+  List<SunModel> sunData = [];
 
   List<Color> widgetBackgroundDayColors = <Color>[
     const Color.fromARGB(255, 21, 123, 207),
@@ -168,6 +173,14 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     for (final item in seaData) {
       if (convertToLocation(item.location.toString()) == selectedLocation) {
         currentSeaData = item;
+      }
+    }
+
+    //Load data for sun
+    currentSunData.clear();
+    for (final item in sunData) {
+      if (convertToLocation(item.location.toString()) == selectedLocation) {
+        currentSunData.add(item);
       }
     }
   }
@@ -348,6 +361,15 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
             );
 
             tideData.add(tideModel);
+
+            //we also add the data for sunrise and sunset here
+            SunModel sunModel = SunModel(
+                id: item[1],
+                date: item[6],
+                location: item[0],
+                rise: item[8],
+                set: item[9]);
+            sunData.add(sunModel);
           }
         }
 
@@ -790,6 +812,62 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           seaData: currentSeaData,
                           tideData: currentTideData,
                         ),
+                      ],
+                    ),
+                  ),
+
+                  // Sunrise, sunset widget
+                  const SizedBox(height: 10),
+                  Container(
+                    height: 400,
+                    margin: EdgeInsets.only(bottom: 10.0),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: currentData.dayOrNight == 'day'
+                              ? widgetBackgroundDayColors
+                              : widgetBackgroundNightColors),
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Column(
+                      children: [
+                        SunSlide(
+                          seaData: currentSeaData,
+                          tideData: currentTideData,
+                          sunData: currentSunData,
+                        )
+                      ],
+                    ),
+                  ),
+
+                  // Radar Images widget
+                  const SizedBox(height: 10),
+                  Container(
+                    height: 600,
+                    margin: EdgeInsets.only(bottom: 10.0),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: currentData.dayOrNight == 'day'
+                              ? widgetBackgroundDayColors
+                              : widgetBackgroundNightColors),
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Column(
+                      children: [
+                        RadarSlide(data: [
+                          {'rise': '7am', 'set': '8pm'}
+                        ])
                       ],
                     ),
                   ),
