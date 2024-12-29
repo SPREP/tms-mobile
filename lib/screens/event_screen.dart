@@ -22,7 +22,7 @@ class _EventScreen extends State<EventScreen> {
     _clearCounter();
     setState(() {
       isLoading = true;
-      getEvents();
+      _getEvents();
     });
     super.initState();
   }
@@ -34,7 +34,7 @@ class _EventScreen extends State<EventScreen> {
     setState(() {});
   }
 
-  getEvents() async {
+  Future _getEvents() async {
     String username = AppConfig.userName;
     String password = AppConfig.password;
     String host = AppConfig.baseUrl;
@@ -130,21 +130,25 @@ class _EventScreen extends State<EventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(0.0),
-        child: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : apiData.isEmpty
-                ? const Center(
-                    child: Text('No events at this time'),
-                  )
-                : Column(
-                    children: apiData.map<Widget>((eventObject) {
-                    return EventWidget(event: eventObject);
-                  }).toList()),
+    return RefreshIndicator(
+      onRefresh: _getEvents,
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : apiData.isEmpty
+                  ? const Center(
+                      child: Text('No events at this time'),
+                    )
+                  : Column(
+                      children: apiData.map<Widget>((eventObject) {
+                      return EventWidget(event: eventObject);
+                    }).toList()),
+        ),
       ),
     );
   }

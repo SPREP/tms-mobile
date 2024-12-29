@@ -90,5 +90,8 @@
     "earthquakeFelt": "Ongo'i Mofuike",
     "otherPlaces": "Feitu'u kehe",
     "nationalNumber": "Fika Telefoni",
-    "traditionalKnowledge": "'Ilo he kuohili"
+    "traditionalKnowledge": "'Ilo he kuohili",
+    "sunRise": "Hopo",
+    "sunSet": "To",
+    "sunTitle": "Hopo moe to 'a e la'a"
 }

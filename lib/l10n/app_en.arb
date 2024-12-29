@@ -121,5 +121,8 @@
     "earthquakeFelt": "Earthquake Felt",
     "otherPlaces": "Other places",
     "nationalNumber": "National Number",
-    "traditionalKnowledge": "Traditional Knowledge"
+    "traditionalKnowledge": "Traditional Knowledge",
+    "sunRise": "Sunrise",
+    "sunSet": "Sunset",
+    "sunTitle": "SUNRISE & SUNSET"
 }

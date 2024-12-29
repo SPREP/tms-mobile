@@ -22,7 +22,7 @@ class _WarningScreen extends State<WarningScreen> {
     _clearCounter();
     setState(() {
       isLoading = true;
-      getEvents();
+      _getWarnings();
     });
     super.initState();
   }
@@ -34,7 +34,7 @@ class _WarningScreen extends State<WarningScreen> {
     setState(() {});
   }
 
-  getEvents() async {
+  Future _getWarnings() async {
     var username = AppConfig.userName;
     var password = AppConfig.password;
     var host = AppConfig.baseUrl;
@@ -104,21 +104,25 @@ class _WarningScreen extends State<WarningScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 2, bottom: 2),
-        child: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : apiData.isEmpty
-                ? const Center(
-                    child: Text('No warnings at this time'),
-                  )
-                : Column(
-                    children: apiData.map<Widget>((warningObject) {
-                    return WarningWidget(warning: warningObject);
-                  }).toList()),
+    return RefreshIndicator(
+      onRefresh: _getWarnings,
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 2, bottom: 2),
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : apiData.isEmpty
+                  ? const Center(
+                      child: Text('No warnings at this time'),
+                    )
+                  : Column(
+                      children: apiData.map<Widget>((warningObject) {
+                      return WarningWidget(warning: warningObject);
+                    }).toList()),
+        ),
       ),
     );
   }
