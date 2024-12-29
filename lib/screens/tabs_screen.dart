@@ -207,18 +207,16 @@ class _TabsScreenState extends State<TabsScreen> {
           backgroundColor: _selectedPageIndex == 0 || _selectedPageIndex == 4
               ? const Color.fromARGB(0, 82, 38, 38)
               : null,
-          body: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: height),
-              child: Container(
-                padding: _selectedPageIndex == 0 || _selectedPageIndex == 4
-                    ? const EdgeInsets.only(
-                        right: 5,
-                        left: 5,
-                      )
-                    : null,
-                child: activePage,
-              ),
+          body: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: height),
+            child: Container(
+              padding: _selectedPageIndex == 0 || _selectedPageIndex == 4
+                  ? const EdgeInsets.only(
+                      right: 5,
+                      left: 5,
+                    )
+                  : null,
+              child: activePage,
             ),
           ),
           drawer: MainDrawerWidget(),

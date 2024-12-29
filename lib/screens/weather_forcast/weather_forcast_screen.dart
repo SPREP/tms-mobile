@@ -80,8 +80,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
   @override
   void initState() {
     _timerWeather = Timer.periodic(
-      const Duration(minutes: 2),
-      (Timer t) => getWeather(),
+      const Duration(minutes: 1),
+      (Timer t) => _getWeather(),
     );
 
     warningData = WarningModel();
@@ -89,7 +89,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     setLocation();
     setState(() {
       isLoading = true;
-      getWeather();
+      _getWeather();
       getWarning();
     });
 
@@ -320,7 +320,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     return false;
   }
 
-  getWeather() async {
+  Future _getWeather() async {
     var username = AppConfig.userName;
     var password = AppConfig.password;
     var host = AppConfig.baseUrl;
@@ -362,6 +362,59 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
             tideData.add(tideModel);
 
+            //temp solution allocate tide info to nearby region who doesn't have data
+            if (item[0] == 'tbu') {
+              //add Ha'apai tide
+              TideModel hppTideModel = TideModel(
+                id: item[1],
+                status: item[3],
+                time: item[4],
+                level: item[5],
+                date: item[6],
+                location: 'hpp',
+              );
+
+              tideData.add(hppTideModel);
+
+              //add Eua tide
+              TideModel euaTideModel = TideModel(
+                id: item[1],
+                status: item[3],
+                time: item[4],
+                level: item[5],
+                date: item[6],
+                location: 'eua',
+              );
+
+              tideData.add(euaTideModel);
+            }
+
+            if (item[0] == 'vv') {
+              //add Niuafoou
+              TideModel nfoTideModel = TideModel(
+                id: item[1],
+                status: item[3],
+                time: item[4],
+                level: item[5],
+                date: item[6],
+                location: 'nfo',
+              );
+
+              tideData.add(nfoTideModel);
+
+              //add Niuatoputapu
+              TideModel nttTideModel = TideModel(
+                id: item[1],
+                status: item[3],
+                time: item[4],
+                level: item[5],
+                date: item[6],
+                location: 'ntt',
+              );
+
+              tideData.add(nttTideModel);
+            }
+
             //we also add the data for sunrise and sunset here
             SunModel sunModel = SunModel(
                 id: item[1],
@@ -370,6 +423,48 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                 rise: item[8],
                 set: item[9]);
             sunData.add(sunModel);
+
+            //temp solution to allocate data to nearest region
+            //who currently doesn't have data
+            if (item[0] == 'tbu') {
+              //add Ha'apai
+              SunModel hppSunModel = SunModel(
+                  id: item[1],
+                  date: item[6],
+                  location: 'hpp',
+                  rise: item[8],
+                  set: item[9]);
+              sunData.add(hppSunModel);
+
+              //add 'Eua
+              SunModel euaSunModel = SunModel(
+                  id: item[1],
+                  date: item[6],
+                  location: 'eua',
+                  rise: item[8],
+                  set: item[9]);
+              sunData.add(euaSunModel);
+            }
+
+            if (item[0] == 'vv') {
+              //add Niuafoou
+              SunModel nfoSunModel = SunModel(
+                  id: item[1],
+                  date: item[6],
+                  location: 'nfo',
+                  rise: item[8],
+                  set: item[9]);
+              sunData.add(nfoSunModel);
+
+              //add Niuatoputapu
+              SunModel nttSunModel = SunModel(
+                  id: item[1],
+                  date: item[6],
+                  location: 'ntt',
+                  rise: item[8],
+                  set: item[9]);
+              sunData.add(nttSunModel);
+            }
           }
         }
 
@@ -483,395 +578,401 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
             selectedLocation = weatherLocationProvider.selectedLocation;
             changeCurrentData();
 
-            return DefaultTextStyle.merge(
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-              child: Column(
-                children: [
-                  //Warning section
-                  Container(
-                    child: Column(
-                      children: [
-                        if (warningData.body != null)
-                          WarningWidget(warning: warningData)
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // End Warning section
-
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: currentData.dayOrNight == 'day'
-                            ? widgetBackgroundDayColors
-                            : widgetBackgroundNightColors,
-                      ),
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(20.0),
-                          child: Column(children: [
-                            Text(
-                                '${localizations.weatherCurrentConditionTitle}'),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  dateTime,
-                                  style: TextStyle(
-                                      color:
-                                          Color.fromARGB(255, 226, 226, 226)),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  locationLabel[selectedLocation].toString(),
-                                  style: TextStyle(
-                                      fontSize: 18, color: Colors.white),
-                                ),
-
-                                // @todo - remove if not needed in the future.
-                                // Degrees icon.
-                                // const Spacer(),
-                                // Icon(
-                                //   selectedTempretureUnit == 'c'
-                                //       ? WeatherIcons.celsius
-                                //       : WeatherIcons.fahrenheit,
-                                //   color: Colors.white,
-                                //   size: 30.0,
-                                // ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 0,
-                            ),
-                            Row(
-                              children: [
-                                Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(children: [
-                                        Text(
-                                          "${currentData.currentTemp}",
-                                          style: const TextStyle(
-                                              fontSize: 60,
-                                              fontWeight: FontWeight.w300),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                        Align(
-                                          heightFactor: 1.5,
-                                          alignment: Alignment.topRight,
-                                          child: Text(
-                                            "\u00B0${selectedTempretureUnit.toUpperCase()}",
-                                            style: TextStyle(
-                                                fontSize: 30,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                      ]),
-                                      Text(
-                                        currentData
-                                            .getIconDefinition(context)
-                                            .toString(),
-                                        style: TextStyle(fontSize: 19),
-                                      ),
-                                    ]),
-                                Column(
-                                  children: [
-                                    Container(
-                                      height: 130.0,
-                                      width: 130.0,
-                                      child: currentData.getIcon(),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ]),
-                        ),
-                        const SizedBox(height: 10.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            return RefreshIndicator(
+              onRefresh: _getWeather,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: DefaultTextStyle.merge(
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                  child: Column(
+                    children: [
+                      //Warning section
+                      Container(
+                        child: Column(
                           children: [
-                            WeatherProperty(
-                              title:
-                                  '${localizations.weatherCurrentConditionHumidity}',
-                              value: currentData.humidity,
-                              unit: '%',
-                              icon: Icon(
-                                WeatherIcons.humidity,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                            ),
-                            WeatherProperty(
-                              title:
-                                  '${localizations.weatherCurrentConditionPressure}',
-                              value: currentData.pressure,
-                              unit: 'mb',
-                              icon: Icon(
-                                WeatherIcons.barometer,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                            ),
-                            WeatherProperty(
-                                title:
-                                    '${localizations.weatherCurrentConditionWindSpeed}',
-                                value: currentData.windSpeed,
-                                unit: 'km/h',
-                                icon: Icon(
-                                  WeatherIcons.strong_wind,
-                                  color: Colors.white,
-                                )),
+                            if (warningData.body != null)
+                              WarningWidget(warning: warningData)
                           ],
                         ),
-                        SizedBox(
-                          height: 10.0,
+                      ),
+                      const SizedBox(height: 10),
+                      // End Warning section
+
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: currentData.dayOrNight == 'day'
+                                ? widgetBackgroundDayColors
+                                : widgetBackgroundNightColors,
+                          ),
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        child: Column(
                           children: [
-                            WeatherProperty(
-                              title:
-                                  '${localizations.weatherCurrentConditionWindDirection}',
-                              value: currentData.windDirection,
-                              unit: '',
-                              icon: Container(
-                                height: 38.0,
-                                child: WindIcon(
-                                  degree:
-                                      currentData.windDirectionDegree != null
+                            Container(
+                              padding: EdgeInsets.all(20.0),
+                              child: Column(children: [
+                                Text(
+                                    '${localizations.weatherCurrentConditionTitle}'),
+                                SizedBox(
+                                  height: 20.0,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      dateTime,
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 226, 226, 226)),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      locationLabel[selectedLocation]
+                                          .toString(),
+                                      style: TextStyle(
+                                          fontSize: 18, color: Colors.white),
+                                    ),
+
+                                    // @todo - remove if not needed in the future.
+                                    // Degrees icon.
+                                    // const Spacer(),
+                                    // Icon(
+                                    //   selectedTempretureUnit == 'c'
+                                    //       ? WeatherIcons.celsius
+                                    //       : WeatherIcons.fahrenheit,
+                                    //   color: Colors.white,
+                                    //   size: 30.0,
+                                    // ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 0,
+                                ),
+                                Row(
+                                  children: [
+                                    Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(children: [
+                                            Text(
+                                              "${currentData.currentTemp}",
+                                              style: const TextStyle(
+                                                  fontSize: 60,
+                                                  fontWeight: FontWeight.w300),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                            Align(
+                                              heightFactor: 1.5,
+                                              alignment: Alignment.topRight,
+                                              child: Text(
+                                                "\u00B0${selectedTempretureUnit.toUpperCase()}",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              ),
+                                            ),
+                                          ]),
+                                          Text(
+                                            currentData
+                                                .getIconDefinition(context)
+                                                .toString(),
+                                            style: TextStyle(fontSize: 19),
+                                          ),
+                                        ]),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          height: 130.0,
+                                          width: 130.0,
+                                          child: currentData.getIcon(),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ]),
+                            ),
+                            const SizedBox(height: 10.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                WeatherProperty(
+                                  title:
+                                      '${localizations.weatherCurrentConditionHumidity}',
+                                  value: currentData.humidity,
+                                  unit: '%',
+                                  icon: Icon(
+                                    WeatherIcons.humidity,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                ),
+                                WeatherProperty(
+                                  title:
+                                      '${localizations.weatherCurrentConditionPressure}',
+                                  value: currentData.pressure,
+                                  unit: 'mb',
+                                  icon: Icon(
+                                    WeatherIcons.barometer,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                ),
+                                WeatherProperty(
+                                    title:
+                                        '${localizations.weatherCurrentConditionWindSpeed}',
+                                    value: currentData.windSpeed,
+                                    unit: 'km/h',
+                                    icon: Icon(
+                                      WeatherIcons.strong_wind,
+                                      color: Colors.white,
+                                    )),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                WeatherProperty(
+                                  title:
+                                      '${localizations.weatherCurrentConditionWindDirection}',
+                                  value: currentData.windDirection,
+                                  unit: '',
+                                  icon: Container(
+                                    height: 38.0,
+                                    child: WindIcon(
+                                      degree: currentData.windDirectionDegree !=
+                                              null
                                           ? num.parse(
                                               currentData.windDirectionDegree!)
                                           : 0,
-                                  color: Colors.white,
-                                  size: 35,
+                                      color: Colors.white,
+                                      size: 35,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                WeatherProperty(
+                                  title:
+                                      '${localizations.weatherCurrentConditionVisibility}',
+                                  value: currentData.visibility,
+                                  unit: 'km',
+                                  icon: Icon(
+                                    Icons.visibility_outlined,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                ),
+                                WeatherProperty(
+                                  title:
+                                      '${localizations.weatherCurrentConditionSolarRadiation}',
+                                  value: currentData.solarRadiation,
+                                  unit: 'W/m\u00b2',
+                                  icon: Icon(
+                                    Icons.solar_power_rounded,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                ),
+                              ],
                             ),
-                            WeatherProperty(
-                              title:
-                                  '${localizations.weatherCurrentConditionVisibility}',
-                              value: currentData.visibility,
-                              unit: 'km',
-                              icon: Icon(
-                                Icons.visibility_outlined,
-                                color: Colors.white,
-                                size: 30,
-                              ),
+                            SizedBox(
+                              height: 10.0,
                             ),
-                            WeatherProperty(
-                              title:
-                                  '${localizations.weatherCurrentConditionSolarRadiation}',
-                              value: currentData.solarRadiation,
-                              unit: 'W/m\u00b2',
-                              icon: Icon(
-                                Icons.solar_power_rounded,
-                                color: Colors.white,
-                                size: 30,
+                            Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${localizations.weatherCurrentConditionFooter} ${currentData.station} ${currentData.getObservedTime()}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                '${localizations.weatherCurrentConditionFooter} ${currentData.station} ${currentData.getObservedTime()}',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                            ],
+                      ),
+
+                      // 24 Hours widget
+                      const SizedBox(height: 10),
+                      Container(
+                        height: 400,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: currentData.dayOrNight == 'day'
+                                ? widgetBackgroundDayColors
+                                : widgetBackgroundNightColors,
+                          ),
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-
-                  // 24 Hours widget
-                  const SizedBox(height: 10),
-                  Container(
-                    height: 400,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: currentData.dayOrNight == 'day'
-                            ? widgetBackgroundDayColors
-                            : widgetBackgroundNightColors,
-                      ),
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Column(
-                      children: [
-                        TwentyFourHoursSlide(
-                          currentData: currentTwentyFourHoursData,
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Column(
+                          children: [
+                            TwentyFourHoursSlide(
+                              currentData: currentTwentyFourHoursData,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
 
-                  // 3 Hours widget
-                  const SizedBox(height: 10),
-                  Container(
-                    height: 350,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: currentData.dayOrNight == 'day'
-                            ? widgetBackgroundDayColors
-                            : widgetBackgroundNightColors,
-                      ),
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Column(
-                      children: [
-                        ThreeHoursSlide(
-                          currentData: currentThreeHoursData,
+                      // 3 Hours widget
+                      const SizedBox(height: 10),
+                      Container(
+                        height: 350,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: currentData.dayOrNight == 'day'
+                                ? widgetBackgroundDayColors
+                                : widgetBackgroundNightColors,
+                          ),
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-
-                  // 10 Days widget
-                  const SizedBox(height: 10),
-                  Container(
-                    // height: 650,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: currentData.dayOrNight == 'day'
-                            ? widgetBackgroundDayColors
-                            : widgetBackgroundNightColors,
-                      ),
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Column(
-                      children: [
-                        TenDaysSlide(
-                          currentData: currentTenDaysData,
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Column(
+                          children: [
+                            ThreeHoursSlide(
+                              currentData: currentThreeHoursData,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-
-                  // Tide widget
-                  const SizedBox(height: 10),
-                  Container(
-                    height: 600,
-                    margin: EdgeInsets.only(bottom: 10.0),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: currentData.dayOrNight == 'day'
-                              ? widgetBackgroundDayColors
-                              : widgetBackgroundNightColors),
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
                       ),
-                    ),
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Column(
-                      children: [
-                        TideSlide(
-                          seaData: currentSeaData,
-                          tideData: currentTideData,
+
+                      // 10 Days widget
+                      const SizedBox(height: 10),
+                      Container(
+                        // height: 650,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: currentData.dayOrNight == 'day'
+                                ? widgetBackgroundDayColors
+                                : widgetBackgroundNightColors,
+                          ),
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-
-                  // Sunrise, sunset widget
-                  const SizedBox(height: 10),
-                  Container(
-                    height: 400,
-                    margin: EdgeInsets.only(bottom: 10.0),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: currentData.dayOrNight == 'day'
-                              ? widgetBackgroundDayColors
-                              : widgetBackgroundNightColors),
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Column(
+                          children: [
+                            TenDaysSlide(
+                              currentData: currentTenDaysData,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Column(
-                      children: [
-                        SunSlide(
-                          seaData: currentSeaData,
-                          tideData: currentTideData,
-                          sunData: currentSunData,
-                        )
-                      ],
-                    ),
-                  ),
 
-                  // Radar Images widget
-                  const SizedBox(height: 10),
-                  Container(
-                    height: 600,
-                    margin: EdgeInsets.only(bottom: 10.0),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: currentData.dayOrNight == 'day'
-                              ? widgetBackgroundDayColors
-                              : widgetBackgroundNightColors),
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
+                      // Tide widget
+                      const SizedBox(height: 10),
+                      Container(
+                        height: 600,
+                        margin: EdgeInsets.only(bottom: 10.0),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: currentData.dayOrNight == 'day'
+                                  ? widgetBackgroundDayColors
+                                  : widgetBackgroundNightColors),
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Column(
+                          children: [
+                            TideSlide(
+                              seaData: currentSeaData,
+                              tideData: currentTideData,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Column(
-                      children: [
-                        RadarSlide(data: [
-                          {'rise': '7am', 'set': '8pm'}
-                        ])
-                      ],
-                    ),
+
+                      // Sunrise, sunset widget
+                      const SizedBox(height: 10),
+                      Container(
+                        height: 350,
+                        margin: EdgeInsets.only(bottom: 10.0),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: currentData.dayOrNight == 'day'
+                                  ? widgetBackgroundDayColors
+                                  : widgetBackgroundNightColors),
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Column(
+                          children: [
+                            SunSlide(
+                              sunData: currentSunData,
+                            )
+                          ],
+                        ),
+                      ),
+
+                      // Radar Images widget
+                      const SizedBox(height: 10),
+                      Container(
+                        height: 600,
+                        margin: EdgeInsets.only(bottom: 10.0),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: currentData.dayOrNight == 'day'
+                                  ? widgetBackgroundDayColors
+                                  : widgetBackgroundNightColors),
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Column(
+                          children: [
+                            RadarSlide(data: [
+                              {'rise': '7am', 'set': '8pm'}
+                            ])
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           });

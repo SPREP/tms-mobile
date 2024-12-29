@@ -7,14 +7,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class SunSlide extends StatefulWidget {
-  SunSlide(
-      {super.key,
-      required this.seaData,
-      required this.tideData,
-      required this.sunData});
+  SunSlide({super.key, required this.sunData});
 
-  final seaData;
-  final tideData;
   final sunData;
 
   final List<Color> gradientColors = [
@@ -46,6 +40,9 @@ class _SunSlideState extends State<SunSlide> {
         break;
       case 5:
         text = Text('5am', style: style);
+        break;
+      case 6:
+        text = Text('6am', style: style);
         break;
       case 7:
         text = Text('7am', style: style);
@@ -148,11 +145,17 @@ class _SunSlideState extends State<SunSlide> {
   Widget getLineChart(double minx, double maxx) {
     //Calculate the sun position on the chart
     double maxy = 2.0;
+    double miny = 0;
 
     double rangex = maxx - minx;
     double middlex = rangex / 2;
     double yunit = maxy / middlex;
-    double middlexTime = middlex + minx;
+    double middlexTime = double.parse((middlex + minx).toStringAsFixed(2));
+
+    //get the current time
+    var now = DateTime.now();
+    String strNow = DateFormat('HH:mm').format(now);
+    double currentTime = double.parse(strNow.replaceAll(':', '.'));
 
     return Stack(children: [
       AspectRatio(
@@ -178,8 +181,8 @@ class _SunSlideState extends State<SunSlide> {
               })),
               minX: minx, // sunrise
               maxX: maxx, //sunset
-              minY: 0,
-              maxY: 2,
+              minY: miny,
+              maxY: maxy,
               titlesData: getTitleData(),
               borderData: FlBorderData(
                   show: true,
@@ -190,9 +193,9 @@ class _SunSlideState extends State<SunSlide> {
               lineBarsData: [
                 LineChartBarData(
                   spots: [
-                    FlSpot(minx, 0.0),
+                    FlSpot(minx, miny),
                     FlSpot(middlexTime, maxy),
-                    FlSpot(maxx, 0.0)
+                    FlSpot(maxx, miny)
                   ],
                   isCurved: false,
                   dotData: FlDotData(
@@ -204,13 +207,14 @@ class _SunSlideState extends State<SunSlide> {
                       strokeColor: Colors.white,
                     ),
                   ),
-                  belowBarData: BarAreaData(show: true),
                 ),
                 LineChartBarData(
                   spots: getSunPos(minx, maxx, middlexTime, yunit),
                   isCurved: true,
                   dotData: FlDotData(
-                    show: true,
+                    show: (currentTime >= minx && currentTime <= maxx)
+                        ? true
+                        : false,
                     getDotPainter: (spot, percent, barData, index) =>
                         FlDotCirclePainter(
                       radius: 7,
@@ -232,32 +236,23 @@ class _SunSlideState extends State<SunSlide> {
   @override
   Widget build(BuildContext context) {
     SunModel sunToday = SunModel();
-    SunModel sunTomorrow = SunModel();
+    //SunModel sunTomorrow = SunModel();
 
     AppLocalizations localizations = AppLocalizations.of(context)!;
-
-    //Use for label if the time is in tomorrow
-    // String high_tomorrow_morning = localizations.today;
-    // String low_tomorrow_morning = localizations.today;
 
     for (SunModel item in widget.sunData) {
       //compare current time to the time we got from API
       DateTime dt1 = DateTime.parse(item.date!);
       DateTime dt2 = DateTime.now();
 
-      if ((dt1.compareTo(dt2) > 0)) {
-        sunTomorrow = item;
-        continue;
-      }
+      //if (dt2.isBefore(dt1) && !DateUtils.isSameDay(dt1, dt2)) {
+      //  sunTomorrow = item;
+      //}
 
       if (DateUtils.isSameDay(dt1, dt2)) {
         sunToday = item;
-        continue;
       }
     }
-
-    print(sunToday.convertTo24(sunToday.rise!));
-    print(sunToday.convertTo24(sunToday.set!));
 
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
@@ -269,8 +264,8 @@ class _SunSlideState extends State<SunSlide> {
                 width: 30,
               ),
               Spacer(),
-              //Text(localizations.tideTitle),
-              Text('Sunrise & Sunset'),
+              Text(localizations.sunTitle),
+              //Text('SUNRISE & SUNSET'),
               Spacer(),
               SizedBox(
                 width: 30,
@@ -280,14 +275,17 @@ class _SunSlideState extends State<SunSlide> {
           Padding(
             padding: const EdgeInsets.only(top: 5.0, left: 20, right: 20),
             child: Container(
-              child: getLineChart(sunToday.convertTo24(sunToday.rise!),
-                  sunToday.convertTo24(sunToday.set!)),
+              child: sunToday.rise != null
+                  ? getLineChart(sunToday.convertTo24(sunToday.rise!),
+                      sunToday.convertTo24(sunToday.set!))
+                  : null,
             ),
           ),
           const SizedBox(
             height: 10,
           ),
-          Text('Today'),
+          Text(localizations.today.toUpperCase()),
+          //Text('Today'),
           Row(
             children: [
               Icon(
@@ -297,9 +295,10 @@ class _SunSlideState extends State<SunSlide> {
               SizedBox(
                 width: 10,
               ),
-              Text('Sunrise:'),
+              Text(localizations.sunRise),
+              //Text('Sunrise:'),
               SizedBox(
-                width: 10,
+                width: 5,
               ),
               Text('${sunToday.rise}'),
               Spacer(),
@@ -308,11 +307,12 @@ class _SunSlideState extends State<SunSlide> {
                 color: Colors.red,
               ),
               SizedBox(
-                width: 10,
+                width: 6,
               ),
-              Text('Sunset:'),
+              Text(localizations.sunSet),
+              //Text('Sunset:'),
               SizedBox(
-                width: 10,
+                width: 5,
               ),
               Text('${sunToday.set}'),
             ],
@@ -321,6 +321,7 @@ class _SunSlideState extends State<SunSlide> {
           SizedBox(
             height: 10,
           ),
+          /*
           Text('Tommorow'),
           Row(
             children: [
@@ -351,6 +352,7 @@ class _SunSlideState extends State<SunSlide> {
               Text('${sunTomorrow.set}'),
             ],
           ),
+          */
         ],
       ),
     );
