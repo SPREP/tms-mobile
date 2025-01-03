@@ -6,6 +6,7 @@ import 'package:macres/providers/auth_provider.dart';
 import 'package:macres/providers/dark_theme_provider.dart';
 import 'package:macres/providers/event_counter_provider.dart';
 import 'package:macres/providers/locale_provider.dart';
+import 'package:macres/providers/sun_provider.dart';
 import 'package:macres/providers/tide_provider.dart';
 import 'package:macres/providers/ten_days_provider.dart';
 import 'package:macres/providers/three_hours_provider.dart';
@@ -118,6 +119,7 @@ class _AppState extends State<App> {
         ChangeNotifierProvider(create: (context) => WeatherLocationProvider()),
         ChangeNotifierProvider(create: (context) => EventCounterProvider()),
         ChangeNotifierProvider(create: (context) => WarningCounterProvider()),
+        ChangeNotifierProvider(create: (context) => SunProvider()),
       ],
       child: Consumer2<LocaleProvider, ThemeProvider>(
         builder: (context, localeProvider, ThemeProvider, child) => MaterialApp(

@@ -7,6 +7,8 @@ import 'package:macres/models/warning_model.dart';
 import 'package:macres/models/sea_model.dart';
 import 'package:macres/models/tide_model.dart';
 import 'package:macres/models/weather_model.dart';
+import 'package:macres/providers/dark_theme_provider.dart';
+import 'package:macres/providers/sun_provider.dart';
 import 'package:macres/providers/weather_location.dart';
 import 'package:macres/screens/weather_forcast/radar_slide.dart';
 import 'package:macres/screens/weather_forcast/sun_slide.dart';
@@ -181,6 +183,14 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     for (final item in sunData) {
       if (convertToLocation(item.location.toString()) == selectedLocation) {
         currentSunData.add(item);
+
+        //find today data and notify listener to check for anychange required.
+        if (item.isToday()) {
+          print('run provider');
+          // Provider.of<SunProvider>(context, listen: false).setData(item);
+        } else {
+          print('not today');
+        }
       }
     }
   }
@@ -573,10 +583,24 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
     return isLoading
         ? const Center(child: CircularProgressIndicator())
-        : Consumer<WeatherLocationProvider>(
-            builder: (context, weatherLocationProvider, child) {
+        : Consumer3<WeatherLocationProvider, ThemeProvider, SunProvider>(
+            builder: (context, weatherLocationProvider, themeProvider,
+                sunProvider, child) {
             selectedLocation = weatherLocationProvider.selectedLocation;
             changeCurrentData();
+
+            List<Color> backgroundColor = widgetBackgroundDayColors;
+
+            //manage the color here base on time/theme
+            if (sunProvider.currentSunData.isDay()) {
+              if (themeProvider.isDarkTheme) {
+                backgroundColor = widgetBackgroundNightColors;
+              } else {
+                backgroundColor = widgetBackgroundDayColors;
+              }
+            } else {
+              backgroundColor = widgetBackgroundNightColors;
+            }
 
             return RefreshIndicator(
               onRefresh: _getWeather,
@@ -604,9 +628,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            colors: currentData.dayOrNight == 'day'
-                                ? widgetBackgroundDayColors
-                                : widgetBackgroundNightColors,
+                            colors: backgroundColor,
                           ),
                           border: Border.all(color: Colors.white),
                           borderRadius: BorderRadius.all(
@@ -815,9 +837,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            colors: currentData.dayOrNight == 'day'
-                                ? widgetBackgroundDayColors
-                                : widgetBackgroundNightColors,
+                            colors: backgroundColor,
                           ),
                           border: Border.all(color: Colors.white),
                           borderRadius: BorderRadius.all(
@@ -842,9 +862,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            colors: currentData.dayOrNight == 'day'
-                                ? widgetBackgroundDayColors
-                                : widgetBackgroundNightColors,
+                            colors: backgroundColor,
                           ),
                           border: Border.all(color: Colors.white),
                           borderRadius: BorderRadius.all(
@@ -870,9 +888,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            colors: currentData.dayOrNight == 'day'
-                                ? widgetBackgroundDayColors
-                                : widgetBackgroundNightColors,
+                            colors: backgroundColor,
                           ),
                           border: Border.all(color: Colors.white),
                           borderRadius: BorderRadius.all(
@@ -898,9 +914,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: currentData.dayOrNight == 'day'
-                                  ? widgetBackgroundDayColors
-                                  : widgetBackgroundNightColors),
+                              colors: backgroundColor),
                           border: Border.all(color: Colors.white),
                           borderRadius: BorderRadius.all(
                             Radius.circular(20),
@@ -926,9 +940,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: currentData.dayOrNight == 'day'
-                                  ? widgetBackgroundDayColors
-                                  : widgetBackgroundNightColors),
+                              colors: backgroundColor),
                           border: Border.all(color: Colors.white),
                           borderRadius: BorderRadius.all(
                             Radius.circular(20),
@@ -953,9 +965,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                           gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: currentData.dayOrNight == 'day'
-                                  ? widgetBackgroundDayColors
-                                  : widgetBackgroundNightColors),
+                              colors: backgroundColor),
                           border: Border.all(color: Colors.white),
                           borderRadius: BorderRadius.all(
                             Radius.circular(20),
