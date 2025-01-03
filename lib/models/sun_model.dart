@@ -9,28 +9,33 @@ class SunModel {
 
   SunModel({this.id, this.location, this.date, this.rise, this.set}) {}
 
+/**
+ * Convert the given time to 24 hours
+ */
   convertTo24(String time) {
     DateTime tempDate = DateFormat("hh:mm a").parse(time);
     var dateFormat = DateFormat("HH:mm");
     return double.parse(dateFormat.format(tempDate).replaceAll(':', '.'));
   }
 
+/**
+ * Check if Day or Night
+ */
   bool isDay() {
     if (this.rise == null) return false;
-    double hours = double.parse(DateFormat('HH:mm').format(DateTime.now()));
+    double hours = double.parse(
+        DateFormat('HH:mm').format(DateTime.now()).replaceAll(':', '.'));
 
-    print('run here');
     double _riseTime = this.convertTo24(this.rise!);
     double _setTime = this.convertTo24(this.set!);
-
-    print("riseTime: ");
-    print(_riseTime);
-
     bool _isday = (hours >= _riseTime && hours <= _setTime) ? true : false;
 
     return _isday;
   }
 
+/**
+ * Check if the given time is today
+ */
   bool isToday() {
     final now = DateTime.now();
 

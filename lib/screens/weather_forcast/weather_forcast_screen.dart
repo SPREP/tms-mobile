@@ -29,7 +29,7 @@ import 'package:http/http.dart' as http;
 class WeatherForcastScreen extends StatefulWidget {
   WeatherForcastScreen({super.key, required this.onCurrentWeatherChange});
 
-  final String Function(String filepath, String dayOrNight)
+  final String Function(String filepath, bool dayOrNight)
       onCurrentWeatherChange;
 
   @override
@@ -183,14 +183,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
     for (final item in sunData) {
       if (convertToLocation(item.location.toString()) == selectedLocation) {
         currentSunData.add(item);
-
-        //find today data and notify listener to check for anychange required.
-        if (item.isToday()) {
-          print('run provider');
-          // Provider.of<SunProvider>(context, listen: false).setData(item);
-        } else {
-          print('not today');
-        }
       }
     }
   }
@@ -201,12 +193,12 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
       case 5:
       case 6:
       case 7:
-        filePath = currentData.dayOrNight == 'day'
+        filePath = currentData.isDay
             ? 'assets/images/day_rain.jpg'
             : 'assets/images/night_rain.jpg';
         break;
       case 1:
-        filePath = currentData.dayOrNight == 'day'
+        filePath = currentData.isDay
             ? 'assets/images/sunny_day.jpg'
             : 'assets/images/clear_night.jpg';
         break;
@@ -216,7 +208,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
       case 8:
       case 9:
       case 10:
-        filePath = currentData.dayOrNight == 'day'
+        filePath = currentData.isDay
             ? 'assets/images/cloudy_day.jpg'
             : 'assets/images/cloudy_night.jpg';
         break;
@@ -360,6 +352,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
         if (listData['tide'].length > 0) {
           tideData.clear();
+          bool hasRun = false;
           for (final item in listData['tide']) {
             TideModel tideModel = TideModel(
               id: item[1],
@@ -433,6 +426,13 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                 rise: item[8],
                 set: item[9]);
             sunData.add(sunModel);
+
+            //find today data and notify listener to check for anychange required.
+            if (sunModel.isToday() && !hasRun) {
+              hasRun = true;
+              Provider.of<SunProvider>(context, listen: false)
+                  .setData(sunModel);
+            }
 
             //temp solution to allocate data to nearest region
             //who currently doesn't have data
@@ -527,7 +527,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
               currentData = dataModel;
             }
           }
-          widget.onCurrentWeatherChange('', currentData.dayOrNight);
+          widget.onCurrentWeatherChange('', currentData.isDay);
         }
 
         if (listData['3hrs'].length > 0) {
@@ -601,6 +601,12 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
             } else {
               backgroundColor = widgetBackgroundNightColors;
             }
+
+            //set the current data with the latest sun time to determined the icon to use
+            currentData.isDay = sunProvider.currentSunData.isDay();
+            currentThreeHoursData.isDay = sunProvider.currentSunData.isDay();
+            currentTwentyFourHoursData.isDay =
+                sunProvider.currentSunData.isDay();
 
             return RefreshIndicator(
               onRefresh: _getWeather,
