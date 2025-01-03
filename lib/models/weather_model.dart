@@ -70,6 +70,39 @@ class WeatherModel {
     return ((int.parse(value) * 9 / 5) + 32).toStringAsFixed(0);
   }
 
+/**
+ * Get the background image for the current weather condition
+ */
+  String getBgImage() {
+    String filePath = '';
+    switch (iconId) {
+      case 5:
+      case 6:
+      case 7:
+        filePath = isDay
+            ? 'assets/images/weather/rain_day.jpg'
+            : 'assets/images/weather/night_rain.jpg';
+        break;
+      case 1:
+        filePath = isDay
+            ? 'assets/images/weather/fine_day.png'
+            : 'assets/images/weather/fine_night.jpg';
+        break;
+      case 2:
+      case 3:
+      case 4:
+      case 8:
+      case 9:
+      case 10:
+        filePath = isDay
+            ? 'assets/images/weather/cloudy_day.jpg'
+            : 'assets/images/weather/cloudy_night.jpg';
+        break;
+    }
+
+    return filePath;
+  }
+
   getIcon() {
     String icon;
 

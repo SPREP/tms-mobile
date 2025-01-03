@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:macres/config/app_config.dart';
@@ -184,34 +185,6 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
       if (convertToLocation(item.location.toString()) == selectedLocation) {
         currentSunData.add(item);
       }
-    }
-  }
-
-  void changeBgImage() {
-    String filePath = '';
-    switch (currentData.iconId) {
-      case 5:
-      case 6:
-      case 7:
-        filePath = currentData.isDay
-            ? 'assets/images/day_rain.jpg'
-            : 'assets/images/night_rain.jpg';
-        break;
-      case 1:
-        filePath = currentData.isDay
-            ? 'assets/images/sunny_day.jpg'
-            : 'assets/images/clear_night.jpg';
-        break;
-      case 2:
-      case 3:
-      case 4:
-      case 8:
-      case 9:
-      case 10:
-        filePath = currentData.isDay
-            ? 'assets/images/cloudy_day.jpg'
-            : 'assets/images/cloudy_night.jpg';
-        break;
     }
   }
 
@@ -631,6 +604,14 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
 
                       Container(
                         decoration: BoxDecoration(
+                          color: backgroundColor[0],
+                          image: DecorationImage(
+                            opacity: 0.6,
+                            image: AssetImage(
+                              currentData.getBgImage(),
+                            ),
+                            fit: BoxFit.cover,
+                          ),
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
@@ -720,7 +701,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                         Container(
                                           height: 130.0,
                                           width: 130.0,
-                                          child: currentData.getIcon(),
+                                          // child: currentData.getIcon(),
                                         )
                                       ],
                                     ),
@@ -742,6 +723,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                     color: Colors.white,
                                     size: 30,
                                   ),
+                                  bgColor: backgroundColor[0],
                                 ),
                                 WeatherProperty(
                                   title:
@@ -753,16 +735,19 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                     color: Colors.white,
                                     size: 30,
                                   ),
+                                  bgColor: backgroundColor[0],
                                 ),
                                 WeatherProperty(
-                                    title:
-                                        '${localizations.weatherCurrentConditionWindSpeed}',
-                                    value: currentData.windSpeed,
-                                    unit: 'km/h',
-                                    icon: Icon(
-                                      WeatherIcons.strong_wind,
-                                      color: Colors.white,
-                                    )),
+                                  title:
+                                      '${localizations.weatherCurrentConditionWindSpeed}',
+                                  value: currentData.windSpeed,
+                                  unit: 'km/h',
+                                  icon: Icon(
+                                    WeatherIcons.strong_wind,
+                                    color: Colors.white,
+                                  ),
+                                  bgColor: backgroundColor[0],
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -788,6 +773,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                       size: 35,
                                     ),
                                   ),
+                                  bgColor: backgroundColor[0],
                                 ),
                                 WeatherProperty(
                                   title:
@@ -799,6 +785,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                     color: Colors.white,
                                     size: 30,
                                   ),
+                                  bgColor: backgroundColor[0],
                                 ),
                                 WeatherProperty(
                                   title:
@@ -810,6 +797,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                                     color: Colors.white,
                                     size: 30,
                                   ),
+                                  bgColor: backgroundColor[0],
                                 ),
                               ],
                             ),
@@ -917,6 +905,7 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                         height: 600,
                         margin: EdgeInsets.only(bottom: 10.0),
                         decoration: BoxDecoration(
+                          color: backgroundColor[0],
                           gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,

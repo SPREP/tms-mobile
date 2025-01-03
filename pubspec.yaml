@@ -108,6 +108,7 @@ flutter:
     - assets/images/
     - assets/flare/weather_icons/
     - assets/images/earthquake/
+    - assets/images/weather/
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
