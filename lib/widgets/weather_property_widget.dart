@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 class WeatherProperty extends StatelessWidget {
-  WeatherProperty({super.key, this.title, this.value, this.unit, this.icon});
+  WeatherProperty(
+      {super.key, this.title, this.value, this.unit, this.icon, this.bgColor});
 
   final String? title;
   final String? value;
   final String? unit;
   final Widget? icon;
+
+  final Color? bgColor;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +20,7 @@ class WeatherProperty extends StatelessWidget {
       padding: EdgeInsets.all(5.0),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white),
+        color: this.bgColor,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
