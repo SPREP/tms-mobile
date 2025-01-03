@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:macres/models/settings_model.dart';
+import 'package:macres/providers/dark_theme_provider.dart';
+import 'package:macres/providers/sun_provider.dart';
 import 'package:macres/providers/weather_location.dart';
 import 'package:macres/screens/evacuation_map_screen.dart';
 import 'package:macres/screens/event_screen.dart';
@@ -29,15 +31,13 @@ class _TabsScreenState extends State<TabsScreen> {
   String activePageTitle = '';
   List<Widget> actionButtons = [];
   String bgFilePath = '';
-  String dayOrNightStatus = 'day';
   Location selectedLocation = Location.tongatapu;
   bool visibility = false;
   late AppLocalizations localizations;
 
-  String _onCurrentWeatherChange(String filepath, String dayOrNight) {
+  String _onCurrentWeatherChange(String filepath, bool dayOrNight) {
     setState(() {
       bgFilePath = filepath;
-      dayOrNightStatus = dayOrNight;
     });
 
     return filepath;
@@ -71,14 +71,14 @@ class _TabsScreenState extends State<TabsScreen> {
     );
   }
 
-  getAppBar() {
+  getAppBar(backgroundColor) {
     if ((_selectedPageIndex == 0 || _selectedPageIndex == 4)) {
       return PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(
           centerTitle: false,
           backgroundColor: Colors.transparent,
-          flexibleSpace: getLocationDropdown(),
+          flexibleSpace: getLocationDropdown(backgroundColor),
           actions: [
             TextButton(
               onPressed: () {
@@ -116,7 +116,7 @@ class _TabsScreenState extends State<TabsScreen> {
     }
   }
 
-  Widget getLocationDropdown() {
+  Widget getLocationDropdown(backgroundColor) {
     return Center(
         child: Column(
       children: [
@@ -126,17 +126,13 @@ class _TabsScreenState extends State<TabsScreen> {
           margin: EdgeInsets.only(bottom: 3.0),
           height: 30.0,
           decoration: BoxDecoration(
-              color: dayOrNightStatus == 'day'
-                  ? Color.fromARGB(255, 26, 99, 152)
-                  : Color.fromARGB(255, 88, 88, 88),
+              color: backgroundColor[0],
               borderRadius: BorderRadius.circular(10)),
           child: DropdownButton<Location>(
             underline: SizedBox(),
             borderRadius: BorderRadius.circular(10),
             value: selectedLocation,
-            dropdownColor: dayOrNightStatus == 'day'
-                ? Color.fromARGB(255, 33, 123, 187)
-                : Color.fromARGB(255, 70, 73, 76),
+            dropdownColor: backgroundColor[0],
             icon: const Icon(
               Icons.expand_more,
               color: Colors.white,
@@ -184,65 +180,100 @@ class _TabsScreenState extends State<TabsScreen> {
       }
     }
 
-    return Mag.Magnifier(
-      size: Size(250.0, 250.0),
-      enabled: visibility ? true : false,
-      child: Container(
-        width: width,
-        decoration: _selectedPageIndex == 0 || _selectedPageIndex == 4
-            ? BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: dayOrNightStatus == 'day'
-                      ? <Color>[Color.fromARGB(255, 3, 55, 97), Colors.blue]
-                      : <Color>[
-                          Color.fromARGB(255, 64, 65, 67),
-                          Color.fromARGB(255, 20, 24, 27)
-                        ],
-                ),
-              )
-            : null,
-        child: Scaffold(
-          backgroundColor: _selectedPageIndex == 0 || _selectedPageIndex == 4
-              ? const Color.fromARGB(0, 82, 38, 38)
+    return Consumer2<SunProvider, ThemeProvider>(
+        builder: (context, sunProvider, themeProvider, child) {
+      List<Color> backgroundColor = _getColor(sunProvider, themeProvider);
+
+      return Mag.Magnifier(
+        size: Size(250.0, 250.0),
+        enabled: visibility ? true : false,
+        child: Container(
+          width: width,
+          decoration: _selectedPageIndex == 0 || _selectedPageIndex == 4
+              ? BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: backgroundColor,
+                  ),
+                )
               : null,
-          body: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: height),
-            child: Container(
-              padding: _selectedPageIndex == 0 || _selectedPageIndex == 4
-                  ? const EdgeInsets.only(
-                      right: 5,
-                      left: 5,
-                    )
-                  : null,
-              child: activePage,
+          child: Scaffold(
+            backgroundColor: _selectedPageIndex == 0 || _selectedPageIndex == 4
+                ? const Color.fromARGB(0, 82, 38, 38)
+                : null,
+            body: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: height),
+              child: Container(
+                padding: _selectedPageIndex == 0 || _selectedPageIndex == 4
+                    ? const EdgeInsets.only(
+                        right: 5,
+                        left: 5,
+                      )
+                    : null,
+                child: activePage,
+              ),
             ),
-          ),
-          drawer: MainDrawerWidget(),
-          appBar: getAppBar(),
-          bottomNavigationBar: Container(
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                    top: BorderSide(
-                        color: Color.fromARGB(255, 233, 232, 232),
-                        width: 1.0))),
-            child: BottomNavigationBar(
-              onTap: _selectPage,
-              type: BottomNavigationBarType.fixed,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home_filled),
-                  label: this.localizations.tabLabelHome,
-                ),
-                BottomNavigationBarItem(
-                    label: this.localizations.tabLabelEvents,
-                    icon: _totalNewEvents < 1
-                        ? Icon(Icons.event)
+            drawer: MainDrawerWidget(),
+            appBar: getAppBar(backgroundColor),
+            bottomNavigationBar: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                      top: BorderSide(
+                          color: Color.fromARGB(255, 233, 232, 232),
+                          width: 1.0))),
+              child: BottomNavigationBar(
+                onTap: _selectPage,
+                type: BottomNavigationBarType.fixed,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home_filled),
+                    label: this.localizations.tabLabelHome,
+                  ),
+                  BottomNavigationBarItem(
+                      label: this.localizations.tabLabelEvents,
+                      icon: _totalNewEvents < 1
+                          ? Icon(Icons.event)
+                          : Stack(
+                              children: <Widget>[
+                                Icon(Icons.event),
+                                Positioned(
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.all(1),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    constraints: BoxConstraints(
+                                      minWidth: 14,
+                                      minHeight: 14,
+                                    ),
+                                    child: Text(
+                                      _totalNewEvents.toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 8,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.directions),
+                    label: this.localizations.tabLabelEvacuation,
+                  ),
+                  BottomNavigationBarItem(
+                    label: this.localizations.tabLabelWarning,
+                    icon: _totalNewWarnings < 1
+                        ? Icon(Icons.warning)
                         : Stack(
                             children: <Widget>[
-                              Icon(Icons.event),
+                              Icon(Icons.warning),
                               Positioned(
                                 right: 0,
                                 bottom: 0,
@@ -257,7 +288,7 @@ class _TabsScreenState extends State<TabsScreen> {
                                     minHeight: 14,
                                   ),
                                   child: Text(
-                                    _totalNewEvents.toString(),
+                                    _totalNewWarnings.toString(),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 8,
@@ -267,55 +298,20 @@ class _TabsScreenState extends State<TabsScreen> {
                                 ),
                               )
                             ],
-                          )),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.directions),
-                  label: this.localizations.tabLabelEvacuation,
-                ),
-                BottomNavigationBarItem(
-                  label: this.localizations.tabLabelWarning,
-                  icon: _totalNewWarnings < 1
-                      ? Icon(Icons.warning)
-                      : Stack(
-                          children: <Widget>[
-                            Icon(Icons.warning),
-                            Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: Container(
-                                padding: EdgeInsets.all(1),
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                constraints: BoxConstraints(
-                                  minWidth: 14,
-                                  minHeight: 14,
-                                ),
-                                child: Text(
-                                  _totalNewWarnings.toString(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 8,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.add_circle_outline),
-                  label: this.localizations.tabLabelMore,
-                ),
-              ],
-              currentIndex: _selectedPageIndex,
+                          ),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.add_circle_outline),
+                    label: this.localizations.tabLabelMore,
+                  ),
+                ],
+                currentIndex: _selectedPageIndex,
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   void _selectPage(int index) {
@@ -468,5 +464,26 @@ class _TabsScreenState extends State<TabsScreen> {
         builder: (_, controller) => const ReportScreen(),
       ),
     );
+  }
+
+  _getColor(SunProvider sunProvider, ThemeProvider themeProvider) {
+    List<Color> backgroundColor = [];
+    List<Color> nightColor = [
+      Color.fromARGB(255, 64, 65, 67),
+      Color.fromARGB(255, 20, 24, 27)
+    ];
+    List<Color> dayColor = [Color.fromARGB(255, 3, 55, 97), Colors.blue];
+
+    //manage the color here base on time/theme
+    if (sunProvider.currentSunData.isDay()) {
+      if (themeProvider.isDarkTheme) {
+        backgroundColor = nightColor;
+      } else {
+        backgroundColor = dayColor;
+      }
+    } else {
+      backgroundColor = nightColor;
+    }
+    return backgroundColor;
   }
 }

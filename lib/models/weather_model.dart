@@ -22,7 +22,7 @@ class WeatherModel {
   String? solarRadiation;
   String? station;
 
-  String dayOrNight = 'day';
+  bool isDay = true;
 
   WeatherModel(
       {this.iconId,
@@ -45,23 +45,7 @@ class WeatherModel {
     isDayOrNight();
   }
 
-  void isDayOrNight() {
-    if (this.solarRadiation != '' && this.solarRadiation != null) {
-      //Use solar radiation to determine day or night
-      double solar = double.parse(this.solarRadiation.toString());
-      if (solar > 50) {
-        dayOrNight = 'day';
-      } else if (solar < 50) {
-        dayOrNight = 'night';
-      }
-    } else {
-      //If solar radiation is not available then use the time
-      int hours = DateTime.now().hour;
-      dayOrNight = (hours >= 7 && hours <= 20) ? 'day' : 'night';
-    }
-
-    dayOrNight = 'day';
-  }
+  void isDayOrNight() {}
 
   void celsiusToFahrenheight() {
     minTemp = toFahrenheight(minTemp);
@@ -91,18 +75,17 @@ class WeatherModel {
 
     switch (iconId) {
       case 1:
-        icon = dayOrNight == 'day' ? 'sunny' : 'night_clear_sky';
+        icon = isDay ? 'sunny' : 'night_clear_sky';
         break;
       case 2:
-        icon =
-            dayOrNight == 'day' ? 'day_partial_cloud' : 'night_partial_cloud';
+        icon = isDay ? 'day_partial_cloud' : 'night_partial_cloud';
         break;
       case 3:
-        icon = dayOrNight == 'day' ? 'cloudy' : 'cloudy';
+        icon = isDay ? 'cloudy' : 'cloudy';
         break;
 
       case 10:
-        icon = dayOrNight == 'day' ? 'snow' : 'snow';
+        icon = isDay ? 'snow' : 'snow';
         break;
       case 4:
       case 5:
@@ -112,7 +95,7 @@ class WeatherModel {
         break;
       case 8:
       case 9:
-        icon = dayOrNight == 'day' ? 'thunder_storm' : 'thunder_storm';
+        icon = isDay ? 'thunder_storm' : 'thunder_storm';
         break;
       default:
         icon = '';
@@ -163,9 +146,7 @@ class TenDaysForecastModel extends WeatherModel {
     super.maxTemp,
     super.minTemp,
     super.location,
-  }) {
-    dayOrNight = 'day';
-  }
+  }) {}
 
   String getDay(context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
@@ -205,9 +186,7 @@ class CurrentWeatherModel extends WeatherModel {
       super.observedDate,
       super.windDirectionDegree,
       super.solarRadiation,
-      super.station}) {
-    super.isDayOrNight();
-  }
+      super.station}) {}
 }
 
 class ThreeHoursForecastModel extends WeatherModel {
@@ -219,9 +198,7 @@ class ThreeHoursForecastModel extends WeatherModel {
     super.windSpeed,
     super.visibility,
     super.location,
-  }) {
-    super.isDayOrNight();
-  }
+  }) {}
 }
 
 class TwentyFourHoursForecastModel extends WeatherModel {
@@ -234,7 +211,5 @@ class TwentyFourHoursForecastModel extends WeatherModel {
     super.windDirection,
     super.windSpeed,
     super.warning,
-  }) {
-    super.isDayOrNight();
-  }
+  }) {}
 }
