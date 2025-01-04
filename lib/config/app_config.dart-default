@@ -1,5 +1,5 @@
 class AppConfig {
-  static const String appName = "Tonga Joint Early Warning and Response";
+  static const String appName = "Tonga Weather Alerts Response";
   static const String prodURL = "http://app.met.gov.to";
 
   static const String liveBaseURL = "$prodURL/api/v1";
@@ -18,5 +18,5 @@ class AppConfig {
   static const String password = '[CHANGE ME]';
 
   //current version
-  static const String version = '1.0.0';
+  static const String version = '1.1.0';
 }

@@ -4,7 +4,6 @@ import 'package:macres/providers/locale_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:macres/models/settings_model.dart';
-import 'package:weather_icons/weather_icons.dart';
 
 class OnboardingFirstScreen extends StatefulWidget {
   const OnboardingFirstScreen(

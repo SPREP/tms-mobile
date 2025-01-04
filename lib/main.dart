@@ -78,7 +78,7 @@ Future main() async {
     (value) => runApp(App(showOnboarding: showOnboarding)),
   );
 
-  //runApp(App(showOnboarding: showOnboarding));
+  runApp(App(showOnboarding: showOnboarding));
 }
 
 class App extends StatefulWidget {
