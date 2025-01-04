@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:humanitarian_icons/humanitarian_icons.dart';
 
-enum Category { hospital, fire, police, ambulance, wccc, majestyArmedForces }
+enum Category {
+  hospital,
+  fire,
+  police,
+  ambulance,
+  wccc,
+  majestyArmedForces,
+  ndrmo,
+}
 
 const categoryLabel = {
   Category.hospital: "Hospital",
@@ -9,7 +17,8 @@ const categoryLabel = {
   Category.police: "Police",
   Category.ambulance: "Ambulance",
   Category.wccc: 'Women Chrildrens Crisis Centre',
-  Category.majestyArmedForces: 'Majesty Armed Forces'
+  Category.majestyArmedForces: 'Majesty Armed Forces',
+  Category.ndrmo: "National Disaster Risk Management Office",
 };
 
 const categoryIcon = {

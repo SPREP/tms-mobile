@@ -175,7 +175,7 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               size: 26,
             ),
             title: Text(
-              'National Numbers',
+              'Emergency Contact',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
                     fontSize: 17,
                   ),
