@@ -11,6 +11,7 @@ import 'package:macres/screens/user/login_screen.dart';
 import 'package:macres/screens/user/profile_screen.dart';
 import 'package:macres/screens/user/signup_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MainDrawerWidget extends StatefulWidget {
@@ -254,6 +255,25 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
               );
             },
           ),
+          ListTile(
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              size: 15,
+            ),
+            leading: Icon(
+              Icons.share,
+              size: 26,
+            ),
+            title: Text(
+              'Share this app',
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    fontSize: 17,
+                  ),
+            ),
+            onTap: () {
+              shareApp();
+            },
+          ),
           const Spacer(),
           const Text(
             'Version ' + AppConfig.version,
@@ -278,5 +298,15 @@ class _MainDrawerWidgetState extends State<MainDrawerWidget> {
         ],
       ),
     );
+  }
+
+  Future<void> shareApp() async {
+    final String appLink =
+        'https://play.google.com/store/apps/details?id=com.metgov.macres';
+    final String message =
+        'Check out Tonga Weather Alerts and Response app: $appLink';
+
+    // Share the app link and message using the share dialog
+    await Share.share(message);
   }
 }
