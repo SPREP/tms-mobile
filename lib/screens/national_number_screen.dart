@@ -23,6 +23,7 @@ class _NationalNumberScreenState extends State<NationalNumberScreen> {
       Category.fire: ["+676 999", "+676 927", "+676 928", "+676 7401064"],
       Category.hospital: ["+676 933", "+676 7400200", "+676 7400403"],
       Category.wccc: ["+676 22240"],
+      Category.ndrmo: ["+676 26340", "0800-6366"],
     };
 
     const haapaiNumbers = {
@@ -72,7 +73,7 @@ class _NationalNumberScreenState extends State<NationalNumberScreen> {
       enabled: visibility ? true : false,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('National number'),
+          title: const Text('Emergency Contact'),
           actions: [
             TextButton(
               onPressed: () {
