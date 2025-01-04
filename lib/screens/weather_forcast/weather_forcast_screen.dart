@@ -581,6 +581,8 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
             currentTwentyFourHoursData.isDay =
                 sunProvider.currentSunData.isDay();
 
+            String backgroundImage = currentData.getBgImage();
+
             return RefreshIndicator(
               onRefresh: _getWeather,
               child: SingleChildScrollView(
@@ -605,13 +607,15 @@ class _WeatherForcastScreenState extends State<WeatherForcastScreen> {
                       Container(
                         decoration: BoxDecoration(
                           color: backgroundColor[0],
-                          image: DecorationImage(
-                            opacity: 0.6,
-                            image: AssetImage(
-                              currentData.getBgImage(),
-                            ),
-                            fit: BoxFit.cover,
-                          ),
+                          image: backgroundImage != ""
+                              ? DecorationImage(
+                                  opacity: 0.6,
+                                  image: AssetImage(
+                                    backgroundImage,
+                                  ),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
