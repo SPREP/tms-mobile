@@ -1,5 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:humanitarian_icons/humanitarian_icons.dart';
 import 'package:macres/models/event_model.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -11,6 +13,7 @@ import 'package:macres/screens/user/islogin_screen.dart';
 import 'package:macres/widgets/big_map_widget.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   const EventDetailsScreen({super.key, required this.eventModel});
@@ -210,8 +213,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       height: 30.0,
                     ),
                   Flexible(
-                    child: Text(
-                      widget.eventModel.body.toString(),
+                    child: Linkify(
+                      onOpen: (link) {
+                        launchUrl(Uri.parse(link.url));
+                      },
+                      text: widget.eventModel.body!.toString(),
                     ),
                   ),
                   const SizedBox(
